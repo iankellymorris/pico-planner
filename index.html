@@ -1,11 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>GitHub Pages Test</title>
+<meta charset="UTF-8">
+<title>Assignment Tracker</title>
+<!-- Tabulator CSS -->
+<link href="https://unpkg.com/tabulator-tables@6.5.3/dist/css/tabulator.min.css" rel="stylesheet">
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  #assignment-table { width: 100%; }
+</style>
 </head>
 <body>
-  <h1>Hello, GitHub Pages is working!</h1>
-  <p>If you see this rendered, the build is successful.</p>
+
+<h2>Assignment Tracker</h2>
+<div id="assignment-table"></div>
+
+<!-- Tabulator JS -->
+<script src="https://unpkg.com/tabulator-tables@6.5.3/dist/js/tabulator.min.js"></script>
+<script>
+// Sample data
+const tableData = [
+  { class: "Math", assignment: "HW 1", due: "2025-09-01", link: "https://example.com/math1" },
+  { class: "Math", assignment: "HW 2", due: "2025-09-05", link: "https://example.com/math2" },
+  { class: "History", assignment: "Essay 1", due: "2025-09-03", link: "https://example.com/history1" },
+  { class: "History", assignment: "Essay 2", due: "2025-09-07", link: "https://example.com/history2" },
+  { class: "Science", assignment: "Lab Report", due: "2025-09-04", link: "https://example.com/science1" }
+];
+
+// Tabulator setup
+const table = new Tabulator("#assignment-table", {
+    data: tableData,
+    layout: "fitColumns",
+    reactiveData: true,      // allows dynamic updates and multiple views
+    groupBy: "class",        // collapsible row groups by class
+    groupStartOpen: false,   // groups collapsed initially
+    columns: [
+        { title: "Assignment", field: "assignment", headerSort:true },
+        { title: "Due Date", field: "due", headerSort:true },
+        { title: "Link", field: "link", formatter:"link", formatterParams:{ target:"_blank" } }
+    ],
+    initialSort:[
+        { column:"class", dir:"asc" }   // default sort
+    ],
+    movableColumns:true,
+    columnHeaderClick:function(e, column){
+        // Shift-click multi-sort handled automatically by Tabulator
+    }
+});
+</script>
+
 </body>
 </html>
