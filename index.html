@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;title&gt;Assignment Tracker&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1">&lt;!-- Tabulator CSS --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;link href="https://unpkg.com/tabulator-tables@6.5.3/dist/css/tabulator.min.css" rel="stylesheet"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>body { font-family: Arial, sans-serif; margin: 20px; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#assignment-table { width: 100%; }</span></p>
+<p class="p1"><span class="s1">&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;h2&gt;Assignment Tracker&lt;/h2&gt;</span></p>
+<p class="p1"><span class="s1">&lt;div id="assignment-table"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;!-- Tabulator JS --&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script src="https://unpkg.com/tabulator-tables@6.5.3/dist/js/tabulator.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script&gt;</span></p>
+<p class="p1"><span class="s1">// Sample data</span></p>
+<p class="p1"><span class="s1">const tableData = [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{ class: "Math", assignment: "HW 1", due: "2025-09-01", link: "https://example.com/math1" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{ class: "Math", assignment: "HW 2", due: "2025-09-05", link: "https://example.com/math2" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{ class: "History", assignment: "Essay 1", due: "2025-09-03", link: "https://example.com/history1" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{ class: "History", assignment: "Essay 2", due: "2025-09-07", link: "https://example.com/history2" },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>{ class: "Science", assignment: "Lab Report", due: "2025-09-04", link: "https://example.com/science1" }</span></p>
+<p class="p1"><span class="s1">];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">// Tabulator setup</span></p>
+<p class="p1"><span class="s1">const table = new Tabulator("#assignment-table", {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>data: tableData,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>layout: "fitColumns",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>reactiveData: true,<span class="Apple-converted-space">      </span>// allows dynamic updates and multiple views</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>groupBy: "class",<span class="Apple-converted-space">        </span>// collapsible row groups by class</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>groupStartOpen: false, <span class="Apple-converted-space">  </span>// groups collapsed initially</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>columns: [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ title: "Assignment", field: "assignment", headerSort:true },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ title: "Due Date", field: "due", headerSort:true },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ title: "Link", field: "link", formatter:"link", formatterParams:{ target:"_blank" } }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>initialSort:[</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ column:"class", dir:"asc" } <span class="Apple-converted-space">  </span>// default sort</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>movableColumns:true,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>columnHeaderClick:function(e, column){</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Shift-click multi-sort handled automatically by Tabulator</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1">});</span></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
