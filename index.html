@@ -38,6 +38,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
     }
+    /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
       font-family: 'Poppins', sans-serif !important;
     }
@@ -55,30 +56,20 @@
     .delete-btn:hover {
       color: rgba(0,0,0,0.55);
     }
-
-    /* Group header colors */
-    .tabulator-group.phys {
-      background: #b3cde8; /* pastel blue */
-      color: #1a2a4f;
+    /* Group header base styles */
+    .group-header {
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: #333;
     }
-    .tabulator-group.ece {
-      background: #e8b3b3; /* pastel red */
-      color: #4f1a1a;
-    }
-    .tabulator-group.math {
-      background: #f5e6a6; /* pastel yellow */
-      color: #4f4a1a;
-    }
-
-    /* Row striping per class */
-    .row-phys:nth-child(even) { background: #e9f2fb; }
-    .row-phys:nth-child(odd)  { background: #f4f8fc; }
-
-    .row-ece:nth-child(even) { background: #fbe9e9; }
-    .row-ece:nth-child(odd)  { background: #fcf4f4; }
-
-    .row-math:nth-child(even) { background: #fcf9e5; }
-    .row-math:nth-child(odd)  { background: #fefdf3; }
+    .group-phys { background: #c9d9f2; } /* soft blue */
+    .group-ece { background: #f5c7c7; }  /* soft red */
+    .group-math { background: #f9f2c4; } /* soft yellow */
+    /* Row coloring */
+    .row-phys:nth-child(even) { background: #edf2fb !important; }
+    .row-ece:nth-child(even)  { background: #fdecec !important; }
+    .row-math:nth-child(even) { background: #fffbe6 !important; }
   </style>
 </head>
 <body>
@@ -141,19 +132,19 @@
       layout: "fitColumns",
       reactiveData: true,
       groupBy: "class",
+      groupHeader: function(value, count, data){
+        let cls = "";
+        if (value === "PHYS 2210") cls = "group-phys";
+        else if (value === "ECE 1400") cls = "group-ece";
+        else if (value === "MATH 1210") cls = "group-math";
+        return `<div class="group-header ${cls}">${value} (${count})</div>`;
+      },
       groupStartOpen: true,
-      rowFormatter: function(row) {
+      rowFormatter: function(row){
         const data = row.getData();
         if (data.class === "PHYS 2210") row.getElement().classList.add("row-phys");
         if (data.class === "ECE 1400") row.getElement().classList.add("row-ece");
         if (data.class === "MATH 1210") row.getElement().classList.add("row-math");
-      },
-      groupHeader: function(value) {
-        let cls = "";
-        if (value === "PHYS 2210") cls = "phys";
-        if (value === "ECE 1400") cls = "ece";
-        if (value === "MATH 1210") cls = "math";
-        return `<span class="tabulator-group ${cls}">${value}</span>`;
       },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
