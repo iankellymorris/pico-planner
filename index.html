@@ -23,14 +23,14 @@
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 12px; /* new offset */
+      padding-left: 12px; /* subtle offset */
     }
     .form-container {
       margin: 20px 0;
       padding: 15px;
       background: rgba(75, 46, 131, 0.15); /* darker overlay */
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 16px; /* rounder corners */
+      border-radius: 20px; /* touch more rounding */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -44,6 +44,11 @@
     }
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
       font-weight: 600;
+    }
+    /* Extra vertical padding for column titles */
+    .tabulator .tabulator-header .tabulator-col {
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
     .delete-btn {
       cursor: pointer;
@@ -98,12 +103,23 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      height: false, // let the whole page scroll
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
           }},
         { title: "Assignment", field: "assignment", editor: "input" },
-        { title: "Due Date", field: "due", editor: "date" },
+        { 
+          title: "Due Date", 
+          field: "due", 
+          editor: "date", 
+          sorter: "date", 
+          formatter: "datetime",
+          formatterParams: {
+            outputFormat: "dd MMM yyyy", // DD MON YYYY
+            invalidPlaceholder: "---"
+          }
+        },
         { title: "Link", field: "link", editor: "input",
           formatter: "link", formatterParams: { target: "_blank" } },
         { 
