@@ -68,27 +68,6 @@
     .tabulator-group[data-group="MATH 1210"] {
       background-color: #f7e9b7 !important; /* pastel yellow */
     }
-    /* Row colors for PHYS 2210 */
-    .tabulator-row.phys-row:nth-child(even) {
-      background-color: #dbe7f8 !important;
-    }
-    .tabulator-row.phys-row:nth-child(odd) {
-      background-color: #edf4fc !important;
-    }
-    /* Row colors for ECE 1400 */
-    .tabulator-row.ece-row:nth-child(even) {
-      background-color: #f8dbdb !important;
-    }
-    .tabulator-row.ece-row:nth-child(odd) {
-      background-color: #fceeee !important;
-    }
-    /* Row colors for MATH 1210 */
-    .tabulator-row.math-row:nth-child(even) {
-      background-color: #faf3d1 !important;
-    }
-    .tabulator-row.math-row:nth-child(odd) {
-      background-color: #fef9e4 !important;
-    }
   </style>
 </head>
 <body>
@@ -153,10 +132,20 @@
       rowFormatter: function(row){
         const data = row.getData();
         const el = row.getElement();
-        el.classList.remove("phys-row","ece-row","math-row");
-        if (data.class === "PHYS 2210") el.classList.add("phys-row");
-        if (data.class === "ECE 1400") el.classList.add("ece-row");
-        if (data.class === "MATH 1210") el.classList.add("math-row");
+        const pos = row.getPosition(true); // absolute row index
+
+        // Reset background
+        el.style.background = "";
+
+        if (data.class === "PHYS 2210") {
+          el.style.background = (pos % 2 === 0) ? "#dbe7f8" : "#edf4fc";
+        }
+        if (data.class === "ECE 1400") {
+          el.style.background = (pos % 2 === 0) ? "#f8dbdb" : "#fceeee";
+        }
+        if (data.class === "MATH 1210") {
+          el.style.background = (pos % 2 === 0) ? "#faf3d1" : "#fef9e4";
+        }
       },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
