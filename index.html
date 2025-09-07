@@ -56,22 +56,6 @@
     .delete-btn:hover {
       color: rgba(0,0,0,0.55); /* slightly darker on hover */
     }
-
-    /* Kill Tabulator's built-in striping */
-    .tabulator-row:nth-child(even),
-    .tabulator-row:nth-child(odd) {
-      background: none !important;
-    }
-
-    /* Pastel row classes */
-    .row-phys-even { background-color: #dbe7f8 !important; }
-    .row-phys-odd  { background-color: #edf4fc !important; }
-
-    .row-ece-even  { background-color: #f8dbdb !important; }
-    .row-ece-odd   { background-color: #fceeee !important; }
-
-    .row-math-even { background-color: #faf3d1 !important; }
-    .row-math-odd  { background-color: #fef9e4 !important; }
   </style>
 </head>
 <body>
@@ -151,20 +135,17 @@
         const pos = row.getPosition(true);
         const el = row.getElement();
 
-        el.classList.remove(
-          "row-phys-even","row-phys-odd",
-          "row-ece-even","row-ece-odd",
-          "row-math-even","row-math-odd"
-        );
+        // Reset background
+        el.style.background = "";
 
         if (data.class === "PHYS 2210") {
-          el.classList.add(pos % 2 === 0 ? "row-phys-even" : "row-phys-odd");
+          el.style.background = (pos % 2 === 0) ? "#dbe7f8" : "#edf4fc";
         }
         if (data.class === "ECE 1400") {
-          el.classList.add(pos % 2 === 0 ? "row-ece-even" : "row-ece-odd");
+          el.style.background = (pos % 2 === 0) ? "#f8dbdb" : "#fceeee";
         }
         if (data.class === "MATH 1210") {
-          el.classList.add(pos % 2 === 0 ? "row-math-even" : "row-math-odd");
+          el.style.background = (pos % 2 === 0) ? "#faf3d1" : "#fef9e4";
         }
       }
     });
