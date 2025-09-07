@@ -11,26 +11,26 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 20px;
-      background: #ede3fa;
+      background: #ede3fa; /* warmer lavender */
     }
     h1 {
       font-family: 'DM Sans', sans-serif;
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3rem;
+      font-size: 3.75rem; /* bigger */
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 12px;
+      padding-left: 15px;
     }
     .form-container {
       margin: 20px 0;
-      padding: 15px;
-      background: rgba(75, 46, 131, 0.15);
+      padding: 18px;
+      background: rgba(75, 46, 131, 0.18);
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 16px;
+      border-radius: 20px; /* more rounded */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -51,30 +51,35 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3);
+      color: rgba(0,0,0,0.3); /* lighter overlay */
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55);
+      color: rgba(0,0,0,0.55); /* slightly darker on hover */
     }
-    /* Group header base styles */
-    .group-header {
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 6px;
-      color: #333;
+
+    /* Kill Tabulator’s built-in row striping */
+    .tabulator-row:nth-child(even),
+    .tabulator-row:nth-child(odd) {
+      background: unset !important;
     }
-    .group-phys { background: #c9d9f2; } /* soft blue */
-    .group-ece { background: #f5c7c7; }  /* soft red */
-    .group-math { background: #f9f2c4; } /* soft yellow */
-    /* Row coloring */
-    .row-phys:nth-child(even) { background: #edf2fb !important; }
-    .row-ece:nth-child(even)  { background: #fdecec !important; }
-    .row-math:nth-child(even) { background: #fffbe6 !important; }
+
+    /* PHYS 2210 rows */
+    .row-phys { background: #dbe7f8 !important; }       /* soft blue */
+    .row-phys:nth-child(even) { background: #edf4fc !important; }
+
+    /* ECE 1400 rows */
+    .row-ece { background: #f8dbdb !important; }        /* soft red */
+    .row-ece:nth-child(even) { background: #fceeee !important; }
+
+    /* MATH 1210 rows */
+    .row-math { background: #faf3d1 !important; }       /* soft yellow */
+    .row-math:nth-child(even) { background: #fef9e4 !important; }
   </style>
 </head>
 <body>
   <h1>Assignment Tracker</h1>
 
+  <!-- Form for adding assignments -->
   <div class="form-container">
     <select id="class-input">
       <option value="MATH 1210">MATH 1210</option>
@@ -89,68 +94,56 @@
 
   <div id="assignment-table"></div>
 
+  <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
+    // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
       { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
       { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    function deleteFormatter(cell) {
-      return "<span class='delete-btn'>&times;</span>";
-    }
-
-    function parseISODateSafe(str) {
-      if (!str) return null;
+    // Safe ISO date parser
+    function parseISODateSafe(str){
+      if(!str) return null;
       const d = new Date(str);
-      return isNaN(d) ? null : d;
+      return isNaN(d.getTime()) ? null : d;
     }
 
-    function dueDateFormatter(cell) {
+    // Custom date formatter
+    function dueDateFormatter(cell){
       const value = cell.getValue();
-      const date = parseISODateSafe(value);
-      if (!date) return "---";
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = date.toLocaleString("en-US", { month: "short" }).toUpperCase();
-      const year = date.getFullYear();
+      const d = parseISODateSafe(value);
+      if(!d) return "---";
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+      const year = d.getFullYear();
       return `${day} ${month} ${year}`;
     }
 
-    function assignmentLinkFormatter(cell) {
-      const row = cell.getRow().getData();
-      const name = row.assignment || "";
-      const url = row.link || "";
-      if (url) {
-        return `<a href="${url}" target="_blank" style="color:#4b2e83; text-decoration:none;">${name}</a>`;
-      }
-      return name;
+    // Custom delete formatter
+    function deleteFormatter(cell, formatterParams, onRendered) {
+      return "<span class='delete-btn'>&times;</span>";
     }
 
+    // Initialize table
     const table = new Tabulator("#assignment-table", {
       data: savedData,
       layout: "fitColumns",
       reactiveData: true,
       groupBy: "class",
-      groupHeader: function(value, count, data){
-        let cls = "";
-        if (value === "PHYS 2210") cls = "group-phys";
-        else if (value === "ECE 1400") cls = "group-ece";
-        else if (value === "MATH 1210") cls = "group-math";
-        return `<div class="group-header ${cls}">${value} (${count})</div>`;
-      },
       groupStartOpen: true,
-      rowFormatter: function(row){
-        const data = row.getData();
-        if (data.class === "PHYS 2210") row.getElement().classList.add("row-phys");
-        if (data.class === "ECE 1400") row.getElement().classList.add("row-ece");
-        if (data.class === "MATH 1210") row.getElement().classList.add("row-math");
-      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
           }},
-        { title: "Assignment", field: "assignment", formatter: assignmentLinkFormatter, editor: "input" },
+        { title: "Assignment", field: "assignment", editor: "input",
+          formatter: function(cell){
+            const link = cell.getRow().getData().link;
+            const assignment = cell.getValue();
+            return link ? `<a href="${link}" target="_blank">${assignment}</a>` : assignment;
+          }},
         { 
           title: "Due Date", 
           field: "due", 
@@ -165,6 +158,7 @@
           },
           formatter: dueDateFormatter
         },
+        { title: "Link", field: "link", visible: false },
         { 
           title: "", 
           formatter: deleteFormatter, 
@@ -176,14 +170,24 @@
           }
         }
       ],
+      rowFormatter: function(row){
+        const data = row.getData();
+        const el = row.getElement();
+        el.classList.remove("row-phys","row-ece","row-math");
+        if (data.class === "PHYS 2210") el.classList.add("row-phys");
+        if (data.class === "ECE 1400") el.classList.add("row-ece");
+        if (data.class === "MATH 1210") el.classList.add("row-math");
+      },
       cellEdited: saveData,
       rowDeleted: saveData,
     });
 
+    // Save data to localStorage
     function saveData() {
       localStorage.setItem("assignments", JSON.stringify(table.getData()));
     }
 
+    // Add new assignment from form
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
         class: document.getElementById("class-input").value,
@@ -193,6 +197,8 @@
       };
       table.addRow(newRow);
       saveData();
+
+      // Clear inputs
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
