@@ -5,11 +5,11 @@
   <title>Assignment Tracker</title>
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-  <!-- Google Fonts: DM Sans & Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: DM Sans & Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 20px;
       background: #ede3fa; /* warmer lavender */
     }
@@ -18,7 +18,7 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3.75rem; /* 25% bigger */
+      font-size: 3rem;
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
@@ -28,9 +28,9 @@
     .form-container {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(75, 46, 131, 0.18);
+      background: rgba(75, 46, 131, 0.15); /* darker overlay */
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 22px; /* more rounding */
+      border-radius: 20px; /* touch more rounding */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -40,14 +40,15 @@
     }
     /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
-      font-family: 'Inter', sans-serif !important;
+      font-family: 'Poppins', sans-serif !important;
     }
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
       font-weight: 600;
     }
+    /* Extra vertical padding for column titles */
     .tabulator .tabulator-header .tabulator-col {
-      padding-top: 12px;
-      padding-bottom: 12px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
     .delete-btn {
       cursor: pointer;
@@ -55,10 +56,10 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3);
+      color: rgba(0,0,0,0.3); /* lighter overlay */
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55);
+      color: rgba(0,0,0,0.55); /* slightly darker on hover */
     }
   </style>
 </head>
@@ -83,20 +84,15 @@
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Load saved data or defaults
+    // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
       { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
       { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    // Save data to localStorage
-    function saveData() {
-      localStorage.setItem("assignments", JSON.stringify(table.getData()));
-    }
-
     // Custom delete formatter (× instead of ❌)
-    function deleteFormatter(cell) {
+    function deleteFormatter(cell, formatterParams, onRendered) {
       return "<span class='delete-btn'>&times;</span>";
     }
 
@@ -107,6 +103,7 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      height: false, // let the whole page scroll
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
@@ -140,6 +137,11 @@
       rowDeleted: saveData,
     });
 
+    // Save data to localStorage
+    function saveData() {
+      localStorage.setItem("assignments", JSON.stringify(table.getData()));
+    }
+
     // Add new assignment from form
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
@@ -148,7 +150,7 @@
         due: document.getElementById("due-input").value,
         link: document.getElementById("link-input").value
       };
-      table.addRow(newRow); // ✅ simple and reliable
+      table.addRow(newRow);
       saveData();
 
       // Clear inputs
