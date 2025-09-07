@@ -103,7 +103,17 @@
             values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
           }},
         { title: "Assignment", field: "assignment", editor: "input" },
-        { title: "Due Date", field: "due", editor: "date" },
+        { 
+          title: "Due Date", 
+          field: "due", 
+          editor: "date", 
+          sorter: "date", 
+          formatter: "datetime",
+          formatterParams: {
+            outputFormat: "dd MMM yyyy", // DD MON YYYY
+            invalidPlaceholder: "---"
+          }
+        },
         { title: "Link", field: "link", editor: "input",
           formatter: "link", formatterParams: { target: "_blank" } },
         { 
