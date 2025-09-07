@@ -79,37 +79,34 @@
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Load saved data or defaults
+    // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
       { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
       { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    // -- Date helpers & formatter (stable, no dependencies) --
-    const MONS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-    function parseISODateSafe(str){
-      // Expecting "YYYY-MM-DD"; avoid timezone shifts by building Date(y,m-1,d)
-      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str || "");
-      if(!m) return null;
-      const y = +m[1], mo = +m[2], d = +m[3];
-      return new Date(y, mo - 1, d);
-    }
-    function dueDateFormatter(cell){
-      const v = cell.getValue();
-      let d = null;
-      if (v instanceof Date) d = v;
-      else if (typeof v === "string") d = parseISODateSafe(v);
-      if (!d || isNaN(d)) return v || "";
-      const day = String(d.getDate()).padStart(2,"0");
-      const mon = MONS[d.getMonth()];
-      const year = d.getFullYear();
-      return `${day} ${mon} ${year}`;
+    // Custom delete formatter (× instead of ❌)
+    function deleteFormatter(cell, formatterParams, onRendered) {
+      return "<span class='delete-btn'>&times;</span>";
     }
 
-    // Custom delete formatter (× instead of ❌)
-    function deleteFormatter(cell) {
-      return "<span class='delete-btn'>&times;</span>";
+    // Parse ISO string safely
+    function parseISODateSafe(str) {
+      if (!str) return null;
+      const d = new Date(str);
+      return isNaN(d) ? null : d;
+    }
+
+    // Custom date formatter: DD MON YYYY
+    function dueDateFormatter(cell) {
+      const value = cell.getValue();
+      const date = parseISODateSafe(value);
+      if (!date) return "---";
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = date.toLocaleString("en-US", { month: "short" }).toUpperCase();
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
     }
 
     // Initialize table
@@ -125,11 +122,18 @@
           }},
         { title: "Assignment", field: "assignment", editor: "input" },
         { 
-          title: "Due Date",
-          field: "due",
-          editor: "date",
-          sorter: "date",           // keep real date sorting
-          formatter: dueDateFormatter // pretty display
+          title: "Due Date", 
+          field: "due", 
+          editor: "date", 
+          sorter: function(a, b){
+            const da = parseISODateSafe(a);
+            const db = parseISODateSafe(b);
+            if(!da && !db) return 0;
+            if(!da) return -1;
+            if(!db) return 1;
+            return da - db;
+          },
+          formatter: dueDateFormatter
         },
         { title: "Link", field: "link", editor: "input",
           formatter: "link", formatterParams: { target: "_blank" } },
@@ -158,7 +162,7 @@
       const newRow = {
         class: document.getElementById("class-input").value,
         assignment: document.getElementById("assignment-input").value,
-        due: document.getElementById("due-input").value, // keep ISO "YYYY-MM-DD"
+        due: document.getElementById("due-input").value,
         link: document.getElementById("link-input").value
       };
       table.addRow(newRow);
