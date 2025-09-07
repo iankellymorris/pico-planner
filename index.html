@@ -5,11 +5,13 @@
   <title>Assignment Tracker</title>
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-  <!-- Google Fonts: DM Sans & Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: DM Sans & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- localForage (IndexedDB wrapper) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 20px;
       background: #ede3fa; /* warmer lavender */
     }
@@ -28,9 +30,9 @@
     .form-container {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(75, 46, 131, 0.15); /* darker overlay */
+      background: rgba(75, 46, 131, 0.15);
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 20px; /* touch more rounding */
+      border-radius: 20px; /* more rounded */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -40,12 +42,11 @@
     }
     /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
-      font-family: 'Poppins', sans-serif !important;
+      font-family: 'Inter', sans-serif !important;
     }
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
       font-weight: 600;
     }
-    /* Extra vertical padding for column titles */
     .tabulator .tabulator-header .tabulator-col {
       padding-top: 10px;
       padding-bottom: 10px;
@@ -56,10 +57,10 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3); /* lighter overlay */
+      color: rgba(0,0,0,0.3);
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55); /* slightly darker on hover */
+      color: rgba(0,0,0,0.55);
     }
   </style>
 </head>
@@ -84,66 +85,83 @@
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Load saved data or use defaults
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-    ];
+    // configure localForage
+    localforage.config({
+      name: "AssignmentTracker",
+      storeName: "assignments"
+    });
+
+    let table;
+
+    // Load saved data or defaults
+    async function loadData() {
+      let savedData = await localforage.getItem("assignments");
+      if (!savedData) {
+        savedData = [
+          { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
+          { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
+          { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+        ];
+        await localforage.setItem("assignments", savedData);
+      }
+      initTable(savedData);
+    }
+
+    // Save data to IndexedDB
+    async function saveData() {
+      await localforage.setItem("assignments", table.getData());
+    }
 
     // Custom delete formatter (× instead of ❌)
-    function deleteFormatter(cell, formatterParams, onRendered) {
+    function deleteFormatter(cell) {
       return "<span class='delete-btn'>&times;</span>";
     }
 
     // Initialize table
-    const table = new Tabulator("#assignment-table", {
-      data: savedData,
-      layout: "fitColumns",
-      reactiveData: true,
-      groupBy: "class",
-      groupStartOpen: true,
-      height: false, // let the whole page scroll
-      columns: [
-        { title: "Class", field: "class", editor: "select", editorParams: {
-            values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
-          }},
-        { title: "Assignment", field: "assignment", editor: "input" },
-        { 
-          title: "Due Date", 
-          field: "due", 
-          editor: "date", 
-          sorter: "date", 
-          formatter: "datetime",
-          formatterParams: {
-            outputFormat: "dd MMM yyyy", // DD MON YYYY
-            invalidPlaceholder: "---"
+    function initTable(data) {
+      table = new Tabulator("#assignment-table", {
+        data: data,
+        layout: "fitColumns",
+        reactiveData: true,
+        groupBy: "class",
+        groupStartOpen: true,
+        height: false, // page scroll instead of fixed window
+        columns: [
+          { title: "Class", field: "class", editor: "select", editorParams: {
+              values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
+            }},
+          { title: "Assignment", field: "assignment", editor: "input" },
+          { 
+            title: "Due Date", 
+            field: "due", 
+            editor: "date", 
+            sorter: "date", 
+            formatter: "datetime",
+            formatterParams: {
+              outputFormat: "dd MMM yyyy", // DD MON YYYY
+              invalidPlaceholder: "---"
+            }
+          },
+          { title: "Link", field: "link", editor: "input",
+            formatter: "link", formatterParams: { target: "_blank" } },
+          { 
+            title: "", 
+            formatter: deleteFormatter, 
+            width: 40, 
+            hozAlign: "center", 
+            cellClick: function(e, cell){
+              cell.getRow().delete();
+              saveData();
+            }
           }
-        },
-        { title: "Link", field: "link", editor: "input",
-          formatter: "link", formatterParams: { target: "_blank" } },
-        { 
-          title: "", 
-          formatter: deleteFormatter, 
-          width: 40, 
-          hozAlign: "center", 
-          cellClick: function(e, cell){
-            cell.getRow().delete();
-            saveData();
-          }
-        }
-      ],
-      cellEdited: saveData,
-      rowDeleted: saveData,
-    });
-
-    // Save data to localStorage
-    function saveData() {
-      localStorage.setItem("assignments", JSON.stringify(table.getData()));
+        ],
+        cellEdited: saveData,
+        rowDeleted: saveData,
+      });
     }
 
     // Add new assignment from form
-    document.getElementById("add-btn").addEventListener("click", () => {
+    document.getElementById("add-btn").addEventListener("click", async () => {
       const newRow = {
         class: document.getElementById("class-input").value,
         assignment: document.getElementById("assignment-input").value,
@@ -151,13 +169,16 @@
         link: document.getElementById("link-input").value
       };
       table.addRow(newRow);
-      saveData();
+      await saveData();
 
       // Clear inputs
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
     });
+
+    // load everything
+    loadData();
   </script>
 </body>
 </html>
