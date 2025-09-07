@@ -5,11 +5,11 @@
   <title>Assignment Tracker</title>
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-  <!-- Google Fonts: DM Sans & Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: DM Sans & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 20px;
       background: #ede3fa; /* warmer lavender */
     }
@@ -18,19 +18,19 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3.75rem; /* bigger */
+      font-size: 3.75rem; /* 25% bigger */
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 15px;
+      padding-left: 15px; /* left offset */
     }
     .form-container {
       margin: 20px 0;
-      padding: 18px;
-      background: rgba(75, 46, 131, 0.18);
+      padding: 15px;
+      background: rgba(75, 46, 131, 0.2); /* darker overlay */
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 20px; /* more rounded */
+      border-radius: 20px; /* rounder corners */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -40,10 +40,11 @@
     }
     /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
-      font-family: 'Poppins', sans-serif !important;
+      font-family: 'Inter', sans-serif !important;
     }
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
       font-weight: 600;
+      line-height: 1.5em; /* more breathing space for headers */
     }
     .delete-btn {
       cursor: pointer;
@@ -51,13 +52,14 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3); /* lighter overlay */
+      color: rgba(0,0,0,0.25); /* lighter overlay */
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55); /* slightly darker on hover */
+      color: rgba(0,0,0,0.5); /* slightly darker on hover */
     }
 
-    /* Kill Tabulator’s built-in row striping */
+    /* --- Row Coloring Overrides --- */
+    /* disable Tabulator’s default striping */
     .tabulator-row:nth-child(even),
     .tabulator-row:nth-child(odd) {
       background: unset !important;
@@ -104,27 +106,27 @@
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    // Safe ISO date parser
-    function parseISODateSafe(str){
-      if(!str) return null;
-      const d = new Date(str);
-      return isNaN(d.getTime()) ? null : d;
+    // Custom delete formatter (× instead of ❌)
+    function deleteFormatter(cell, formatterParams, onRendered) {
+      return "<span class='delete-btn'>&times;</span>";
     }
 
     // Custom date formatter
-    function dueDateFormatter(cell){
+    function dueDateFormatter(cell) {
       const value = cell.getValue();
-      const d = parseISODateSafe(value);
-      if(!d) return "---";
-      const day = String(d.getDate()).padStart(2, "0");
-      const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
-      const year = d.getFullYear();
-      return `${day} ${month} ${year}`;
+      if (!value) return "---";
+      const date = parseISODateSafe(value);
+      if (!date) return value;
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }).toUpperCase();
     }
 
-    // Custom delete formatter
-    function deleteFormatter(cell, formatterParams, onRendered) {
-      return "<span class='delete-btn'>&times;</span>";
+    function parseISODateSafe(value) {
+      const date = new Date(value);
+      return isNaN(date.getTime()) ? null : date;
     }
 
     // Initialize table
@@ -134,16 +136,19 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      rowFormatter: function(row){
+        const data = row.getData();
+        const el = row.getElement();
+        el.classList.remove("row-phys","row-ece","row-math");
+        if (data.class === "PHYS 2210") el.classList.add("row-phys");
+        if (data.class === "ECE 1400") el.classList.add("row-ece");
+        if (data.class === "MATH 1210") el.classList.add("row-math");
+      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
           }},
-        { title: "Assignment", field: "assignment", editor: "input",
-          formatter: function(cell){
-            const link = cell.getRow().getData().link;
-            const assignment = cell.getValue();
-            return link ? `<a href="${link}" target="_blank">${assignment}</a>` : assignment;
-          }},
+        { title: "Assignment", field: "assignment", editor: "input" },
         { 
           title: "Due Date", 
           field: "due", 
@@ -158,7 +163,13 @@
           },
           formatter: dueDateFormatter
         },
-        { title: "Link", field: "link", visible: false },
+        { 
+          title: "Link", 
+          field: "link", 
+          formatter: "link", 
+          formatterParams: { labelField: "assignment", target: "_blank" }, 
+          editor: "input" 
+        },
         { 
           title: "", 
           formatter: deleteFormatter, 
@@ -170,14 +181,6 @@
           }
         }
       ],
-      rowFormatter: function(row){
-        const data = row.getData();
-        const el = row.getElement();
-        el.classList.remove("row-phys","row-ece","row-math");
-        if (data.class === "PHYS 2210") el.classList.add("row-phys");
-        if (data.class === "ECE 1400") el.classList.add("row-ece");
-        if (data.class === "MATH 1210") el.classList.add("row-math");
-      },
       cellEdited: saveData,
       rowDeleted: saveData,
     });
