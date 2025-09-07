@@ -20,7 +20,7 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3rem;
+      font-size: 3.75rem; /* 25% bigger */
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
@@ -30,9 +30,9 @@
     .form-container {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(75, 46, 131, 0.15);
+      background: rgba(75, 46, 131, 0.18);
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 20px; /* more rounded */
+      border-radius: 22px; /* more rounding */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -48,8 +48,8 @@
       font-weight: 600;
     }
     .tabulator .tabulator-header .tabulator-col {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: 12px;
+      padding-bottom: 12px;
     }
     .delete-btn {
       cursor: pointer;
@@ -125,7 +125,6 @@
         reactiveData: true,
         groupBy: "class",
         groupStartOpen: true,
-        height: false, // page scroll instead of fixed window
         columns: [
           { title: "Class", field: "class", editor: "select", editorParams: {
               values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
