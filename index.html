@@ -18,19 +18,19 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3.75rem; /* bigger */
+      font-size: 3rem;
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 12px;
+      padding-left: 12px; /* offset */
     }
     .form-container {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(75, 46, 131, 0.15);
+      background: rgba(75, 46, 131, 0.15); /* darker overlay */
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 20px; /* rounder */
+      border-radius: 18px; /* slightly rounder corners */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -38,6 +38,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
     }
+    /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
       font-family: 'Poppins', sans-serif !important;
     }
@@ -50,24 +51,27 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3);
+      color: rgba(0,0,0,0.3); /* lighter overlay */
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55);
+      color: rgba(0,0,0,0.55); /* slightly darker on hover */
     }
-    .tabulator-group {
-      font-weight: bold;
-      color: #333;
+
+    /* Kill Tabulator's built-in striping */
+    .tabulator-row:nth-child(even),
+    .tabulator-row:nth-child(odd) {
+      background: none !important;
     }
-    .tabulator-group[data-group="PHYS 2210"] {
-      background-color: #c3d9f1 !important; /* pastel blue */
-    }
-    .tabulator-group[data-group="ECE 1400"] {
-      background-color: #f1c3c3 !important; /* pastel red */
-    }
-    .tabulator-group[data-group="MATH 1210"] {
-      background-color: #f7e9b7 !important; /* pastel yellow */
-    }
+
+    /* Pastel row classes */
+    .row-phys-even { background-color: #dbe7f8 !important; }
+    .row-phys-odd  { background-color: #edf4fc !important; }
+
+    .row-ece-even  { background-color: #f8dbdb !important; }
+    .row-ece-odd   { background-color: #fceeee !important; }
+
+    .row-math-even { background-color: #faf3d1 !important; }
+    .row-math-odd  { background-color: #fef9e4 !important; }
   </style>
 </head>
 <body>
@@ -91,25 +95,6 @@
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Safe parse ISO dates
-    function parseISODateSafe(str){
-      const parts = str.split("-");
-      if(parts.length !== 3) return null;
-      const [y,m,d] = parts.map(Number);
-      return new Date(y, m-1, d);
-    }
-
-    // Custom date formatter
-    function dueDateFormatter(cell){
-      const value = cell.getValue();
-      const date = parseISODateSafe(value);
-      if(!date) return "";
-      const day = String(date.getDate()).padStart(2,"0");
-      const month = date.toLocaleString("en-US", {month:"short"}).toUpperCase();
-      const year = date.getFullYear();
-      return `${day} ${month} ${year}`;
-    }
-
     // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
       { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
@@ -117,8 +102,8 @@
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    // Custom delete formatter
-    function deleteFormatter(cell){
+    // Custom delete formatter (× instead of ❌)
+    function deleteFormatter(cell, formatterParams, onRendered) {
       return "<span class='delete-btn'>&times;</span>";
     }
 
@@ -129,45 +114,30 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
-      rowFormatter: function(row){
-        const data = row.getData();
-        const el = row.getElement();
-        const pos = row.getPosition(true); // absolute row index
-
-        // Reset background
-        el.style.background = "";
-
-        if (data.class === "PHYS 2210") {
-          el.style.background = (pos % 2 === 0) ? "#dbe7f8" : "#edf4fc";
-        }
-        if (data.class === "ECE 1400") {
-          el.style.background = (pos % 2 === 0) ? "#f8dbdb" : "#fceeee";
-        }
-        if (data.class === "MATH 1210") {
-          el.style.background = (pos % 2 === 0) ? "#faf3d1" : "#fef9e4";
-        }
-      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
           }},
         { title: "Assignment", field: "assignment", editor: "input",
-          formatter: "link", formatterParams: { labelField: "assignment", urlField: "link", target: "_blank" } },
-        { title: "Due Date", field: "due", editor: "date",
-          sorter: function(a,b){
-            const da = parseISODateSafe(a);
-            const db = parseISODateSafe(b);
-            if(!da && !db) return 0;
-            if(!da) return -1;
-            if(!db) return 1;
-            return da - db;
-          },
-          formatter: dueDateFormatter },
-        { 
-          title: "", 
-          formatter: deleteFormatter, 
-          width: 40, 
-          hozAlign: "center", 
+          formatter: function(cell){
+            const value = cell.getValue();
+            const link = cell.getRow().getData().link;
+            return link ? `<a href="${link}" target="_blank">${value}</a>` : value;
+          }
+        },
+        { title: "Due Date", field: "due", sorter: "date", sorterParams:{format:"YYYY-MM-DD"},
+          editor: "date", formatter: function(cell){
+            const date = cell.getValue();
+            if (!date) return "";
+            const d = new Date(date);
+            if (isNaN(d)) return date;
+            const day = String(d.getDate()).padStart(2,"0");
+            const month = d.toLocaleString("en-US",{month:"short"}).toUpperCase();
+            const year = d.getFullYear();
+            return `${day} ${month} ${year}`;
+          }
+        },
+        { title: "", formatter: deleteFormatter, width: 40, hozAlign: "center",
           cellClick: function(e, cell){
             cell.getRow().delete();
             saveData();
@@ -176,14 +146,35 @@
       ],
       cellEdited: saveData,
       rowDeleted: saveData,
+      rowFormatter: function(row){
+        const data = row.getData();
+        const pos = row.getPosition(true);
+        const el = row.getElement();
+
+        el.classList.remove(
+          "row-phys-even","row-phys-odd",
+          "row-ece-even","row-ece-odd",
+          "row-math-even","row-math-odd"
+        );
+
+        if (data.class === "PHYS 2210") {
+          el.classList.add(pos % 2 === 0 ? "row-phys-even" : "row-phys-odd");
+        }
+        if (data.class === "ECE 1400") {
+          el.classList.add(pos % 2 === 0 ? "row-ece-even" : "row-ece-odd");
+        }
+        if (data.class === "MATH 1210") {
+          el.classList.add(pos % 2 === 0 ? "row-math-even" : "row-math-odd");
+        }
+      }
     });
 
-    // Save data
+    // Save data to localStorage
     function saveData() {
       localStorage.setItem("assignments", JSON.stringify(table.getData()));
     }
 
-    // Add new assignment
+    // Add new assignment from form
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
         class: document.getElementById("class-input").value,
@@ -193,6 +184,8 @@
       };
       table.addRow(newRow);
       saveData();
+
+      // Clear inputs
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
