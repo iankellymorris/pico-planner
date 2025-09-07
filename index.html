@@ -11,7 +11,7 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 20px;
-      background: #ede3fa; /* warmer lavender */
+      background: #ede3fa;
     }
     h1 {
       font-family: 'DM Sans', sans-serif;
@@ -23,14 +23,14 @@
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 12px; /* new offset */
+      padding-left: 12px;
     }
     .form-container {
       margin: 20px 0;
       padding: 15px;
-      background: rgba(75, 46, 131, 0.15); /* darker overlay */
+      background: rgba(75, 46, 131, 0.15);
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 16px; /* rounder corners */
+      border-radius: 16px;
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -38,7 +38,6 @@
       border-radius: 6px;
       border: 1px solid #ccc;
     }
-    /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
       font-family: 'Poppins', sans-serif !important;
     }
@@ -51,20 +50,43 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3); /* lighter overlay */
+      color: rgba(0,0,0,0.3);
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55); /* slightly darker on hover */
+      color: rgba(0,0,0,0.55);
     }
+
+    /* Group header colors */
+    .tabulator-group.phys {
+      background: #b3cde8; /* pastel blue */
+      color: #1a2a4f;
+    }
+    .tabulator-group.ece {
+      background: #e8b3b3; /* pastel red */
+      color: #4f1a1a;
+    }
+    .tabulator-group.math {
+      background: #f5e6a6; /* pastel yellow */
+      color: #4f4a1a;
+    }
+
+    /* Row striping per class */
+    .row-phys:nth-child(even) { background: #e9f2fb; }
+    .row-phys:nth-child(odd)  { background: #f4f8fc; }
+
+    .row-ece:nth-child(even) { background: #fbe9e9; }
+    .row-ece:nth-child(odd)  { background: #fcf4f4; }
+
+    .row-math:nth-child(even) { background: #fcf9e5; }
+    .row-math:nth-child(odd)  { background: #fefdf3; }
   </style>
 </head>
 <body>
   <h1>Assignment Tracker</h1>
 
-  <!-- Form for adding assignments -->
   <div class="form-container">
     <select id="class-input">
-      <option value="MATH 1220">MATH 1220</option>
+      <option value="MATH 1210">MATH 1210</option>
       <option value="PHYS 2210">PHYS 2210</option>
       <option value="ECE 1400">ECE 1400</option>
     </select>
@@ -76,29 +98,24 @@
 
   <div id="assignment-table"></div>
 
-  <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
+      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
       { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    // Custom delete formatter (× instead of ❌)
     function deleteFormatter(cell) {
       return "<span class='delete-btn'>&times;</span>";
     }
 
-    // Parse ISO string safely
     function parseISODateSafe(str) {
       if (!str) return null;
       const d = new Date(str);
       return isNaN(d) ? null : d;
     }
 
-    // Custom date formatter: DD MON YYYY
     function dueDateFormatter(cell) {
       const value = cell.getValue();
       const date = parseISODateSafe(value);
@@ -109,7 +126,6 @@
       return `${day} ${month} ${year}`;
     }
 
-    // Custom formatter: assignment name as link (if link exists)
     function assignmentLinkFormatter(cell) {
       const row = cell.getRow().getData();
       const name = row.assignment || "";
@@ -120,16 +136,28 @@
       return name;
     }
 
-    // Initialize table
     const table = new Tabulator("#assignment-table", {
       data: savedData,
       layout: "fitColumns",
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      rowFormatter: function(row) {
+        const data = row.getData();
+        if (data.class === "PHYS 2210") row.getElement().classList.add("row-phys");
+        if (data.class === "ECE 1400") row.getElement().classList.add("row-ece");
+        if (data.class === "MATH 1210") row.getElement().classList.add("row-math");
+      },
+      groupHeader: function(value) {
+        let cls = "";
+        if (value === "PHYS 2210") cls = "phys";
+        if (value === "ECE 1400") cls = "ece";
+        if (value === "MATH 1210") cls = "math";
+        return `<span class="tabulator-group ${cls}">${value}</span>`;
+      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
-            values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
+            values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
           }},
         { title: "Assignment", field: "assignment", formatter: assignmentLinkFormatter, editor: "input" },
         { 
@@ -161,12 +189,10 @@
       rowDeleted: saveData,
     });
 
-    // Save data to localStorage
     function saveData() {
       localStorage.setItem("assignments", JSON.stringify(table.getData()));
     }
 
-    // Add new assignment from form
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
         class: document.getElementById("class-input").value,
@@ -176,8 +202,6 @@
       };
       table.addRow(newRow);
       saveData();
-
-      // Clear inputs
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
