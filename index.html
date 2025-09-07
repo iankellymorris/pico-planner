@@ -40,6 +40,12 @@
       border-radius: 6px;
       border: 1px solid #ccc;
     }
+    #error-message {
+      margin-top: 10px;
+      color: #c0392b;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
     /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
       font-family: 'Inter', sans-serif !important;
@@ -77,7 +83,8 @@
     <input type="text" id="assignment-input" placeholder="Assignment Name">
     <input type="date" id="due-input">
     <input type="url" id="link-input" placeholder="https://...">
-    <button id="add-btn">Add Assignment</button>
+    <button id="add-btn" disabled>Add Assignment</button>
+    <div id="error-message"></div>
   </div>
 
   <div id="assignment-table"></div>
@@ -93,23 +100,40 @@
 
     let table;
 
+    // Show error messages
+    function showError(msg) {
+      const errorDiv = document.getElementById("error-message");
+      errorDiv.textContent = msg;
+      setTimeout(() => { errorDiv.textContent = ""; }, 5000); // clear after 5s
+    }
+
     // Load saved data or defaults
     async function loadData() {
-      let savedData = await localforage.getItem("assignments");
-      if (!savedData) {
-        savedData = [
-          { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
-          { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-          { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-        ];
-        await localforage.setItem("assignments", savedData);
+      try {
+        let savedData = await localforage.getItem("assignments");
+        if (!savedData) {
+          savedData = [
+            { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
+            { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
+            { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+          ];
+          await localforage.setItem("assignments", savedData);
+        }
+        initTable(savedData);
+      } catch (err) {
+        showError("Failed to load assignments.");
+        console.error(err);
       }
-      initTable(savedData);
     }
 
     // Save data to IndexedDB
     async function saveData() {
-      await localforage.setItem("assignments", table.getData());
+      try {
+        await localforage.setItem("assignments", table.getData());
+      } catch (err) {
+        showError("Failed to save assignments.");
+        console.error(err);
+      }
     }
 
     // Custom delete formatter (× instead of ❌)
@@ -157,23 +181,35 @@
         cellEdited: saveData,
         rowDeleted: saveData,
       });
+
+      // Enable the add button AFTER table is ready
+      document.getElementById("add-btn").disabled = false;
     }
 
     // Add new assignment from form
     document.getElementById("add-btn").addEventListener("click", async () => {
-      const newRow = {
-        class: document.getElementById("class-input").value,
-        assignment: document.getElementById("assignment-input").value,
-        due: document.getElementById("due-input").value,
-        link: document.getElementById("link-input").value
-      };
-      table.addRow(newRow);
-      await saveData();
+      try {
+        if (!table) {
+          showError("Table not ready yet.");
+          return;
+        }
+        const newRow = {
+          class: document.getElementById("class-input").value,
+          assignment: document.getElementById("assignment-input").value,
+          due: document.getElementById("due-input").value,
+          link: document.getElementById("link-input").value
+        };
+        await table.addData([newRow], true); // more reliable than addRow
+        await saveData();
 
-      // Clear inputs
-      document.getElementById("assignment-input").value = "";
-      document.getElementById("due-input").value = "";
-      document.getElementById("link-input").value = "";
+        // Clear inputs
+        document.getElementById("assignment-input").value = "";
+        document.getElementById("due-input").value = "";
+        document.getElementById("link-input").value = "";
+      } catch (err) {
+        showError("Failed to add assignment.");
+        console.error(err);
+      }
     });
 
     // load everything
