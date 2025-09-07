@@ -5,11 +5,11 @@
   <title>Assignment Tracker</title>
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-  <!-- Google Font: DM Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: DM Sans & Fira Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Fira+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Fira Sans', sans-serif; /* default body font */
       margin: 20px;
       background: #ede3fa; /* warmer lavender */
     }
@@ -18,7 +18,7 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 2.2rem;
+      font-size: 2.75rem; /* 25% bigger */
       margin-bottom: 20px;
       color: #4b2e83; /* deep purple */
       letter-spacing: -0.5px; /* tightened kerning */
@@ -27,6 +27,13 @@
     .form-container { margin: 20px 0; }
     .form-container input, .form-container select {
       margin-right: 10px; padding: 5px;
+    }
+    /* Table font styles */
+    .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
+      font-family: 'Fira Sans', sans-serif !important;
+    }
+    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+      font-weight: 600;
     }
     .delete-btn {
       cursor: pointer;
@@ -69,7 +76,7 @@
 
     // Custom delete formatter (× instead of ❌)
     function deleteFormatter(cell, formatterParams, onRendered) {
-      return "<span class='delete-btn'>&times;</span>"; // ×
+      return "<span class='delete-btn'>&times;</span>"; // × symbol
     }
 
     // Initialize table
@@ -87,10 +94,16 @@
         { title: "Due Date", field: "due", editor: "date" },
         { title: "Link", field: "link", editor: "input",
           formatter: "link", formatterParams: { target: "_blank" } },
-        { formatter: deleteFormatter, width: 40, hozAlign: "center", cellClick: function(e, cell){
+        { 
+          title: "", 
+          formatter: deleteFormatter, 
+          width: 40, 
+          hozAlign: "center", 
+          cellClick: function(e, cell){
             cell.getRow().delete();
             saveData();
-        }}
+          }
+        }
       ],
       cellEdited: saveData,
       rowDeleted: saveData,
