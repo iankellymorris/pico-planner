@@ -87,7 +87,7 @@
     ];
 
     // Custom delete formatter (× instead of ❌)
-    function deleteFormatter(cell, formatterParams, onRendered) {
+    function deleteFormatter(cell) {
       return "<span class='delete-btn'>&times;</span>";
     }
 
@@ -109,6 +109,17 @@
       return `${day} ${month} ${year}`;
     }
 
+    // Custom formatter: assignment name as link (if link exists)
+    function assignmentLinkFormatter(cell) {
+      const row = cell.getRow().getData();
+      const name = row.assignment || "";
+      const url = row.link || "";
+      if (url) {
+        return `<a href="${url}" target="_blank" style="color:#4b2e83; text-decoration:none;">${name}</a>`;
+      }
+      return name;
+    }
+
     // Initialize table
     const table = new Tabulator("#assignment-table", {
       data: savedData,
@@ -120,7 +131,7 @@
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
           }},
-        { title: "Assignment", field: "assignment", editor: "input" },
+        { title: "Assignment", field: "assignment", formatter: assignmentLinkFormatter, editor: "input" },
         { 
           title: "Due Date", 
           field: "due", 
@@ -135,8 +146,6 @@
           },
           formatter: dueDateFormatter
         },
-        { title: "Link", field: "link", editor: "input",
-          formatter: "link", formatterParams: { target: "_blank" } },
         { 
           title: "", 
           formatter: deleteFormatter, 
