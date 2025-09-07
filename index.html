@@ -7,8 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
   <!-- Google Fonts: DM Sans & Inter -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <!-- localForage (IndexedDB wrapper) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -39,12 +37,6 @@
       padding: 6px 8px;
       border-radius: 6px;
       border: 1px solid #ccc;
-    }
-    #error-message {
-      margin-top: 10px;
-      color: #c0392b;
-      font-size: 0.9rem;
-      font-weight: 600;
     }
     /* Table font styles */
     .tabulator, .tabulator .tabulator-header, .tabulator .tabulator-cell {
@@ -83,8 +75,7 @@
     <input type="text" id="assignment-input" placeholder="Assignment Name">
     <input type="date" id="due-input">
     <input type="url" id="link-input" placeholder="https://...">
-    <button id="add-btn" disabled>Add Assignment</button>
-    <div id="error-message"></div>
+    <button id="add-btn">Add Assignment</button>
   </div>
 
   <div id="assignment-table"></div>
@@ -92,48 +83,16 @@
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // configure localForage
-    localforage.config({
-      name: "AssignmentTracker",
-      storeName: "assignments"
-    });
-
-    let table;
-
-    // Show error messages
-    function showError(msg) {
-      const errorDiv = document.getElementById("error-message");
-      errorDiv.textContent = msg;
-      setTimeout(() => { errorDiv.textContent = ""; }, 5000); // clear after 5s
-    }
-
     // Load saved data or defaults
-    async function loadData() {
-      try {
-        let savedData = await localforage.getItem("assignments");
-        if (!savedData) {
-          savedData = [
-            { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
-            { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-            { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-          ];
-          await localforage.setItem("assignments", savedData);
-        }
-        initTable(savedData);
-      } catch (err) {
-        showError("Failed to load assignments.");
-        console.error(err);
-      }
-    }
+    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
+      { class: "MATH 1220", assignment: "HW 1", due: "2025-09-01", link: "" },
+      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
+      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+    ];
 
-    // Save data to IndexedDB
-    async function saveData() {
-      try {
-        await localforage.setItem("assignments", table.getData());
-      } catch (err) {
-        showError("Failed to save assignments.");
-        console.error(err);
-      }
+    // Save data to localStorage
+    function saveData() {
+      localStorage.setItem("assignments", JSON.stringify(table.getData()));
     }
 
     // Custom delete formatter (× instead of ❌)
@@ -142,78 +101,61 @@
     }
 
     // Initialize table
-    function initTable(data) {
-      table = new Tabulator("#assignment-table", {
-        data: data,
-        layout: "fitColumns",
-        reactiveData: true,
-        groupBy: "class",
-        groupStartOpen: true,
-        columns: [
-          { title: "Class", field: "class", editor: "select", editorParams: {
-              values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
-            }},
-          { title: "Assignment", field: "assignment", editor: "input" },
-          { 
-            title: "Due Date", 
-            field: "due", 
-            editor: "date", 
-            sorter: "date", 
-            formatter: "datetime",
-            formatterParams: {
-              outputFormat: "dd MMM yyyy", // DD MON YYYY
-              invalidPlaceholder: "---"
-            }
-          },
-          { title: "Link", field: "link", editor: "input",
-            formatter: "link", formatterParams: { target: "_blank" } },
-          { 
-            title: "", 
-            formatter: deleteFormatter, 
-            width: 40, 
-            hozAlign: "center", 
-            cellClick: function(e, cell){
-              cell.getRow().delete();
-              saveData();
-            }
+    const table = new Tabulator("#assignment-table", {
+      data: savedData,
+      layout: "fitColumns",
+      reactiveData: true,
+      groupBy: "class",
+      groupStartOpen: true,
+      columns: [
+        { title: "Class", field: "class", editor: "select", editorParams: {
+            values: ["MATH 1220", "PHYS 2210", "ECE 1400"]
+          }},
+        { title: "Assignment", field: "assignment", editor: "input" },
+        { 
+          title: "Due Date", 
+          field: "due", 
+          editor: "date", 
+          sorter: "date", 
+          formatter: "datetime",
+          formatterParams: {
+            outputFormat: "dd MMM yyyy", // DD MON YYYY
+            invalidPlaceholder: "---"
           }
-        ],
-        cellEdited: saveData,
-        rowDeleted: saveData,
-      });
-
-      // Enable the add button AFTER table is ready
-      document.getElementById("add-btn").disabled = false;
-    }
-
-    // Add new assignment from form
-    document.getElementById("add-btn").addEventListener("click", async () => {
-      try {
-        if (!table) {
-          showError("Table not ready yet.");
-          return;
+        },
+        { title: "Link", field: "link", editor: "input",
+          formatter: "link", formatterParams: { target: "_blank" } },
+        { 
+          title: "", 
+          formatter: deleteFormatter, 
+          width: 40, 
+          hozAlign: "center", 
+          cellClick: function(e, cell){
+            cell.getRow().delete();
+            saveData();
+          }
         }
-        const newRow = {
-          class: document.getElementById("class-input").value,
-          assignment: document.getElementById("assignment-input").value,
-          due: document.getElementById("due-input").value,
-          link: document.getElementById("link-input").value
-        };
-        await table.addData([newRow], true); // more reliable than addRow
-        await saveData();
-
-        // Clear inputs
-        document.getElementById("assignment-input").value = "";
-        document.getElementById("due-input").value = "";
-        document.getElementById("link-input").value = "";
-      } catch (err) {
-        showError("Failed to add assignment.");
-        console.error(err);
-      }
+      ],
+      cellEdited: saveData,
+      rowDeleted: saveData,
     });
 
-    // load everything
-    loadData();
+    // Add new assignment from form
+    document.getElementById("add-btn").addEventListener("click", () => {
+      const newRow = {
+        class: document.getElementById("class-input").value,
+        assignment: document.getElementById("assignment-input").value,
+        due: document.getElementById("due-input").value,
+        link: document.getElementById("link-input").value
+      };
+      table.addRow(newRow); // ✅ simple and reliable
+      saveData();
+
+      // Clear inputs
+      document.getElementById("assignment-input").value = "";
+      document.getElementById("due-input").value = "";
+      document.getElementById("link-input").value = "";
+    });
   </script>
 </body>
 </html>
