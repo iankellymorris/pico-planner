@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Reginald V3)</title>
+  <title>Assignment Tracker (Reginald V4)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Eczar&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -18,10 +18,10 @@
     }
 
     h1 {
-      font-family: 'Bagel Fat One', cursive;
+      font-family: 'Eczar', serif;
       font-weight: 400;
       text-align: left;
-      font-size: 3rem;
+      font-size: 3.2rem; /* bigger */
       margin-bottom: 20px;
       color: #4b2e83;
       padding-left: 12px;
@@ -29,18 +29,18 @@
 
     .form-container {
       margin: 20px 0;
-      padding: 16px;
+      padding: 20px 12px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 18px;
+      border-radius: 24px; /* more rounding */
     }
 
     .form-container input,
     .form-container select,
     .form-container button {
       margin-right: 10px;
-      padding: 6px 8px;
-      border-radius: 6px;
+      padding: 8px 10px; /* taller fields */
+      border-radius: 8px;
       border: 1px solid #ccc;
     }
 
@@ -55,20 +55,6 @@
       font-weight: 600;
       padding-top: 6px;
       padding-bottom: 6px;
-    }
-
-    /* Force group header background colors */
-    .tabulator .tabulator-group[data-group="PHYS 2210"] .tabulator-group-header {
-      background-color: #c9def6 !important; /* pastel blue */
-      color: #1a2a4f !important;
-    }
-    .tabulator .tabulator-group[data-group="ECE 1400"] .tabulator-group-header {
-      background-color: #f6cccc !important; /* pastel red */
-      color: #4f1a1a !important;
-    }
-    .tabulator .tabulator-group[data-group="MATH 1210"] .tabulator-group-header {
-      background-color: #f8e9b6 !important; /* pastel yellow */
-      color: #4f461a !important;
     }
 
     .delete-btn {
@@ -111,9 +97,9 @@
     }
 
     const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4" }
+      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#c9def6" },
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#f6cccc" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#f8e9b6" }
     };
 
     function parseISODateSafe(str){
@@ -165,6 +151,13 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      groupHeader: function(value, count, data){
+        let bg = "#ddd", fg = "#222";
+        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#1a2a4f"; }
+        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#4f1a1a"; }
+        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#4f461a"; }
+        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;">${value} <span style="opacity:0.7;">(${count} assignments)</span></div>`;
+      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: { values: ["MATH 1210","PHYS 2210","ECE 1400"] }},
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
