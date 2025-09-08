@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Harold v11)</title>
+  <title>Assignment Tracker (Reginald)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@1,600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Edu+QLD+Hand:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -18,9 +18,8 @@
     }
 
     h1 {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-style: italic;
+      font-family: 'Edu QLD Hand', cursive;
+      font-weight: 500;
       text-align: left;
       font-size: 3rem;
       margin-bottom: 20px;
@@ -46,7 +45,7 @@
       border: 1px solid #ccc;
     }
 
-    /* Tabulator fonts */
+    /* Table fonts */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
@@ -59,15 +58,18 @@
       padding-bottom: 6px;
     }
 
-    /* Group header pastel tints (keeps group headers visible) */
+    /* Group headers color-coded */
     .tabulator-group[data-group="PHYS 2210"] {
-      background-color: #d6e8fb !important;
+      background-color: #c9def6 !important; /* pastel blue */
+      color: #1a2a4f;
     }
     .tabulator-group[data-group="ECE 1400"] {
-      background-color: #f7d9d9 !important;
+      background-color: #f6cccc !important; /* pastel red */
+      color: #4f1a1a;
     }
     .tabulator-group[data-group="MATH 1210"] {
-      background-color: #fbf3cf !important;
+      background-color: #f8e9b6 !important; /* pastel yellow */
+      color: #4f461a;
     }
 
     .delete-btn {
@@ -77,12 +79,6 @@
       color: rgba(0,0,0,0.32);
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
-
-    /* small responsiveness */
-    @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
-      .form-container { padding: 12px; }
-    }
   </style>
 </head>
 <body>
@@ -105,7 +101,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // ---------- simple helpers ----------
     function escapeHtml(str){
       if (str == null) return "";
       return String(str)
@@ -116,160 +111,75 @@
         .replace(/'/g, "&#039;");
     }
 
-    // colors: pastel primary-ish tints (desaturated)
     const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc" },   // soft blue
-      ECE:  { even: "#f8dbdb", odd: "#fceeee" },   // soft red
-      MATH: { even: "#faf3d1", odd: "#fef9e4" }    // soft yellow
+      PHYS: { even: "#dbe7f8", odd: "#edf4fc" },
+      ECE:  { even: "#f8dbdb", odd: "#fceeee" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4" }
     };
 
-    // parse ISO YYYY-MM-DD safely
     function parseISODateSafe(str){
       if (!str) return null;
       const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
       if (!m) return null;
-      const y = +m[1], mo = +m[2], d = +m[3];
-      return new Date(y, mo - 1, d);
+      return new Date(+m[1], +m[2]-1, +m[3]);
     }
 
     function formatDueDateISOToDDMONYYYY(iso){
       const d = parseISODateSafe(iso);
       if (!d) return "";
-      const day = String(d.getDate()).padStart(2, "0");
       const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      const mon = months[d.getMonth()];
-      return `${day} ${mon} ${d.getFullYear()}`;
+      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
     }
 
-    // ---------- storage / defaults ----------
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
       { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
       { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
       { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
     ];
 
-    let table; // will be assigned
-
-    // Apply background to every cell in a row based on that row's class and its index within the group
     function applyRowBackground(row){
-      try {
-        if (!table) return;
-        const rowEl = row.getElement();
-        if (!rowEl) return;
-
-        const data = row.getData();
-        const cls = data.class || "";
-
-        // get displayed row components in order, filter to same class to compute index-in-group
-        const rows = table.getRows();
-        const groupRows = rows.filter(r => (r.getData().class || "") === cls);
-
-        // find index of this row within groupRows by reference equality
-        const idx = groupRows.findIndex(r => r === row);
-        const even = (idx >= 0) ? (idx % 2 === 0) : true;
-
-        let bg = "";
-        if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-        else if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-        else if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-
-        // Apply the background inline to each cell element for this row
-        const cells = rowEl.querySelectorAll(".tabulator-cell");
-        cells.forEach(cEl => {
-          if (bg) cEl.style.background = bg;
-          else cEl.style.background = "";
-        });
-      } catch (e) {
-        // swallow - coloring shouldn't break the table
-        console.error("applyRowBackground error:", e);
-      }
+      const cls = row.getData().class;
+      const rows = table.getRows().filter(r => r.getData().class === cls);
+      const idx = rows.indexOf(row);
+      const even = idx % 2 === 0;
+      let bg = "";
+      if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+      if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+      if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+      row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
     }
 
-    // Reapply colors to all rows (used after full render)
-    function applyAllRowBackgrounds(){
-      if (!table) return;
-      table.getRows().forEach(r => applyRowBackground(r));
+    function assignmentFormatter(cell){ 
+      const data = cell.getRow().getData();
+      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
     }
 
-    // ---------- custom formatters ----------
-    function assignmentFormatter(cell, formatterParams, onRendered){
-      const text = cell.getValue() || "";
-      const rowData = cell.getRow().getData();
-      const url = rowData.link || "";
-      const out = url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(text)}</a>` : escapeHtml(text);
-      onRendered(() => applyRowBackground(cell.getRow()));
-      return out;
+    function dueFormatter(cell){
+      return formatDueDateISOToDDMONYYYY(cell.getValue());
     }
 
-    function classFormatter(cell, formatterParams, onRendered){
-      const v = cell.getValue() || "";
-      onRendered(() => applyRowBackground(cell.getRow()));
-      return escapeHtml(v);
-    }
+    function deleteFormatter(){ return "<span class='delete-btn'>&times;</span>"; }
 
-    function dueFormatter(cell, formatterParams, onRendered){
-      const iso = cell.getValue();
-      const disp = formatDueDateISOToDDMONYYYY(iso);
-      onRendered(() => applyRowBackground(cell.getRow()));
-      return escapeHtml(disp);
-    }
-
-    function deleteFormatter(cell, formatterParams, onRendered){
-      onRendered(() => applyRowBackground(cell.getRow()));
-      return "<span class='delete-btn'>&times;</span>";
-    }
-
-    // ---------- Tabulator init ----------
-    table = new Tabulator("#assignment-table", {
+    const table = new Tabulator("#assignment-table", {
       data: savedData,
       layout: "fitColumns",
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
       columns: [
-        { title: "Class", field: "class", editor: "select", editorParams: { values: ["MATH 1210","PHYS 2210","ECE 1400"] }, formatter: classFormatter },
+        { title: "Class", field: "class", editor: "select", editorParams: { values: ["MATH 1210","PHYS 2210","ECE 1400"] }},
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
-        { title: "Due Date", field: "due", editor: "date",
-          sorter: function(a,b){
-            const da = parseISODateSafe(a), db = parseISODateSafe(b);
-            if (!da && !db) return 0;
-            if (!da) return -1;
-            if (!db) return 1;
-            return da - db;
-          },
-          formatter: dueFormatter
-        },
-        { title: "Link", field: "link", visible: false }, // store link but hide column
-        { title: "", width: 40, hozAlign: "center", formatter: deleteFormatter, cellClick:function(e,cell){
-            cell.getRow().delete();
-            saveData();
-          }
-        }
+        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
+        { title: "Link", field: "link", visible: false },
+        { title: "", width: 40, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } }
       ],
-      cellEdited: function(cell){
-        // when anything edits, persist and also update colors for that row
-        saveData();
-        applyRowBackground(cell.getRow());
-      },
-      renderComplete: function(){
-        // reapply after full render (sorting/grouping/scroll) — guarantees persistence
-        applyAllRowBackgrounds();
-      }
+      rowFormatter: applyRowBackground,
+      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
+      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
     });
 
-    // ensure initial colors applied
-    applyAllRowBackgrounds();
+    function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
 
-    // ---------- persistence ----------
-    function saveData(){
-      try {
-        localStorage.setItem("assignments", JSON.stringify(table.getData()));
-      } catch (e){
-        console.error("saveData failed", e);
-      }
-    }
-
-    // ---------- add new row ----------
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
         class: document.getElementById("class-input").value,
@@ -277,15 +187,7 @@
         due: document.getElementById("due-input").value,
         link: document.getElementById("link-input").value
       };
-      table.addRow(newRow).then(row => {
-        saveData();
-        applyRowBackground(row); // color new row immediately
-      }).catch(err => {
-        console.error("addRow error", err);
-        // show a quick inline console message? left out to keep minimal
-      });
-
-      // clear inputs
+      table.addRow(newRow).then(row => { saveData(); applyRowBackground(row); });
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
