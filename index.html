@@ -18,19 +18,19 @@
       font-weight: 600;
       font-style: italic;
       text-align: left;
-      font-size: 3rem;
+      font-size: 3.75rem; /* 25% bigger */
       margin-bottom: 20px;
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 12px; /* offset */
+      padding-left: 12px;
     }
     .form-container {
       margin: 20px 0;
-      padding: 15px;
-      background: rgba(75, 46, 131, 0.15); /* darker overlay */
+      padding: 18px;
+      background: rgba(75, 46, 131, 0.18); /* darker overlay */
       border: 1px solid rgba(75, 46, 131, 0.25);
-      border-radius: 18px; /* slightly rounder corners */
+      border-radius: 20px; /* more rounding */
     }
     .form-container input, .form-container select, .form-container button {
       margin-right: 10px;
@@ -44,6 +44,8 @@
     }
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
       font-weight: 600;
+      padding-top: 6px;
+      padding-bottom: 6px;
     }
     .delete-btn {
       cursor: pointer;
@@ -51,10 +53,10 @@
       font-weight: bold;
       font-family: "Courier New", monospace;
       line-height: 1;
-      color: rgba(0,0,0,0.3); /* lighter overlay */
+      color: rgba(0,0,0,0.15); /* softer overlay */
     }
     .delete-btn:hover {
-      color: rgba(0,0,0,0.55); /* slightly darker on hover */
+      color: rgba(0,0,0,0.3); /* darker on hover */
     }
   </style>
 </head>
@@ -81,14 +83,34 @@
   <script>
     // Load saved data or use defaults
     let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "https://example.com" },
+      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "https://example.com" },
+      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "https://example.com" }
     ];
 
     // Custom delete formatter (× instead of ❌)
-    function deleteFormatter(cell, formatterParams, onRendered) {
+    function deleteFormatter(cell) {
       return "<span class='delete-btn'>&times;</span>";
+    }
+
+    // Helper to apply row colors
+    function applyRowColor(row){
+      const data = row.getData();
+      const pos = row.getPosition(true);
+      const el = row.getElement();
+      if (!el) return;
+
+      el.style.background = ""; // reset first
+
+      if (data.class === "PHYS 2210") {
+        el.style.background = (pos % 2 === 0) ? "#dbe7f8" : "#edf4fc";
+      }
+      if (data.class === "ECE 1400") {
+        el.style.background = (pos % 2 === 0) ? "#f8dbdb" : "#fceeee";
+      }
+      if (data.class === "MATH 1210") {
+        el.style.background = (pos % 2 === 0) ? "#faf3d1" : "#fef9e4";
+      }
     }
 
     // Initialize table
@@ -98,30 +120,43 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
+      rowFormatter: applyRowColor,
+      renderComplete: function(){
+        this.getRows().forEach(applyRowColor);
+      },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: {
             values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
           }},
         { title: "Assignment", field: "assignment", editor: "input",
           formatter: function(cell){
-            const value = cell.getValue();
-            const link = cell.getRow().getData().link;
-            return link ? `<a href="${link}" target="_blank">${value}</a>` : value;
+            const url = cell.getRow().getData().link;
+            const text = cell.getValue();
+            if (url) {
+              return "<a href='" + url + "' target='_blank'>" + text + "</a>";
+            }
+            return text;
           }
         },
-        { title: "Due Date", field: "due", sorter: "date", sorterParams:{format:"YYYY-MM-DD"},
-          editor: "date", formatter: function(cell){
-            const date = cell.getValue();
-            if (!date) return "";
-            const d = new Date(date);
-            if (isNaN(d)) return date;
-            const day = String(d.getDate()).padStart(2,"0");
-            const month = d.toLocaleString("en-US",{month:"short"}).toUpperCase();
-            const year = d.getFullYear();
+        { title: "Due Date", field: "due", sorter:"date", editor: "date",
+          formatter:function(cell){
+            let val = cell.getValue();
+            if (!val) return "";
+            let d = new Date(val);
+            if (isNaN(d)) return val;
+            const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+            let day = String(d.getDate()).padStart(2,"0");
+            let month = months[d.getMonth()];
+            let year = d.getFullYear();
             return `${day} ${month} ${year}`;
           }
         },
-        { title: "", formatter: deleteFormatter, width: 40, hozAlign: "center",
+        { title: "Link", field: "link", visible: false }, // hidden, used for anchor in Assignment
+        { 
+          title: "", 
+          formatter: deleteFormatter, 
+          width: 40, 
+          hozAlign: "center", 
           cellClick: function(e, cell){
             cell.getRow().delete();
             saveData();
@@ -130,24 +165,6 @@
       ],
       cellEdited: saveData,
       rowDeleted: saveData,
-      rowFormatter: function(row){
-        const data = row.getData();
-        const pos = row.getPosition(true);
-        const el = row.getElement();
-
-        // Reset background
-        el.style.background = "";
-
-        if (data.class === "PHYS 2210") {
-          el.style.background = (pos % 2 === 0) ? "#dbe7f8" : "#edf4fc";
-        }
-        if (data.class === "ECE 1400") {
-          el.style.background = (pos % 2 === 0) ? "#f8dbdb" : "#fceeee";
-        }
-        if (data.class === "MATH 1210") {
-          el.style.background = (pos % 2 === 0) ? "#faf3d1" : "#fef9e4";
-        }
-      }
     });
 
     // Save data to localStorage
