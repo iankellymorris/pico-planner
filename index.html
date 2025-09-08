@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Reginald V7)</title>
+  <title>Assignment Tracker (Reginald V8)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -32,18 +32,18 @@
 
     .form-container {
       margin: 20px 0;
-      padding: 20px 22px; /* backed off 10px */
+      padding: 20px 22px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 40px; /* more rounded */
+      border-radius: 40px;
     }
 
     .form-container input,
     .form-container select,
     .form-container button {
       margin-right: 10px;
-      padding: 8px 10px;
-      border-radius: 8px;
+      padding: 8px 12px;
+      border-radius: 16px; /* rounder fields */
       border: 1px solid #ccc;
     }
 
@@ -67,7 +67,7 @@
       background: none !important;
     }
 
-    /* Remove the little arrows/bars */
+    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -85,7 +85,7 @@
   </style>
 </head>
 <body>
-  <h1>Assignment<span class="space">  </span>Tracker</h1> <!-- true double space -->
+  <h1>Assignment<span class="space">  </span>Tracker</h1>
 
   <div class="form-container">
     <select id="class-input">
@@ -115,9 +115,9 @@
     }
 
     const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#c9def6" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#f6cccc" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#f8e9b6" }
+      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#8da9dc" },
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#dc8d8d" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#dcd08d" }
     };
 
     function parseISODateSafe(str){
@@ -177,7 +177,6 @@
         return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
       },
       columns: [
-        // Hide "Class" column completely
         { title: "Class", field: "class", visible: false },
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
