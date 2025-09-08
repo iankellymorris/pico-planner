@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Reginald V5)</title>
+  <title>Assignment Tracker (Reginald V6)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -24,15 +24,15 @@
       font-size: 3.2rem;
       margin-bottom: 20px;
       color: #4b2e83;
-      padding-left: 12px;
+      padding-left: 32px; /* bumped up */
     }
 
     .form-container {
       margin: 20px 0;
-      padding: 20px 12px;
+      padding: 20px 32px; /* more left padding */
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 24px;
+      border-radius: 32px; /* more rounded */
     }
 
     .form-container input,
@@ -57,11 +57,20 @@
       padding-bottom: 6px;
     }
 
-    /* Remove default periwinkle from group headers */
+    /* Remove periwinkle completely */
     .tabulator .tabulator-group-header {
-      background: transparent !important;
+      background: none !important;
+      box-shadow: none !important;
       border: none !important;
       padding: 0 !important;
+    }
+
+    /* Remove the little arrows/bars */
+    .tabulator .tabulator-group .tabulator-arrow {
+      display: none !important;
+    }
+    .tabulator .tabulator-group-header {
+      padding-left: 0 !important;
     }
 
     .delete-btn {
@@ -74,7 +83,7 @@
   </style>
 </head>
 <body>
-  <h1>Assignment Tracker</h1>
+  <h1>Assignment  Tracker</h1> <!-- extra space -->
 
   <div class="form-container">
     <select id="class-input">
@@ -158,12 +167,12 @@
       reactiveData: true,
       groupBy: "class",
       groupStartOpen: true,
-      groupHeader: function(value, count, data){
+      groupHeader: function(value){
         let bg = "#ddd", fg = "#222";
         if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#1a2a4f"; }
         if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#4f1a1a"; }
         if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#4f461a"; }
-        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value} <span style="opacity:0.7;">(${count} assignments)</span></div>`;
+        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
       },
       columns: [
         { title: "Class", field: "class", editor: "select", editorParams: { values: ["MATH 1210","PHYS 2210","ECE 1400"] }},
