@@ -200,11 +200,12 @@
         .replace(/'/g, "&#039;");
     }
 
-    const COLORS = {
+   const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b05b5b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#b0a35b" }
-    };
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, // redder red
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  // yellower yellow
+   };
+
 
     function parseISODateSafe(str){
       if (!str) return null;
