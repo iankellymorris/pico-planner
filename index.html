@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V5)</title>
+  <title>Assignment Tracker (Terrence V9)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Gorditas&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gorditas&family=Lato:wght@400;700&family=East+Sea+Dokdo&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -27,7 +27,7 @@
     }
 
     h1 {
-      font-family: 'East Sea Dokdo';
+      font-family: 'East Sea Dokdo', cursive;
       font-weight: 400;
       text-align: left;
       font-size: 3.2rem;
@@ -200,12 +200,11 @@
         .replace(/'/g, "&#039;");
     }
 
-   const COLORS = {
+    const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
       ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, // redder red
       MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  // yellower yellow
-   };
-
+    };
 
     function parseISODateSafe(str){
       if (!str) return null;
