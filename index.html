@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V12)</title>
+  <title>Assignment Tracker (Terrence V13)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@900&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -37,13 +37,16 @@
 
     h1 {
       font-family: 'Raleway', sans-serif;
-      font-weight: 900; /* Black weight */
+      font-weight: 900;
       text-align: left;
       font-size: var(--titleFontSize);
       margin-bottom: 16px;
       color: var(--titleColor);
       padding-left: var(--titleLeftEdgePadding);
     }
+
+    /* Force two spaces in title */
+    h1 span.space { white-space: pre; }
 
     /* wrapper for centering */
     .form-wrap {
@@ -64,13 +67,13 @@
     .form-container input,
     .form-container button {
       margin-right: 10px;
-      padding: 10px 16px;
+      padding: 6px 14px;   /* squatter */
       border-radius: 9999px; /* pill style */
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* custom pill dropdown fix */
+    /* pill dropdown wrapper */
     .select-wrapper {
       position: relative;
       display: inline-block;
@@ -84,7 +87,7 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       border-radius: 9999px;
-      padding: 10px 36px 10px 16px; /* extra right padding for arrow */
+      padding: 6px 34px 6px 14px;  /* squatter */
       border: 1px solid #ccc;
       font-size: 1rem;
       background: #fff;
@@ -93,7 +96,7 @@
     .select-wrapper::after {
       content: "▼";
       position: absolute;
-      right: 14px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 0.75rem;
@@ -130,11 +133,6 @@
       background: none !important;
     }
 
-    /* Make table expand instead of scroll */
-    .tabulator .tabulator-tableholder {
-      overflow-y: visible !important;
-    }
-
     /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
@@ -169,19 +167,19 @@
       padding: 8px 14px;
       border-radius: 9999px;
       border: 1px solid #bbb;
-      background: #f9f9f9;
-      color: #aaa;
+      background: #f2f2f2;
+      color: #888;
       font-size: 0.95rem;
       cursor: pointer;
     }
 
     .data-buttons button:hover {
-      background: #eaeaea;
+      background: #e0e0e0;
     }
   </style>
 </head>
 <body>
-  <h1>Assignment&nbsp;&nbsp;Tracker</h1>
+  <h1>Assignment<span class="space">  </span>Tracker</h1>
 
   <div class="form-wrap">
     <div class="form-container">
@@ -276,6 +274,7 @@
       data: savedData,
       layout: "fitColumns",
       reactiveData: true,
+      height: "auto", /* table grows naturally */
       groupBy: "class",
       groupStartOpen: true,
       groupHeader: function(value){
