@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V17)</title>
+  <title>Assignment Tracker (Terrence V18)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -25,11 +25,13 @@
       --backgroundColor: #ede3fa;      /* page background */
       --pageTopPadding: 20px;          /* top padding for the page */
 
-      /* entry field padding + spacing */
-      --entryPaddingTop: 10px;
-      --entryPaddingBottom: 10px;
-      --entryPaddingLeft: 50px;
-      --entryPaddingRight: 10px;
+      /* padding for the purple form-container */
+      --entryPaddingTop: 20px;
+      --entryPaddingBottom: 20px;
+      --entryPaddingLeft: 22px;
+      --entryPaddingRight: 22px;
+
+      /* spacing between fields inside */
       --entryGap: 10px;
     }
 
@@ -63,7 +65,7 @@
     .form-container {
       display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px 0 20px 22px; /* ⬅ no right padding now */
+      padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
@@ -75,30 +77,23 @@
     .form-container input,
     .form-container button {
       margin-right: var(--entryGap);
-      padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-      border-radius: 9999px; /* pill style */
+      padding: 10px 16px;  /* inner pill padding */
+      border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* last item (Add Assignment) should not be clipped */
-    .form-container > *:last-child {
-      margin-right: 0 !important;
-    }
-
-    /* Assignment Name field: external spacing fix */
+    /* Assignment Name field: comfy inner padding */
     #assignment-input {
-      margin-left: 0px;   /* space between dropdown and this field */
-      padding-left: 16px; /* comfy inner padding */
+      padding-left: 16px;
     }
 
-    /* pill dropdown fix */
+    /* pill dropdown with custom arrow */
     .form-container select {
       width: var(--dropdownWidth);
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      position: relative;
       padding-right: 32px; /* room for arrow */
       background: white;
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
