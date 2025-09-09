@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3 - centered form + table padding)</title>
+  <title>Assignment Tracker (Terrence V3.1)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -32,13 +32,13 @@
 
     /* center wrapper so the form can be centered reliably */
     .form-wrap {
-      text-align: center; /* centers inline-block children */
+      text-align: center;
     }
 
     .form-container {
-      display: inline-block;    /* shrink to fit */
-      margin: 20px auto;        /* vertical spacing, horizontal centering via wrapper */
-      padding: 20px 22px;       /* symmetric horizontal padding (same left/right) */
+      display: inline-block;
+      margin: 20px auto;
+      padding: 20px 14px 20px 22px; /* reduce right side by 8px */
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
@@ -60,10 +60,10 @@
       font-family: 'Lato', sans-serif !important;
     }
 
-    /* move the table right, and add 10px padding on the right */
+    /* consistent spacing left and right */
     .tabulator {
-      margin-left: 300px; /* as before */
-      padding-right: 10px; /* new: 10px right padding */
+      margin-left: 300px;
+      margin-right: 10px; /* new: match style of margin-left */
     }
 
     .tabulator .tabulator-cell {
@@ -103,7 +103,6 @@
 <body>
   <h1>Assignment<span class="space">  </span>Tracker</h1>
 
-  <!-- centered wrapper around the form -->
   <div class="form-wrap">
     <div class="form-container">
       <select id="class-input">
