@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.2)</title>
+  <title>Assignment Tracker (Terrence V3.3)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -11,6 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Gorditas&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --entryTableDelta: 30px;         /* spacing between assignment entry and table */
+      --titleLeftEdgePadding: 20px;    /* padding-left for the title */
+      --tableRightEdgePadding: 10px;   /* right margin for the table */
+      --tableLeftEdgePadding: 300px;   /* left margin for the table */
+    }
+
     body {
       font-family: 'Lato', sans-serif;
       margin: 20px;
@@ -24,21 +31,20 @@
       font-size: 3.2rem;
       margin-bottom: 20px;
       color: #4b2e83;
-      padding-left: 20px;
+      padding-left: var(--titleLeftEdgePadding);
     }
 
     /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* center wrapper so the form can be centered reliably */
     .form-wrap {
       text-align: center;
     }
 
     .form-container {
       display: inline-block;
-      margin: 20px auto 30px auto; /* increased bottom margin by 10px */
-      padding: 20px 14px 20px 22px; /* reduce right side by 8px */
+      margin: 20px auto var(--entryTableDelta) auto;
+      padding: 20px 14px 20px 22px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
@@ -53,6 +59,11 @@
       border: 1px solid #ccc;
     }
 
+    /* widen the dropdown so arrow isn't crowded */
+    .form-container select {
+      padding-right: 28px;
+    }
+
     /* Table font */
     .tabulator,
     .tabulator .tabulator-header,
@@ -60,10 +71,9 @@
       font-family: 'Lato', sans-serif !important;
     }
 
-    /* consistent spacing left and right */
     .tabulator {
-      margin-left: 300px;
-      margin-right: 10px; /* new: match style of margin-left */
+      margin-left: var(--tableLeftEdgePadding);
+      margin-right: var(--tableRightEdgePadding);
     }
 
     .tabulator .tabulator-cell {
@@ -199,7 +209,7 @@
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
         { title: "Link", field: "link", visible: false },
-        { title: "", width: 40, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } }
+        { title: "", width: 55, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } } /* widened last col */
       ],
       rowFormatter: applyRowBackground,
       renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
