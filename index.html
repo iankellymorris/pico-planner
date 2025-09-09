@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.3)</title>
+  <title>Assignment Tracker (Terrence V3.6)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -16,6 +16,8 @@
       --titleLeftEdgePadding: 20px;    /* padding-left for the title */
       --tableRightEdgePadding: 10px;   /* right margin for the table */
       --tableLeftEdgePadding: 300px;   /* left margin for the table */
+      --dropdownMinWidth: 160px;       /* min-width for the class dropdown */
+      --deleteColumnWidth: 50px;       /* width for the delete column */
     }
 
     body {
@@ -37,17 +39,13 @@
     /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    .form-wrap {
-      text-align: center;
-    }
-
     .form-container {
-      display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px 14px 20px 22px;
+      padding: 20px 22px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
+      width: fit-content;
     }
 
     .form-container input,
@@ -59,9 +57,9 @@
       border: 1px solid #ccc;
     }
 
-    /* widen the dropdown so arrow isn't crowded */
     .form-container select {
-      padding-right: 28px;
+      min-width: var(--dropdownMinWidth);
+      padding-right: 8px; /* breathing room inside */
     }
 
     /* Table font */
@@ -101,11 +99,16 @@
       padding-left: 0 !important;
     }
 
+    /* Delete button column: center ❌ fully */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
       font-family: "Courier New", monospace;
       color: rgba(0,0,0,0.32);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
   </style>
@@ -113,19 +116,17 @@
 <body>
   <h1>Assignment<span class="space">  </span>Tracker</h1>
 
-  <div class="form-wrap">
-    <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
-      </select>
+  <div class="form-container">
+    <select id="class-input">
+      <option value="MATH 1210">MATH 1210</option>
+      <option value="PHYS 2210">PHYS 2210</option>
+      <option value="ECE 1400">ECE 1400</option>
+    </select>
 
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
-      <button id="add-btn">Add Assignment</button>
-    </div>
+    <input type="text" id="assignment-input" placeholder="Assignment Name">
+    <input type="date" id="due-input">
+    <input type="url" id="link-input" placeholder="https://...">
+    <button id="add-btn">Add Assignment</button>
   </div>
 
   <div id="assignment-table"></div>
@@ -180,7 +181,7 @@
       row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
     }
 
-    function assignmentFormatter(cell){
+    function assignmentFormatter(cell){ 
       const data = cell.getRow().getData();
       return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
     }
@@ -209,7 +210,11 @@
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
         { title: "Link", field: "link", visible: false },
-        { title: "", width: 55, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } } /* widened last col */
+        { title: "", field: "delete", hozAlign: "center",
+          width: parseInt(getComputedStyle(document.documentElement).getPropertyValue("--deleteColumnWidth")),
+          formatter: deleteFormatter,
+          cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); }
+        }
       ],
       rowFormatter: applyRowBackground,
       renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
