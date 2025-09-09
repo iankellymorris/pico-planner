@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V4)</title>
+  <title>Assignment Tracker (Terrence V3)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -24,19 +24,18 @@
       font-size: 3.2rem;
       margin-bottom: 20px;
       color: #4b2e83;
-      padding-left: 20px;
+      padding-left: 20px; /* increased by 8px */
     }
 
     /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
     .form-container {
-      margin: 20px auto; /* center horizontally */
-      padding: 20px 40px; /* equal horizontal padding */
+      margin: 20px 0;
+      padding: 20px 22px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
-      display: inline-block; /* shrink to fit content */
     }
 
     .form-container input,
@@ -56,12 +55,11 @@
     }
 
     .tabulator {
-      margin-left: 300px;
-      margin-top: 20px; /* spacing between form and table */
+      margin-left: 300px; /* bumped to 300px */
     }
 
     .tabulator .tabulator-cell {
-      padding-left: 15px !important;
+      padding-left: 15px !important; /* bumped to 15px */
     }
 
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
