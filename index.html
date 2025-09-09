@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V15)</title>
+  <title>Assignment Tracker (Terrence V15 Fixed)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -27,9 +27,10 @@
 
       /* assignment entry field/button padding */
       --entryPaddingTop: 10px;
-      --entryPaddingRight: 0px;
+      --entryPaddingRight: 16px;
       --entryPaddingBottom: 10px;
       --entryPaddingLeft: 16px;
+      --entryGap: 10px; /* controls spacing between fields/buttons */
     }
 
     body {
@@ -71,7 +72,7 @@
     .form-container select,
     .form-container input,
     .form-container button {
-      margin-right: 10px;
+      margin-right: var(--entryGap);
       padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
       border-radius: 9999px;
       border: 1px solid #ccc;
@@ -198,7 +199,87 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // ... your JS stays exactly the same as V14 ...
+    // Storage + data
+    let table;
+    const saved = localStorage.getItem("assignments");
+    const tableData = saved ? JSON.parse(saved) : [];
+
+    function saveData() {
+      localStorage.setItem("assignments", JSON.stringify(table.getData()));
+    }
+
+    // Table
+    table = new Tabulator("#assignment-table", {
+      data: tableData,
+      layout: "fitColumns",
+      groupBy: "class",
+      columns: [
+        {title:"Class", field:"class"},
+        {title:"Assignment", field:"assignment"},
+        {title:"Due", field:"due"},
+        {title:"Link", field:"link", formatter:"link", formatterParams:{labelField:"link", urlField:"link"}},
+        {
+          title:"Delete", field:"delete", hozAlign:"center", headerSort:false,
+          formatter:() => "<span class='delete-btn'>×</span>",
+          cellClick:(e, cell) => { cell.getRow().delete(); saveData(); }
+        }
+      ],
+      rowFormatter:function(row){
+        const data = row.getData();
+        const colors = {
+          "MATH 1210":"#d35400", // orange
+          "PHYS 2210":"#c0392b", // red
+          "ECE 1400":"#27ae60", // green
+        };
+        if(data.class && colors[data.class]){
+          row.getElement().style.backgroundColor = colors[data.class]+"22";
+        }
+      },
+      dataChanged:saveData,
+    });
+
+    // Add
+    document.getElementById("add-btn").addEventListener("click", () => {
+      const cls = document.getElementById("class-input").value;
+      const name = document.getElementById("assignment-input").value;
+      const due = document.getElementById("due-input").value;
+      const link = document.getElementById("link-input").value;
+      if(name){
+        table.addRow({class:cls, assignment:name, due:due, link:link});
+        saveData();
+      }
+    });
+
+    // Export
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const data = JSON.stringify(table.getData(), null, 2);
+      const blob = new Blob([data], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "assignments.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Import
+    document.getElementById("import-btn").addEventListener("click", () => {
+      document.getElementById("import-file").click();
+    });
+
+    document.getElementById("import-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = evt => {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          table.setData(imported);
+          saveData();
+        } catch(err){ alert("Invalid JSON file"); }
+      };
+      reader.readAsText(file);
+    });
   </script>
 </body>
 </html>
