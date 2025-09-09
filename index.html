@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V6)</title>
+  <title>Assignment Tracker (Carlton V7)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -23,8 +23,9 @@
       --titleFontSize: 3.2rem;
       --titleColor: #4b2e83;
       --backgroundColor: #ede3fa;
-      --pageTopPadding: 10px;        /* control space above title */
-      --titleBottomMargin: 10px;    /* control space below title */
+      --pageTopPadding: 10px;
+      --pageBottomPadding: 30px;    /* NEW: control space at bottom */
+      --titleBottomMargin: 10px;
 
       /* form container padding */
       --entryPaddingTop: 18px;
@@ -34,7 +35,7 @@
       --entryGap: 10px;
 
       /* button colors */
-      --addBtnColor: #C71585;        /* red-violet */
+      --addBtnColor: #C71585;  /* red-violet */
       --addBtnText: #fff;
       --dataBtnBg: #f2f2f2;
       --dataBtnText: #888;
@@ -46,6 +47,7 @@
       padding-top: var(--pageTopPadding);
       padding-left: 20px;
       padding-right: 20px;
+      padding-bottom: var(--pageBottomPadding);
       background: var(--backgroundColor);
     }
 
@@ -109,9 +111,7 @@
       cursor: pointer;
     }
 
-    #add-btn:hover {
-      opacity: 0.9;
-    }
+    #add-btn:hover { opacity: 0.9; }
 
     .tabulator,
     .tabulator .tabulator-header,
@@ -148,7 +148,7 @@
       justify-content: center;
       align-items: center;
       height: 100%;
-      padding-right: 10px; /* balances spacing */
+      padding-right: 10px;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
@@ -214,7 +214,7 @@
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
       ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#FFD300" }
+      MATH: { even: "#fff8cc", odd: "#fffde0", header: "#FFD300" } // lighter yellows
     };
 
     function parseISODateSafe(str){
