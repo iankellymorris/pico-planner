@@ -12,8 +12,6 @@
       font-family: 'Lato', sans-serif;
       margin: 20px;
       background: #ede3fa;
-      position: relative;
-      overflow-x: hidden;
     }
 
     h1 {
@@ -23,20 +21,18 @@
       color: #4b2e83;
       letter-spacing: -0.5px;
       line-height: 1.2;
-      padding-left: 20px; /* slightly more padding */
+      padding-left: 20px; /* title padding */
       text-align: left;
     }
 
     .form-container {
-      margin: 20px auto; /* center in page */
-      padding: 20px;
+      margin: 20px 0;
+      padding: 20px 10px 20px 30px; /* extra left padding */
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 40px;
+      border-radius: 32px; /* rounder corners */
       display: flex;
-      justify-content: center;
       gap: 10px;
-      max-width: fit-content;
     }
 
     .form-container input,
@@ -55,11 +51,6 @@
 
     .tabulator .tabulator-cell {
       padding-left: 15px; /* padding inside each cell */
-    }
-
-    /* Remove the little left color bars */
-    .tabulator .tabulator-group .tabulator-arrow {
-      display: none;
     }
 
     /* Darker custom group headers */
@@ -82,33 +73,20 @@
       background: #a33b3b; /* darker red */
     }
 
-    /* Abstract background typography */
-    .abstract-letter {
-      position: absolute;
-      font-family: 'Gorditas', cursive;
-      font-size: 10rem;
-      color: rgba(75, 46, 131, 0.08);
-      z-index: -1;
-      pointer-events: none;
-      user-select: none;
+    .delete-btn {
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-family: "Courier New", monospace;
+      line-height: 1;
+      color: rgba(0,0,0,0.3); /* lighter overlay */
     }
-
-    .abstract-letter.one {
-      top: 50px;
-      left: 50px;
-    }
-
-    .abstract-letter.two {
-      bottom: 80px;
-      right: 100px;
+    .delete-btn:hover {
+      color: rgba(0,0,0,0.55); /* slightly darker on hover */
     }
   </style>
 </head>
 <body>
-  <!-- Abstract background letters -->
-  <div class="abstract-letter one">A</div>
-  <div class="abstract-letter two">T</div>
-
   <h1>Assignment  Tracker</h1>
 
   <!-- Form for adding assignments -->
@@ -156,7 +134,7 @@
         return `<span class="${cls}">${value}</span>`;
       },
       columns: [
-        { title: "Class", field: "class", visible: false }, /* hidden since grouping already shows class */
+        { title: "Class", field: "class", visible: false },
         { title: "Assignment", field: "assignment", editor: "input",
           formatter: "link", formatterParams: { labelField: "assignment", urlField: "link", target: "_blank" } },
         { title: "Due Date", field: "due", sorter: "date", sorterParams: { format: "YYYY-MM-DD" },
@@ -167,7 +145,7 @@
             return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
           },
           editor: "date" },
-        { title: "Link", field: "link", visible: false }, /* hidden because link is tied to assignment name now */
+        { title: "Link", field: "link", visible: false },
         { title: "", formatter: deleteFormatter, width: 40, hozAlign: "center",
           cellClick: function(e, cell){ cell.getRow().delete(); saveData(); } }
       ],
