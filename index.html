@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V4)</title>
+  <title>Assignment Tracker (Terrence V5)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -136,6 +136,29 @@
       height: 100%;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
+
+    /* export/import buttons */
+    .data-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+      margin-right: var(--tableRightEdgePadding);
+    }
+
+    .data-buttons button {
+      margin-left: 10px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      border: 1px solid #bbb;
+      background: #f0f0f0;
+      color: #555;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .data-buttons button:hover {
+      background: #e0e0e0;
+    }
   </style>
 </head>
 <body>
@@ -157,6 +180,13 @@
   </div>
 
   <div id="assignment-table"></div>
+
+  <!-- export/import buttons -->
+  <div class="data-buttons">
+    <button id="export-btn">Export Data</button>
+    <button id="import-btn">Import Data</button>
+    <input type="file" id="import-file" accept=".json" style="display:none;">
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
@@ -275,6 +305,41 @@
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
+    });
+
+    // Export Data
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const dataStr = JSON.stringify(table.getData(), null, 2);
+      const blob = new Blob([dataStr], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "assignments.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Import Data
+    document.getElementById("import-btn").addEventListener("click", () => {
+      document.getElementById("import-file").click();
+    });
+
+    document.getElementById("import-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          table.replaceData(imported);
+          saveData();
+        } catch {
+          alert("Invalid file format. Please select a valid JSON export.");
+        }
+      };
+      reader.readAsText(file);
     });
   </script>
 </body>
