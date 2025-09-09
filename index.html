@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.6)</title>
+  <title>Assignment Tracker (Terrence V3.5)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -17,7 +17,6 @@
       --tableRightEdgePadding: 10px;   /* right margin for the table */
       --tableLeftEdgePadding: 300px;   /* left margin for the table */
       --dropdownMinWidth: 160px;       /* min-width for the class dropdown */
-      --deleteColumnWidth: 50px;       /* width for the delete column */
     }
 
     body {
@@ -210,8 +209,7 @@
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
         { title: "Link", field: "link", visible: false },
-        { title: "", field: "delete", hozAlign: "center",
-          width: parseInt(getComputedStyle(document.documentElement).getPropertyValue("--deleteColumnWidth")),
+        { title: "", field: "delete", hozAlign: "center", width: 50,
           formatter: deleteFormatter,
           cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); }
         }
