@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V4)</title>
+  <title>Assignment Tracker (Terrence V4.1)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,11 +12,11 @@
 
   <style>
     :root {
-      --entryTableDelta: 30px;       /* vertical spacing between form and table */
-      --titleLeftEdgePadding: 20px;  /* title padding-left */
-      --tableRightEdgePadding: 10px; /* right margin for table */
-      --tableLeftEdgePadding: 300px; /* left margin for table */
-      --dropdownWidth: 180px;        /* width for course dropdown */
+      --entryTableDelta: 30px;
+      --titleLeftEdgePadding: 20px;
+      --tableRightEdgePadding: 10px;
+      --tableLeftEdgePadding: 300px;
+      --dropdownWidth: 180px;
     }
 
     body {
@@ -35,14 +35,13 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
-    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
 
+    /* scale down assignment entry */
     .form-container {
       display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
@@ -50,6 +49,8 @@
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
+      transform: scale(0.75);
+      transform-origin: center;
     }
 
     .form-container select,
@@ -57,19 +58,18 @@
     .form-container button {
       margin-right: 10px;
       padding: 10px 16px;
-      border-radius: 9999px; /* pill style */
+      border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* pill dropdown fix */
     .form-container select {
       width: var(--dropdownWidth);
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
       position: relative;
-      padding-right: 32px; /* room for arrow */
+      padding-right: 32px;
       background: white;
     }
 
@@ -84,7 +84,6 @@
       pointer-events: none;
     }
 
-    /* Table font */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
@@ -106,14 +105,12 @@
       padding-bottom: 6px;
     }
 
-    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -121,16 +118,18 @@
       padding-left: 0 !important;
     }
 
-    /* delete button centering */
+    /* delete button: fix centering by styling the cell itself */
+    .tabulator .tabulator-cell.delete-col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
       font-family: "Courier New", monospace;
       color: rgba(0,0,0,0.32);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
   </style>
@@ -241,7 +240,8 @@
           field: "delete", 
           width: 40, 
           hozAlign: "center", 
-          headerSort: false, /* disable sort arrow */
+          headerSort: false,
+          cssClass: "delete-col",
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
