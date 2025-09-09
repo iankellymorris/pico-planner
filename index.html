@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V16)</title>
+  <title>Assignment Tracker (Terrence V17)</title>
 
-  <!-- Tabulator CSS -->
+  <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
@@ -12,25 +12,25 @@
 
   <style>
     :root {
-      --entryTableDelta: 20px;
-      --titleLeftEdgePadding: 20px;
-      --tableRightEdgePadding: 16px;
-      --tableLeftEdgePadding: 280px;
-      --dropdownWidth: 180px;
-      --formScale: 0.85;
+      --entryTableDelta: 20px;         /* vertical spacing between form and table */
+      --titleLeftEdgePadding: 20px;    /* title padding-left */
+      --tableRightEdgePadding: 16px;   /* right margin for table */
+      --tableLeftEdgePadding: 280px;   /* left margin for table */
+      --dropdownWidth: 180px;          /* width for course dropdown */
+      --formScale: 0.85;               /* scale factor for assignment entry */
 
-      /* title + page */
-      --titleFontSize: 3.2rem;
-      --titleColor: #4b2e83;
-      --backgroundColor: #ede3fa;
-      --pageTopPadding: 20px;
+      /* new variables */
+      --titleFontSize: 3.2rem;         /* title font size */
+      --titleColor: #4b2e83;           /* title font color */
+      --backgroundColor: #ede3fa;      /* page background */
+      --pageTopPadding: 20px;          /* top padding for the page */
 
-      /* assignment entry fields */
+      /* entry field padding + spacing */
       --entryPaddingTop: 10px;
-      --entryPaddingRight: 0px;
       --entryPaddingBottom: 10px;
-      --entryPaddingLeft: 16px;
-      --entryGap: 10px; /* space between fields/buttons */
+      --entryPaddingLeft: 0px;
+      --entryPaddingRight: 16px;
+      --entryGap: 10px;
     }
 
     body {
@@ -52,8 +52,10 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
+    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
+    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
@@ -61,7 +63,7 @@
     .form-container {
       display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px 22px;
+      padding: 20px 0 20px 22px; /* ⬅ no right padding now */
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
@@ -74,29 +76,31 @@
     .form-container button {
       margin-right: var(--entryGap);
       padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-      border-radius: 9999px;
+      border-radius: 9999px; /* pill style */
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* remove extra margin after last field/button */
+    /* last item (Add Assignment) should not be clipped */
     .form-container > *:last-child {
       margin-right: 0 !important;
     }
 
+    /* Assignment Name field: external spacing fix */
     #assignment-input {
-      margin-left: 0px;
-      padding-left: var(--entryPaddingLeft);
+      margin-left: 0px;   /* space between dropdown and this field */
+      padding-left: 16px; /* comfy inner padding */
     }
 
-    /* dropdown arrow */
+    /* pill dropdown fix */
     .form-container select {
       width: var(--dropdownWidth);
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
+      position: relative;
+      padding-right: 32px; /* room for arrow */
       background: white;
-      padding-right: calc(var(--entryPaddingRight) + 20px);
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                         linear-gradient(135deg, #555 50%, transparent 50%);
       background-position: calc(100% - 14px) calc(50% - 3px),
@@ -105,7 +109,7 @@
       background-repeat: no-repeat;
     }
 
-    /* Table */
+    /* Table font */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
@@ -127,12 +131,14 @@
       padding-bottom: 6px;
     }
 
+    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
+    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -140,6 +146,7 @@
       padding-left: 0 !important;
     }
 
+    /* delete button centering */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
@@ -152,6 +159,7 @@
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
+    /* export/import buttons */
     .data-buttons {
       display: flex;
       justify-content: flex-end;
@@ -195,6 +203,7 @@
 
   <div id="assignment-table"></div>
 
+  <!-- export/import buttons -->
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
@@ -215,8 +224,8 @@
 
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, // redder red
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  // yellower yellow
     };
 
     function parseISODateSafe(str){
@@ -233,7 +242,11 @@
       return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
     }
 
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [];
+    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
+      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
+      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
+      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+    ];
 
     function applyRowBackground(row){
       const cls = row.getData().class;
@@ -283,7 +296,7 @@
           field: "delete", 
           width: 40, 
           hozAlign: "center", 
-          headerSort: false, 
+          headerSort: false, /* disable sort arrow */
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
@@ -316,7 +329,7 @@
       document.getElementById("link-input").value = "";
     });
 
-    // Export
+    // Export Data
     document.getElementById("export-btn").addEventListener("click", () => {
       const dataStr = JSON.stringify(table.getData(), null, 2);
       const blob = new Blob([dataStr], {type: "application/json"});
@@ -330,7 +343,7 @@
       URL.revokeObjectURL(url);
     });
 
-    // Import
+    // Import Data
     document.getElementById("import-btn").addEventListener("click", () => {
       document.getElementById("import-file").click();
     });
