@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.3)</title>
+  <title>Assignment Tracker (Terrence V3.2a)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,10 +12,11 @@
 
   <style>
     :root {
-      --entryTableDelta: 30px;         /* spacing between assignment entry and table */
-      --titleLeftEdgePadding: 20px;    /* padding-left for the title */
-      --tableRightEdgePadding: 10px;   /* right margin for the table */
-      --tableLeftEdgePadding: 300px;   /* left margin for the table */
+      --entryTableDelta: 30px;          /* space between entry form and table */
+      --titleLeftEdgePadding: 20px;     /* left padding for title */
+      --tableLeftEdgePadding: 300px;    /* left margin for table */
+      --tableRightEdgePadding: 10px;    /* right margin for table */
+      --deleteColumnWidth: 40px;        /* width of delete column */
     }
 
     body {
@@ -37,6 +38,7 @@
     /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
+    /* center wrapper so the form can be centered reliably */
     .form-wrap {
       text-align: center;
     }
@@ -57,11 +59,6 @@
       padding: 8px 12px;
       border-radius: 32px;
       border: 1px solid #ccc;
-    }
-
-    /* widen the dropdown so arrow isn't crowded */
-    .form-container select {
-      padding-right: 28px;
     }
 
     /* Table font */
@@ -209,245 +206,7 @@
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
         { title: "Link", field: "link", visible: false },
-        { title: "", width: 55, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } } /* widened last col */
-      ],
-      rowFormatter: applyRowBackground,
-      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
-      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
-    });
-
-    function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
-
-    document.getElementById("add-btn").addEventListener("click", () => {
-      const newRow = {
-        class: document.getElementById("class-input").value,
-        assignment: document.getElementById("assignment-input").value,
-        due: document.getElementById("due-input").value,
-        link: document.getElementById("link-input").value
-      };
-      table.addRow(newRow).then(row => { saveData(); applyRowBackground(row); });
-      document.getElementById("assignment-input").value = "";
-      document.getElementById("due-input").value = "";
-      document.getElementById("link-input").value = "";
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.5)</title>
-
-  <!-- Tabulator Modern CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Gorditas&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --entryTableDelta: 30px;         /* spacing between assignment entry and table */
-      --titleLeftEdgePadding: 20px;    /* padding-left for the title */
-      --tableRightEdgePadding: 10px;   /* right margin for the table */
-      --tableLeftEdgePadding: 300px;   /* left margin for the table */
-      --dropdownMinWidth: 160px;       /* min-width for the class dropdown */
-    }
-
-    body {
-      font-family: 'Lato', sans-serif;
-      margin: 20px;
-      background: #ede3fa;
-    }
-
-    h1 {
-      font-family: 'Gorditas', cursive;
-      font-weight: 400;
-      text-align: left;
-      font-size: 3.2rem;
-      margin-bottom: 20px;
-      color: #4b2e83;
-      padding-left: var(--titleLeftEdgePadding);
-    }
-
-    /* Force two spaces in title */
-    h1 span.space { white-space: pre; }
-
-    .form-container {
-      margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px 22px;
-      background: rgba(75, 46, 131, 0.16);
-      border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 40px;
-      width: fit-content;
-    }
-
-    .form-container input,
-    .form-container select,
-    .form-container button {
-      margin-right: 10px;
-      padding: 8px 12px;
-      border-radius: 32px;
-      border: 1px solid #ccc;
-    }
-
-    .form-container select {
-      min-width: var(--dropdownMinWidth);
-      padding-right: 8px; /* breathing room inside */
-    }
-
-    /* Table font */
-    .tabulator,
-    .tabulator .tabulator-header,
-    .tabulator .tabulator-cell {
-      font-family: 'Lato', sans-serif !important;
-    }
-
-    .tabulator {
-      margin-left: var(--tableLeftEdgePadding);
-      margin-right: var(--tableRightEdgePadding);
-    }
-
-    .tabulator .tabulator-cell {
-      padding-left: 15px !important;
-    }
-
-    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
-      font-weight: 700;
-      padding-top: 6px;
-      padding-bottom: 6px;
-    }
-
-    /* Remove periwinkle backgrounds */
-    .tabulator,
-    .tabulator .tabulator-tableholder,
-    .tabulator-row {
-      background: none !important;
-    }
-
-    /* Remove arrows/bars */
-    .tabulator .tabulator-group .tabulator-arrow {
-      display: none !important;
-    }
-    .tabulator .tabulator-group-header {
-      padding-left: 0 !important;
-    }
-
-    /* Delete button column: center ❌ fully */
-    .delete-btn {
-      cursor: pointer;
-      font-size: 1.15rem;
-      font-family: "Courier New", monospace;
-      color: rgba(0,0,0,0.32);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-    .delete-btn:hover { color: rgba(0,0,0,0.6); }
-  </style>
-</head>
-<body>
-  <h1>Assignment<span class="space">  </span>Tracker</h1>
-
-  <div class="form-container">
-    <select id="class-input">
-      <option value="MATH 1210">MATH 1210</option>
-      <option value="PHYS 2210">PHYS 2210</option>
-      <option value="ECE 1400">ECE 1400</option>
-    </select>
-
-    <input type="text" id="assignment-input" placeholder="Assignment Name">
-    <input type="date" id="due-input">
-    <input type="url" id="link-input" placeholder="https://...">
-    <button id="add-btn">Add Assignment</button>
-  </div>
-
-  <div id="assignment-table"></div>
-
-  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <script>
-    function escapeHtml(str){
-      if (str == null) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b05b5b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#b0a35b" }
-    };
-
-    function parseISODateSafe(str){
-      if (!str) return null;
-      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
-      if (!m) return null;
-      return new Date(+m[1], +m[2]-1, +m[3]);
-    }
-
-    function formatDueDateISOToDDMONYYYY(iso){
-      const d = parseISODateSafe(iso);
-      if (!d) return "";
-      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
-    }
-
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-    ];
-
-    function applyRowBackground(row){
-      const cls = row.getData().class;
-      const rows = table.getRows().filter(r => r.getData().class === cls);
-      const idx = rows.indexOf(row);
-      const even = idx % 2 === 0;
-      let bg = "";
-      if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-      if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-      if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-      row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
-    }
-
-    function assignmentFormatter(cell){ 
-      const data = cell.getRow().getData();
-      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
-    }
-
-    function dueFormatter(cell){
-      return formatDueDateISOToDDMONYYYY(cell.getValue());
-    }
-
-    function deleteFormatter(){ return "<span class='delete-btn'>&times;</span>"; }
-
-    const table = new Tabulator("#assignment-table", {
-      data: savedData,
-      layout: "fitColumns",
-      reactiveData: true,
-      groupBy: "class",
-      groupStartOpen: true,
-      groupHeader: function(value){
-        let bg = "#ddd", fg = "#fff";
-        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
-        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
-        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
-        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
-      },
-      columns: [
-        { title: "Class", field: "class", visible: false },
-        { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
-        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
-        { title: "Link", field: "link", visible: false },
-        { title: "", field: "delete", hozAlign: "center", width: 50,
-          formatter: deleteFormatter,
-          cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); }
-        }
+        { title: "", width: parseInt(getComputedStyle(document.documentElement).getPropertyValue("--deleteColumnWidth")), hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } }
       ],
       rowFormatter: applyRowBackground,
       renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
