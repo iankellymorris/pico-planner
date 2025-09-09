@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V20)</title>
+  <title>Assignment Tracker (Carlton V2)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,33 +12,32 @@
 
   <style>
     :root {
-      --entryTableDelta: 20px;         
-      --titleLeftEdgePadding: 20px;    
-      --tableRightEdgePadding: 16px;   
-      --tableLeftEdgePadding: 280px;   
-      --dropdownWidth: 180px;          
-      --formScale: 0.85;               
+      --entryTableDelta: 20px;         /* vertical spacing between form and table */
+      --titleLeftEdgePadding: 20px;    /* title padding-left */
+      --tableRightEdgePadding: 16px;   /* right margin for table */
+      --tableLeftEdgePadding: 280px;   /* left margin for table */
+      --dropdownWidth: 180px;          /* width for course dropdown */
+      --formScale: 0.85;               /* scale factor for assignment entry */
 
-      --titleFontSize: 3.2rem;         
-      --titleColor: #4b2e83;           
-      --backgroundColor: #ede3fa;      
-      --pageTopPadding: 20px;          
+      /* new variables */
+      --titleFontSize: 3.2rem;         /* title font size */
+      --titleColor: #4b2e83;           /* title font color */
+      --backgroundColor: #ede3fa;      /* page background */
+      --pageTopPadding: 20px;          /* top padding for the page */
 
+      /* padding for the purple form-container */
       --entryPaddingTop: 18px;
       --entryPaddingBottom: 18px;
       --entryPaddingLeft: 22px;
       --entryPaddingRight: 12px;
 
+      /* spacing between fields inside */
       --entryGap: 10px;
 
-      /* Button color variables */
-      --addBtnColor: #d16ba5;
-      --addBtnTextColor: #fff;
-
-      --dataBtnBg: #f2f2f2;
-      --dataBtnText: #888;
-      --dataBtnBorder: #bbb;
-      --dataBtnHoverBg: #e0e0e0;
+      /* buttons */
+      --addBtnColor: #d36ad3;          /* pinkish purple */
+      --exportBtnColor: #f2f2f2;
+      --importBtnColor: #f2f2f2;
     }
 
     body {
@@ -60,8 +59,10 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
+    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
+    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
@@ -81,42 +82,42 @@
     .form-container input,
     .form-container button {
       margin-right: var(--entryGap);
-      padding: 10px 16px;
+      padding: 10px 16px;  /* inner pill padding */
       border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
+    /* Assignment Name field: comfy inner padding */
     #assignment-input {
       padding-left: 16px;
     }
 
+    /* pill dropdown with custom arrow */
     .form-container select {
       width: var(--dropdownWidth);
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      padding-right: 32px;
+      padding-right: 32px; /* room for arrow */
       background: white;
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                         linear-gradient(135deg, #555 50%, transparent 50%);
-      background-position: calc(100% - 19px) 50%,
-                           calc(100% - 14px) 50%;
+      background-position: calc(100% - 9px) calc(50% - 0px),
+                           calc(100% - 4px) calc(50% - 0px);
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
     }
 
     /* Add Assignment button */
     #add-btn {
-      background-color: var(--addBtnColor);
-      color: var(--addBtnTextColor);
+      background: var(--addBtnColor);
       border: none;
+      color: white;
+      font-weight: 700;
       cursor: pointer;
     }
-
-    #add-btn:hover {
-      opacity: 0.9;
-    }
+    #add-btn:hover { opacity: 0.9; }
 
     /* Table font */
     .tabulator,
@@ -140,12 +141,14 @@
       padding-bottom: 6px;
     }
 
+    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
+    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -153,18 +156,23 @@
       padding-left: 0 !important;
     }
 
+    /* delete button centering */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
       font-family: "Courier New", monospace;
       color: rgba(0,0,0,0.32);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
+    /* flex centering in delete column */
+    .tabulator-cell.delete-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* export/import buttons */
     .data-buttons {
       display: flex;
       justify-content: flex-end;
@@ -176,15 +184,18 @@
       margin-left: 10px;
       padding: 8px 14px;
       border-radius: 9999px;
-      border: 1px solid var(--dataBtnBorder);
-      background: var(--dataBtnBg);
-      color: var(--dataBtnText);
+      border: 1px solid #bbb;
+      background: #f2f2f2;
+      color: #888;
       font-size: 0.95rem;
       cursor: pointer;
     }
 
+    #export-btn { background: var(--exportBtnColor); }
+    #import-btn { background: var(--importBtnColor); }
+
     .data-buttons button:hover {
-      background: var(--dataBtnHoverBg);
+      background: #e0e0e0;
     }
   </style>
 </head>
@@ -208,6 +219,7 @@
 
   <div id="assignment-table"></div>
 
+  <!-- export/import buttons -->
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
@@ -301,6 +313,7 @@
           width: 40, 
           hozAlign: "center", 
           headerSort: false,
+          cssClass: "delete-cell",   /* flex centering */
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
