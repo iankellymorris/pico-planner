@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V15 Fixed)</title>
+  <title>Assignment Tracker (Terrence V16)</title>
 
-  <!-- Tabulator Modern CSS -->
+  <!-- Tabulator CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
@@ -25,12 +25,12 @@
       --backgroundColor: #ede3fa;
       --pageTopPadding: 20px;
 
-      /* assignment entry field/button padding */
+      /* assignment entry fields */
       --entryPaddingTop: 10px;
       --entryPaddingRight: 0px;
       --entryPaddingBottom: 10px;
       --entryPaddingLeft: 16px;
-      --entryGap: 10px; /* controls spacing between fields/buttons */
+      --entryGap: 10px; /* space between fields/buttons */
     }
 
     body {
@@ -79,7 +79,11 @@
       font-size: 1rem;
     }
 
-    /* Assignment Name padding fix */
+    /* remove extra margin after last field/button */
+    .form-container > *:last-child {
+      margin-right: 0 !important;
+    }
+
     #assignment-input {
       margin-left: 0px;
       padding-left: var(--entryPaddingLeft);
@@ -92,7 +96,7 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       background: white;
-      padding-right: calc(var(--entryPaddingRight) + 20px); /* keep room for arrow */
+      padding-right: calc(var(--entryPaddingRight) + 20px);
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                         linear-gradient(135deg, #555 50%, transparent 50%);
       background-position: calc(100% - 14px) calc(50% - 3px),
@@ -101,7 +105,7 @@
       background-repeat: no-repeat;
     }
 
-    /* Table font */
+    /* Table */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
@@ -199,66 +203,130 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // Storage + data
-    let table;
-    const saved = localStorage.getItem("assignments");
-    const tableData = saved ? JSON.parse(saved) : [];
-
-    function saveData() {
-      localStorage.setItem("assignments", JSON.stringify(table.getData()));
+    function escapeHtml(str){
+      if (str == null) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    // Table
-    table = new Tabulator("#assignment-table", {
-      data: tableData,
+    const COLORS = {
+      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
+    };
+
+    function parseISODateSafe(str){
+      if (!str) return null;
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+      if (!m) return null;
+      return new Date(+m[1], +m[2]-1, +m[3]);
+    }
+
+    function formatDueDateISOToDDMONYYYY(iso){
+      const d = parseISODateSafe(iso);
+      if (!d) return "";
+      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
+    }
+
+    let savedData = JSON.parse(localStorage.getItem("assignments")) || [];
+
+    function applyRowBackground(row){
+      const cls = row.getData().class;
+      const rows = table.getRows().filter(r => r.getData().class === cls);
+      const idx = rows.indexOf(row);
+      const even = idx % 2 === 0;
+      let bg = "";
+      if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+      if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+      if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+      row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+    }
+
+    function assignmentFormatter(cell){
+      const data = cell.getRow().getData();
+      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
+    }
+
+    function dueFormatter(cell){
+      return formatDueDateISOToDDMONYYYY(cell.getValue());
+    }
+
+    function deleteFormatter(){
+      return "<span class='delete-btn'>&times;</span>";
+    }
+
+    const table = new Tabulator("#assignment-table", {
+      data: savedData,
       layout: "fitColumns",
+      reactiveData: true,
       groupBy: "class",
+      groupStartOpen: true,
+      groupHeader: function(value){
+        let bg = "#ddd", fg = "#fff";
+        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
+        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
+        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
+        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
+      },
       columns: [
-        {title:"Class", field:"class"},
-        {title:"Assignment", field:"assignment"},
-        {title:"Due", field:"due"},
-        {title:"Link", field:"link", formatter:"link", formatterParams:{labelField:"link", urlField:"link"}},
-        {
-          title:"Delete", field:"delete", hozAlign:"center", headerSort:false,
-          formatter:() => "<span class='delete-btn'>×</span>",
-          cellClick:(e, cell) => { cell.getRow().delete(); saveData(); }
+        { title: "Class", field: "class", visible: false },
+        { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
+        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
+        { title: "Link", field: "link", visible: false },
+        { 
+          title: "", 
+          field: "delete", 
+          width: 40, 
+          hozAlign: "center", 
+          headerSort: false, 
+          formatter: deleteFormatter, 
+          cellClick:(e,cell)=>{ 
+            cell.getRow().delete(); 
+            saveData(); 
+          } 
         }
       ],
-      rowFormatter:function(row){
-        const data = row.getData();
-        const colors = {
-          "MATH 1210":"#d35400", // orange
-          "PHYS 2210":"#c0392b", // red
-          "ECE 1400":"#27ae60", // green
-        };
-        if(data.class && colors[data.class]){
-          row.getElement().style.backgroundColor = colors[data.class]+"22";
-        }
-      },
-      dataChanged:saveData,
+      rowFormatter: applyRowBackground,
+      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
+      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
     });
 
-    // Add
+    function saveData(){ 
+      localStorage.setItem("assignments", JSON.stringify(table.getData())); 
+    }
+
     document.getElementById("add-btn").addEventListener("click", () => {
-      const cls = document.getElementById("class-input").value;
-      const name = document.getElementById("assignment-input").value;
-      const due = document.getElementById("due-input").value;
-      const link = document.getElementById("link-input").value;
-      if(name){
-        table.addRow({class:cls, assignment:name, due:due, link:link});
-        saveData();
-      }
+      const newRow = {
+        class: document.getElementById("class-input").value,
+        assignment: document.getElementById("assignment-input").value,
+        due: document.getElementById("due-input").value,
+        link: document.getElementById("link-input").value
+      };
+      table.addRow(newRow).then(row => { 
+        saveData(); 
+        applyRowBackground(row); 
+      });
+      document.getElementById("assignment-input").value = "";
+      document.getElementById("due-input").value = "";
+      document.getElementById("link-input").value = "";
     });
 
     // Export
     document.getElementById("export-btn").addEventListener("click", () => {
-      const data = JSON.stringify(table.getData(), null, 2);
-      const blob = new Blob([data], {type:"application/json"});
+      const dataStr = JSON.stringify(table.getData(), null, 2);
+      const blob = new Blob([dataStr], {type: "application/json"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "assignments.json";
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     });
 
@@ -269,14 +337,16 @@
 
     document.getElementById("import-file").addEventListener("change", (e) => {
       const file = e.target.files[0];
-      if(!file) return;
+      if (!file) return;
       const reader = new FileReader();
-      reader.onload = evt => {
+      reader.onload = (ev) => {
         try {
-          const imported = JSON.parse(evt.target.result);
-          table.setData(imported);
+          const imported = JSON.parse(ev.target.result);
+          table.replaceData(imported);
           saveData();
-        } catch(err){ alert("Invalid JSON file"); }
+        } catch {
+          alert("Invalid file format. Please select a valid JSON export.");
+        }
       };
       reader.readAsText(file);
     });
