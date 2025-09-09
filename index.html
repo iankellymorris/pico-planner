@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V14)</title>
+  <title>Assignment Tracker (Terrence V15)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,22 +12,22 @@
 
   <style>
     :root {
-      --entryTableDelta: 20px;         /* vertical spacing between form and table */
-      --titleLeftEdgePadding: 20px;    /* title padding-left */
-      --tableRightEdgePadding: 16px;   /* right margin for table */
-      --tableLeftEdgePadding: 280px;   /* left margin for table */
-      --dropdownWidth: 180px;          /* width for course dropdown */
-      --formScale: 0.85;               /* scale factor for assignment entry */
+      --entryTableDelta: 20px;
+      --titleLeftEdgePadding: 20px;
+      --tableRightEdgePadding: 16px;
+      --tableLeftEdgePadding: 280px;
+      --dropdownWidth: 180px;
+      --formScale: 0.85;
 
-      /* new variables */
-      --titleFontSize: 3.2rem;         /* title font size */
-      --titleColor: #4b2e83;           /* title font color */
-      --backgroundColor: #ede3fa;      /* page background */
-      --pageTopPadding: 20px;          /* top padding for the page */
+      /* title + page */
+      --titleFontSize: 3.2rem;
+      --titleColor: #4b2e83;
+      --backgroundColor: #ede3fa;
+      --pageTopPadding: 20px;
 
       /* assignment entry field/button padding */
       --entryPaddingTop: 10px;
-      --entryPaddingRight: 16px;
+      --entryPaddingRight: 10px;
       --entryPaddingBottom: 10px;
       --entryPaddingLeft: 16px;
     }
@@ -51,10 +51,8 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
-    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
@@ -75,26 +73,25 @@
     .form-container button {
       margin-right: 10px;
       padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-      border-radius: 9999px; /* pill style */
+      border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* Assignment Name field: external spacing fix */
+    /* Assignment Name padding fix */
     #assignment-input {
       margin-left: 0px;
       padding-left: var(--entryPaddingLeft);
     }
 
-    /* pill dropdown fix */
+    /* dropdown arrow */
     .form-container select {
       width: var(--dropdownWidth);
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      position: relative;
-      padding-right: 32px; /* room for arrow */
       background: white;
+      padding-right: calc(var(--entryPaddingRight) + 20px); /* keep room for arrow */
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                         linear-gradient(135deg, #555 50%, transparent 50%);
       background-position: calc(100% - 14px) calc(50% - 3px),
@@ -125,14 +122,12 @@
       padding-bottom: 6px;
     }
 
-    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -140,7 +135,6 @@
       padding-left: 0 !important;
     }
 
-    /* delete button centering */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
@@ -153,7 +147,6 @@
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
-    /* export/import buttons */
     .data-buttons {
       display: flex;
       justify-content: flex-end;
@@ -197,7 +190,6 @@
 
   <div id="assignment-table"></div>
 
-  <!-- export/import buttons -->
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
@@ -205,6 +197,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <!-- JS remains unchanged -->
+  <script>
+    // ... your JS stays exactly the same as V14 ...
+  </script>
 </body>
 </html>
