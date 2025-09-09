@@ -12,18 +12,16 @@
 
   <style>
     :root {
-      --entryTableDelta: 20px;         /* vertical spacing between form and table */
-      --titleLeftEdgePadding: 20px;    /* title padding-left */
-      --tableRightEdgePadding: 16px;   /* right margin for table */
-      --tableLeftEdgePadding: 280px;   /* left margin for table */
-      --dropdownWidth: 180px;          /* width for course dropdown */
-      --formScale: 0.85;               /* scale factor for assignment entry */
-
-      /* new variables */
-      --titleFontSize: 3.2rem;         /* title font size */
-      --titleColor: #4b2e83;           /* title font color */
-      --backgroundColor: #ede3fa;      /* page background */
-      --pageTopPadding: 10px;          /* top padding for the page */
+      --entryTableDelta: 20px;
+      --titleLeftEdgePadding: 20px;
+      --tableRightEdgePadding: 16px;
+      --tableLeftEdgePadding: 280px;
+      --dropdownWidth: 180px;
+      --formScale: 0.85;
+      --titleFontSize: 3.2rem;
+      --titleColor: #4b2e83;
+      --backgroundColor: #ede3fa;
+      --pageTopPadding: 20px;
     }
 
     body {
@@ -45,10 +43,8 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
-    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
@@ -64,21 +60,21 @@
       transform-origin: center;
     }
 
+    .form-container select,
     .form-container input,
     .form-container button {
       margin-right: 10px;
-      padding: 6px 14px;   /* squatter */
-      border-radius: 9999px; /* pill style */
+      padding: 10px 16px;
+      border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
 
-    /* pill dropdown wrapper */
+    /* Dropdown wrapper to control arrow */
     .select-wrapper {
-      position: relative;
       display: inline-block;
+      position: relative;
       width: var(--dropdownWidth);
-      margin-right: 10px;
     }
 
     .select-wrapper select {
@@ -86,11 +82,9 @@
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
+      padding-right: 32px;
+      background: white;
       border-radius: 9999px;
-      padding: 6px 34px 6px 14px;  /* squatter */
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      background: #fff;
     }
 
     .select-wrapper::after {
@@ -98,13 +92,12 @@
       position: absolute;
       right: 12px;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-50%) scaleY(0.7); /* shorter arrow */
       font-size: 0.75rem;
       color: #555;
       pointer-events: none;
     }
 
-    /* Table font */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
@@ -126,14 +119,12 @@
       padding-bottom: 6px;
     }
 
-    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -141,7 +132,6 @@
       padding-left: 0 !important;
     }
 
-    /* delete button centering */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
@@ -154,7 +144,6 @@
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
-    /* export/import buttons */
     .data-buttons {
       display: flex;
       justify-content: flex-end;
@@ -200,7 +189,6 @@
 
   <div id="assignment-table"></div>
 
-  <!-- export/import buttons -->
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
@@ -221,8 +209,8 @@
 
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, // redder red
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  // yellower yellow
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
     };
 
     function parseISODateSafe(str){
@@ -239,11 +227,7 @@
       return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
     }
 
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-    ];
+    let savedData = JSON.parse(localStorage.getItem("assignments")) || [];
 
     function applyRowBackground(row){
       const cls = row.getData().class;
@@ -274,7 +258,6 @@
       data: savedData,
       layout: "fitColumns",
       reactiveData: true,
-      height: "auto", /* table grows naturally */
       groupBy: "class",
       groupStartOpen: true,
       groupHeader: function(value){
@@ -294,7 +277,7 @@
           field: "delete", 
           width: 40, 
           hozAlign: "center", 
-          headerSort: false, /* disable sort arrow */
+          headerSort: false,
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
@@ -327,7 +310,6 @@
       document.getElementById("link-input").value = "";
     });
 
-    // Export Data
     document.getElementById("export-btn").addEventListener("click", () => {
       const dataStr = JSON.stringify(table.getData(), null, 2);
       const blob = new Blob([dataStr], {type: "application/json"});
@@ -341,7 +323,6 @@
       URL.revokeObjectURL(url);
     });
 
-    // Import Data
     document.getElementById("import-btn").addEventListener("click", () => {
       document.getElementById("import-file").click();
     });
