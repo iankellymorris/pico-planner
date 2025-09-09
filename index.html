@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.2b)</title>
+  <title>Assignment Tracker (Terrence V4)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,15 +12,11 @@
 
   <style>
     :root {
-      --entryTableDelta: 30px;
-      --titleLeftEdgePadding: 20px;
-      --tableRightEdgePadding: 10px;
-      --tableLeftEdgePadding: 300px;
-      --dropdownWidth: 160px;
-      --fieldPaddingY: 10px;
-      --fieldPaddingX: 18px;
-      --fieldBorderRadius: 9999px; /* full pill */
-      --fieldFontSize: 1rem;
+      --entryTableDelta: 30px;       /* vertical spacing between form and table */
+      --titleLeftEdgePadding: 20px;  /* title padding-left */
+      --tableRightEdgePadding: 10px; /* right margin for table */
+      --tableLeftEdgePadding: 300px; /* left margin for table */
+      --dropdownWidth: 180px;        /* width for course dropdown */
     }
 
     body {
@@ -39,8 +35,10 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
+    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
+    /* wrapper for centering */
     .form-wrap {
       text-align: center;
     }
@@ -48,61 +46,42 @@
     .form-container {
       display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px;
+      padding: 20px 22px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
     }
 
-    /* pill-shaped fields shared */
+    .form-container select,
     .form-container input,
-    .form-container button,
-    .form-container select {
-      border-radius: var(--fieldBorderRadius);
-      font-size: var(--fieldFontSize);
-      padding: var(--fieldPaddingY) var(--fieldPaddingX);
+    .form-container button {
+      margin-right: 10px;
+      padding: 10px 16px;
+      border-radius: 9999px; /* pill style */
       border: 1px solid #ccc;
-      margin-right: 10px;
+      font-size: 1rem;
     }
 
-    /* dropdown wrapper to control arrow spacing */
-    .form-container .select-wrap {
-      display: inline-block;
-      position: relative;
+    /* pill dropdown fix */
+    .form-container select {
       width: var(--dropdownWidth);
-      margin-right: 10px;
-    }
-
-    .form-container .select-wrap select {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      width: 100%;
-      background-color: #fff;
-      padding-right: 42px; /* room for arrow */
+      position: relative;
+      padding-right: 32px; /* room for arrow */
+      background: white;
     }
 
-    /* custom arrow */
-    .form-container .select-wrap::after {
-      content: "▾";
+    .form-container select::after {
+      content: "▼";
       position: absolute;
-      right: 16px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      pointer-events: none;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       color: #555;
-    }
-
-    /* button look */
-    .form-container button {
-      background-color: #4b2e83;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .form-container button:hover {
-      background-color: #3a2366;
+      pointer-events: none;
     }
 
     /* Table font */
@@ -127,12 +106,14 @@
       padding-bottom: 6px;
     }
 
+    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
+    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
@@ -140,14 +121,16 @@
       padding-left: 0 !important;
     }
 
+    /* delete button centering */
     .delete-btn {
       cursor: pointer;
       font-size: 1.15rem;
       font-family: "Courier New", monospace;
       color: rgba(0,0,0,0.32);
-      text-align: center;
-      display: inline-block;
-      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
     .delete-btn:hover { color: rgba(0,0,0,0.6); }
   </style>
@@ -157,13 +140,11 @@
 
   <div class="form-wrap">
     <div class="form-container">
-      <div class="select-wrap">
-        <select id="class-input">
-          <option value="MATH 1210">MATH 1210</option>
-          <option value="PHYS 2210">PHYS 2210</option>
-          <option value="ECE 1400">ECE 1400</option>
-        </select>
-      </div>
+      <select id="class-input">
+        <option value="MATH 1210">MATH 1210</option>
+        <option value="PHYS 2210">PHYS 2210</option>
+        <option value="ECE 1400">ECE 1400</option>
+      </select>
 
       <input type="text" id="assignment-input" placeholder="Assignment Name">
       <input type="date" id="due-input">
@@ -233,7 +214,9 @@
       return formatDueDateISOToDDMONYYYY(cell.getValue());
     }
 
-    function deleteFormatter(){ return "<span class='delete-btn'>&times;</span>"; }
+    function deleteFormatter(){
+      return "<span class='delete-btn'>&times;</span>";
+    }
 
     const table = new Tabulator("#assignment-table", {
       data: savedData,
@@ -253,14 +236,27 @@
         { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
         { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
         { title: "Link", field: "link", visible: false },
-        { title: "", width: 40, hozAlign: "center", formatter: deleteFormatter, cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } }
+        { 
+          title: "", 
+          field: "delete", 
+          width: 40, 
+          hozAlign: "center", 
+          headerSort: false, /* disable sort arrow */
+          formatter: deleteFormatter, 
+          cellClick:(e,cell)=>{ 
+            cell.getRow().delete(); 
+            saveData(); 
+          } 
+        }
       ],
       rowFormatter: applyRowBackground,
       renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
       cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
     });
 
-    function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
+    function saveData(){ 
+      localStorage.setItem("assignments", JSON.stringify(table.getData())); 
+    }
 
     document.getElementById("add-btn").addEventListener("click", () => {
       const newRow = {
@@ -269,7 +265,10 @@
         due: document.getElementById("due-input").value,
         link: document.getElementById("link-input").value
       };
-      table.addRow(newRow).then(row => { saveData(); applyRowBackground(row); });
+      table.addRow(newRow).then(row => { 
+        saveData(); 
+        applyRowBackground(row); 
+      });
       document.getElementById("assignment-input").value = "";
       document.getElementById("due-input").value = "";
       document.getElementById("link-input").value = "";
