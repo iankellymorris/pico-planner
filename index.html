@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V11.1)</title>
+  <title>Assignment Tracker (Terrence V11)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -12,18 +12,17 @@
 
   <style>
     :root {
-      --entryTableDelta: 20px;         /* vertical spacing between form and table */
-      --titleLeftEdgePadding: 20px;    /* title padding-left */
-      --tableRightEdgePadding: 16px;   /* right margin for table */
-      --tableLeftEdgePadding: 280px;   /* left margin for table */
-      --dropdownWidth: 180px;          /* width for course dropdown */
-      --formScale: 0.85;               /* scale factor for assignment entry */
+      --entryTableDelta: 20px;
+      --titleLeftEdgePadding: 20px;
+      --tableRightEdgePadding: 16px;
+      --tableLeftEdgePadding: 280px;
+      --dropdownWidth: 180px;
+      --formScale: 0.85;
 
-      /* new variables */
-      --titleFontSize: 6.4rem;         /* title font size */
-      --titleColor: #4b2e83;           /* title font color */
-      --backgroundColor: #ede3fa;      /* page background */
-      --pageTopPadding: 30px;          /* top padding for the page */
+      --titleFontSize: 3.2rem;    /* normal title font size */
+      --titleColor: #4b2e83;
+      --backgroundColor: #ede3fa;
+      --pageTopPadding: 30px;
     }
 
     body {
@@ -37,7 +36,7 @@
 
     h1 {
       font-family: 'Raleway', sans-serif;
-      font-weight: 900; /* Black weight */
+      font-weight: 900; /* Raleway Black */
       text-align: left;
       font-size: var(--titleFontSize);
       margin-bottom: 16px;
@@ -45,13 +44,9 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
-    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* wrapper for centering */
-    .form-wrap {
-      text-align: center;
-    }
+    .form-wrap { text-align: center; }
 
     .form-container {
       display: inline-block;
@@ -69,7 +64,7 @@
     .form-container button {
       margin-right: 10px;
       padding: 10px 16px;
-      border-radius: 9999px; /* pill style */
+      border-radius: 9999px;
       border: 1px solid #ccc;
       font-size: 1rem;
     }
@@ -81,7 +76,7 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       position: relative;
-      padding-right: 32px; /* room for arrow */
+      padding-right: 32px;
       background: white;
     }
 
@@ -96,16 +91,17 @@
       pointer-events: none;
     }
 
-    /* Table font */
+    /* Table styling */
+    #assignment-table {
+      margin-left: var(--tableLeftEdgePadding);
+      margin-right: var(--tableRightEdgePadding);
+      height: 400px; /* ensure Tabulator renders */
+    }
+
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
       font-family: 'Lato', sans-serif !important;
-    }
-
-    .tabulator {
-      margin-left: var(--tableLeftEdgePadding);
-      margin-right: var(--tableRightEdgePadding);
     }
 
     .tabulator .tabulator-cell {
@@ -118,20 +114,14 @@
       padding-bottom: 6px;
     }
 
-    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    /* Remove arrows/bars */
-    .tabulator .tabulator-group .tabulator-arrow {
-      display: none !important;
-    }
-    .tabulator .tabulator-group-header {
-      padding-left: 0 !important;
-    }
+    .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
+    .tabulator .tabulator-group-header { padding-left: 0 !important; }
 
     /* delete button centering */
     .delete-btn {
@@ -165,9 +155,7 @@
       cursor: pointer;
     }
 
-    .data-buttons button:hover {
-      background: #e0e0e0;
-    }
+    .data-buttons button:hover { background: #e0e0e0; }
   </style>
 </head>
 <body>
@@ -199,7 +187,157 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    /* same JS from V11 */
+    function escapeHtml(str){
+      if (str == null) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    const COLORS = {
+      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
+    };
+
+    function parseISODateSafe(str){
+      if (!str) return null;
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
+      if (!m) return null;
+      return new Date(+m[1], +m[2]-1, +m[3]);
+    }
+
+    function formatDueDateISOToDDMONYYYY(iso){
+      const d = parseISODateSafe(iso);
+      if (!d) return "";
+      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
+    }
+
+    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
+      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
+      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
+      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
+    ];
+
+    function applyRowBackground(row){
+      const cls = row.getData().class;
+      const rows = table.getRows().filter(r => r.getData().class === cls);
+      const idx = rows.indexOf(row);
+      const even = idx % 2 === 0;
+      let bg = "";
+      if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+      if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+      if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+      row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+    }
+
+    function assignmentFormatter(cell){
+      const data = cell.getRow().getData();
+      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
+    }
+
+    function dueFormatter(cell){
+      return formatDueDateISOToDDMONYYYY(cell.getValue());
+    }
+
+    function deleteFormatter(){
+      return "<span class='delete-btn'>&times;</span>";
+    }
+
+    const table = new Tabulator("#assignment-table", {
+      data: savedData,
+      layout: "fitColumns",
+      reactiveData: true,
+      groupBy: "class",
+      groupStartOpen: true,
+      groupHeader: function(value){
+        let bg = "#ddd", fg = "#fff";
+        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
+        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
+        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
+        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
+      },
+      columns: [
+        { title: "Class", field: "class", visible: false },
+        { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
+        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
+        { title: "Link", field: "link", visible: false },
+        { 
+          title: "", 
+          field: "delete", 
+          width: 40, 
+          hozAlign: "center", 
+          headerSort: false, 
+          formatter: deleteFormatter, 
+          cellClick:(e,cell)=>{ 
+            cell.getRow().delete(); 
+            saveData(); 
+          } 
+        }
+      ],
+      rowFormatter: applyRowBackground,
+      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
+      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
+    });
+
+    function saveData(){ 
+      localStorage.setItem("assignments", JSON.stringify(table.getData())); 
+    }
+
+    document.getElementById("add-btn").addEventListener("click", () => {
+      const newRow = {
+        class: document.getElementById("class-input").value,
+        assignment: document.getElementById("assignment-input").value,
+        due: document.getElementById("due-input").value,
+        link: document.getElementById("link-input").value
+      };
+      table.addRow(newRow).then(row => { 
+        saveData(); 
+        applyRowBackground(row); 
+      });
+      document.getElementById("assignment-input").value = "";
+      document.getElementById("due-input").value = "";
+      document.getElementById("link-input").value = "";
+    });
+
+    // Export Data
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const dataStr = JSON.stringify(table.getData(), null, 2);
+      const blob = new Blob([dataStr], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "assignments.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Import Data
+    document.getElementById("import-btn").addEventListener("click", () => {
+      document.getElementById("import-file").click();
+    });
+
+    document.getElementById("import-file").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          table.replaceData(imported);
+          saveData();
+        } catch {
+          alert("Invalid file format. Please select a valid JSON export.");
+        }
+      };
+      reader.readAsText(file);
+    });
   </script>
 </body>
 </html>
