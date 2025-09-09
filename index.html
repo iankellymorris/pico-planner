@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3)</title>
+  <title>Assignment Tracker (Terrence V3 - centered form + table padding)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -24,15 +24,21 @@
       font-size: 3.2rem;
       margin-bottom: 20px;
       color: #4b2e83;
-      padding-left: 20px; /* increased by 8px */
+      padding-left: 20px;
     }
 
     /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
+    /* center wrapper so the form can be centered reliably */
+    .form-wrap {
+      text-align: center; /* centers inline-block children */
+    }
+
     .form-container {
-      margin: 20px 0;
-      padding: 20px 22px;
+      display: inline-block;    /* shrink to fit */
+      margin: 20px auto;        /* vertical spacing, horizontal centering via wrapper */
+      padding: 20px 22px;       /* symmetric horizontal padding (same left/right) */
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
@@ -54,12 +60,14 @@
       font-family: 'Lato', sans-serif !important;
     }
 
+    /* move the table right, and add 10px padding on the right */
     .tabulator {
-      margin-left: 300px; /* bumped to 300px */
+      margin-left: 300px; /* as before */
+      padding-right: 10px; /* new: 10px right padding */
     }
 
     .tabulator .tabulator-cell {
-      padding-left: 15px !important; /* bumped to 15px */
+      padding-left: 15px !important;
     }
 
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
@@ -95,17 +103,20 @@
 <body>
   <h1>Assignment<span class="space">  </span>Tracker</h1>
 
-  <div class="form-container">
-    <select id="class-input">
-      <option value="MATH 1210">MATH 1210</option>
-      <option value="PHYS 2210">PHYS 2210</option>
-      <option value="ECE 1400">ECE 1400</option>
-    </select>
+  <!-- centered wrapper around the form -->
+  <div class="form-wrap">
+    <div class="form-container">
+      <select id="class-input">
+        <option value="MATH 1210">MATH 1210</option>
+        <option value="PHYS 2210">PHYS 2210</option>
+        <option value="ECE 1400">ECE 1400</option>
+      </select>
 
-    <input type="text" id="assignment-input" placeholder="Assignment Name">
-    <input type="date" id="due-input">
-    <input type="url" id="link-input" placeholder="https://...">
-    <button id="add-btn">Add Assignment</button>
+      <input type="text" id="assignment-input" placeholder="Assignment Name">
+      <input type="date" id="due-input">
+      <input type="url" id="link-input" placeholder="https://...">
+      <button id="add-btn">Add Assignment</button>
+    </div>
   </div>
 
   <div id="assignment-table"></div>
@@ -160,7 +171,7 @@
       row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
     }
 
-    function assignmentFormatter(cell){ 
+    function assignmentFormatter(cell){
       const data = cell.getRow().getData();
       return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
     }
