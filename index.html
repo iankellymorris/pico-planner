@@ -2,27 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V11)</title>
+  <title>Assignment Tracker (Terrence V12)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --entryTableDelta: 20px;
-      --titleLeftEdgePadding: 20px;
-      --tableRightEdgePadding: 16px;
-      --tableLeftEdgePadding: 280px;
-      --dropdownWidth: 180px;
-      --formScale: 0.85;
+      --entryTableDelta: 20px;         /* vertical spacing between form and table */
+      --titleLeftEdgePadding: 20px;    /* title padding-left */
+      --tableRightEdgePadding: 16px;   /* right margin for table */
+      --tableLeftEdgePadding: 280px;   /* left margin for table */
+      --dropdownWidth: 180px;          /* width for course dropdown */
+      --formScale: 0.85;               /* scale factor for assignment entry */
 
-      --titleFontSize: 3.2rem;    /* normal title font size */
-      --titleColor: #4b2e83;
-      --backgroundColor: #ede3fa;
-      --pageTopPadding: 30px;
+      /* new variables */
+      --titleFontSize: 3.2rem;         /* title font size */
+      --titleColor: #4b2e83;           /* title font color */
+      --backgroundColor: #ede3fa;      /* page background */
+      --pageTopPadding: -20px;         /* top padding for the page */
     }
 
     body {
@@ -36,7 +37,7 @@
 
     h1 {
       font-family: 'Raleway', sans-serif;
-      font-weight: 900; /* Raleway Black */
+      font-weight: 900;
       text-align: left;
       font-size: var(--titleFontSize);
       margin-bottom: 16px;
@@ -44,9 +45,13 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
+    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    .form-wrap { text-align: center; }
+    /* wrapper for centering */
+    .form-wrap {
+      text-align: center;
+    }
 
     .form-container {
       display: inline-block;
@@ -64,7 +69,7 @@
     .form-container button {
       margin-right: 10px;
       padding: 10px 16px;
-      border-radius: 9999px;
+      border-radius: 9999px; /* pill style */
       border: 1px solid #ccc;
       font-size: 1rem;
     }
@@ -76,7 +81,7 @@
       -webkit-appearance: none;
       -moz-appearance: none;
       position: relative;
-      padding-right: 32px;
+      padding-right: 32px; /* room for arrow */
       background: white;
     }
 
@@ -91,17 +96,17 @@
       pointer-events: none;
     }
 
-    /* Table styling */
-    #assignment-table {
-      margin-left: var(--tableLeftEdgePadding);
-      margin-right: var(--tableRightEdgePadding);
-      height: 400px; /* ensure Tabulator renders */
-    }
-
+    /* Table font */
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
       font-family: 'Lato', sans-serif !important;
+    }
+
+    .tabulator {
+      margin-left: var(--tableLeftEdgePadding);
+      margin-right: var(--tableRightEdgePadding);
+      /* removed fixed height so it grows naturally */
     }
 
     .tabulator .tabulator-cell {
@@ -114,14 +119,20 @@
       padding-bottom: 6px;
     }
 
+    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
-    .tabulator .tabulator-group-header { padding-left: 0 !important; }
+    /* Remove arrows/bars */
+    .tabulator .tabulator-group .tabulator-arrow {
+      display: none !important;
+    }
+    .tabulator .tabulator-group-header {
+      padding-left: 0 !important;
+    }
 
     /* delete button centering */
     .delete-btn {
@@ -155,7 +166,9 @@
       cursor: pointer;
     }
 
-    .data-buttons button:hover { background: #e0e0e0; }
+    .data-buttons button:hover {
+      background: #e0e0e0;
+    }
   </style>
 </head>
 <body>
@@ -199,8 +212,8 @@
 
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, // redder red
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  // yellower yellow
     };
 
     function parseISODateSafe(str){
@@ -271,7 +284,7 @@
           field: "delete", 
           width: 40, 
           hozAlign: "center", 
-          headerSort: false, 
+          headerSort: false, /* disable sort arrow */
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
