@@ -8,7 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -23,7 +23,7 @@
       --titleFontSize: 3.2rem;         /* title font size */
       --titleColor: #4b2e83;           /* title font color */
       --backgroundColor: #ede3fa;      /* page background */
-      --pageTopPadding: -20px;         /* top padding for the page */
+      --pageTopPadding: 10px;          /* top padding for the page */
     }
 
     body {
@@ -37,16 +37,13 @@
 
     h1 {
       font-family: 'Raleway', sans-serif;
-      font-weight: 900;
+      font-weight: 900; /* Black weight */
       text-align: left;
       font-size: var(--titleFontSize);
       margin-bottom: 16px;
       color: var(--titleColor);
       padding-left: var(--titleLeftEdgePadding);
     }
-
-    /* Force two spaces in title */
-    h1 span.space { white-space: pre; }
 
     /* wrapper for centering */
     .form-wrap {
@@ -64,7 +61,6 @@
       transform-origin: center;
     }
 
-    .form-container select,
     .form-container input,
     .form-container button {
       margin-right: 10px;
@@ -74,21 +70,30 @@
       font-size: 1rem;
     }
 
-    /* pill dropdown fix */
-    .form-container select {
+    /* custom pill dropdown fix */
+    .select-wrapper {
+      position: relative;
+      display: inline-block;
       width: var(--dropdownWidth);
+      margin-right: 10px;
+    }
+
+    .select-wrapper select {
+      width: 100%;
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      position: relative;
-      padding-right: 32px; /* room for arrow */
-      background: white;
+      border-radius: 9999px;
+      padding: 10px 36px 10px 16px; /* extra right padding for arrow */
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background: #fff;
     }
 
-    .form-container select::after {
+    .select-wrapper::after {
       content: "▼";
       position: absolute;
-      right: 12px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 0.75rem;
@@ -106,7 +111,6 @@
     .tabulator {
       margin-left: var(--tableLeftEdgePadding);
       margin-right: var(--tableRightEdgePadding);
-      /* removed fixed height so it grows naturally */
     }
 
     .tabulator .tabulator-cell {
@@ -124,6 +128,11 @@
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
+    }
+
+    /* Make table expand instead of scroll */
+    .tabulator .tabulator-tableholder {
+      overflow-y: visible !important;
     }
 
     /* Remove arrows/bars */
@@ -160,27 +169,29 @@
       padding: 8px 14px;
       border-radius: 9999px;
       border: 1px solid #bbb;
-      background: #f2f2f2;
-      color: #888;
+      background: #f9f9f9;
+      color: #aaa;
       font-size: 0.95rem;
       cursor: pointer;
     }
 
     .data-buttons button:hover {
-      background: #e0e0e0;
+      background: #eaeaea;
     }
   </style>
 </head>
 <body>
-  <h1>Assignment<span class="space">  </span>Tracker</h1>
+  <h1>Assignment&nbsp;&nbsp;Tracker</h1>
 
   <div class="form-wrap">
     <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
-      </select>
+      <div class="select-wrapper">
+        <select id="class-input">
+          <option value="MATH 1210">MATH 1210</option>
+          <option value="PHYS 2210">PHYS 2210</option>
+          <option value="ECE 1400">ECE 1400</option>
+        </select>
+      </div>
 
       <input type="text" id="assignment-input" placeholder="Assignment Name">
       <input type="date" id="due-input">
