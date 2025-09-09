@@ -4,33 +4,24 @@
   <meta charset="UTF-8" />
   <title>Assignment Tracker (Terrence V4)</title>
 
-  <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Gorditas&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --formScale: 0.85;                 /* overall scale for the entry area */
       --entryTableDelta: 30px;           /* vertical spacing between form and table */
-      --titleLeftEdgePadding: 20px;      /* title left padding */
-      --tableLeftEdgePadding: 300px;     /* left margin for table */
-      --tableRightEdgePadding: 10px;     /* right margin for table */
-      --dropdownWidth: 180px;            /* course dropdown width */
-      --deleteColumnWidth: 40px;         /* delete column width (include px) */
-      --fieldPaddingY: 10px;
-      --fieldPaddingX: 16px;
-      --fieldFontSize: 1rem;
+      --titleLeftEdgePadding: 20px;
+      --tableLeftEdgePadding: 300px;
+      --tableRightEdgePadding: 10px;
+      --dropdownWidth: 180px;
+      --deleteColumnWidth: 40px;
     }
 
-    html,body{ height:100%; }
     body {
       font-family: 'Lato', sans-serif;
       margin: 20px;
       background: #ede3fa;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
     }
 
     h1{
@@ -39,14 +30,13 @@
       color: #4b2e83;
       margin-bottom: 20px;
       padding-left: var(--titleLeftEdgePadding);
-      line-height:1.05;
     }
     h1 span.space{ white-space:pre; }
 
-    /* center wrapper for the form */
+    /* Center wrapper */
     .form-wrap{ text-align:center; }
 
-    /* form container scaled */
+    /* Form container scaled */
     .form-container{
       display:inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
@@ -58,139 +48,87 @@
       transform-origin: center;
     }
 
-    /* unified pill field styling */
-    .form-container .select-wrap,
+    /* Input + button styling */
     .form-container input,
-    .form-container button{
-      display:inline-flex;
-      align-items:center;
-      vertical-align:middle;
+    .form-container button,
+    .form-container select{
       margin-right: 10px;
-      font-size: var(--fieldFontSize);
-    }
-
-    .form-container input,
-    .form-container button{
-      padding: var(--fieldPaddingY) var(--fieldPaddingX);
+      padding: 10px 16px;
       border-radius: 9999px;
       border: 1px solid #ccc;
-      background: white;
       height: 40px;
+      font-size: 1rem;
     }
 
-    .form-container input[type="date"]{
-      /* appearance differs across browsers; keep it pill-like */
-      padding-left: var(--fieldPaddingX);
-    }
-
-    /* select wrapper (so we can place arrow) */
-    .form-container .select-wrap{
+    /* Course dropdown wrapper */
+    .select-wrap{
       position: relative;
+      display:inline-block;
       width: var(--dropdownWidth);
       height: 40px;
     }
-
-    /* actual select styling (full width to fill wrapper) */
-    .form-container .select-wrap select{
+    .select-wrap select{
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      width:100%;
-      height:100%;
-      padding: 0 var(--fieldPaddingX) 0 calc(var(--fieldPaddingX) - 2px);
-      border-radius: 9999px;
+      width:100%; height:100%;
+      border-radius:9999px;
       border:1px solid #ccc;
-      background: white;
-      font-size: var(--fieldFontSize);
-      text-align: left;
-      box-sizing: border-box;
-      cursor: pointer;
+      padding: 0 36px 0 14px;
+      font-size:1rem;
+      cursor:pointer;
+    }
+    .select-wrap::after{
+      content:"▾";
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#555;
+      pointer-events:none;
     }
 
-    /* custom arrow sits on wrapper (not the select) */
-    .form-container .select-wrap::after{
-      content: "▾";
-      position: absolute;
-      right: 12px;           /* separation from rounded edge */
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.9rem;
-      color: #555;
-      pointer-events: none;
+    /* Add Assignment button (purple/blue style) */
+    #add-btn{
+      background:#6a5acd;
+      color:white;
+      border:none;
+      cursor:pointer;
+      transition:background 0.2s;
     }
+    #add-btn:hover{ background:#5846b8; }
 
-    /* Tabulator font */
-    .tabulator,
-    .tabulator .tabulator-header,
-    .tabulator .tabulator-cell {
-      font-family: 'Lato', sans-serif !important;
-    }
-
-    /* table horizontal offsets */
+    /* Table adjustments */
     .tabulator{
       margin-left: var(--tableLeftEdgePadding);
       margin-right: var(--tableRightEdgePadding);
     }
-
-    /* cell padding - but remove for delete column (override later) */
     .tabulator .tabulator-cell{
       padding-left: 15px !important;
-      box-sizing: border-box;
     }
 
-    .tabulator .tabulator-header .tabulator-col .tabulator-col-title{
-      font-weight:700;
-      padding-top:6px;
-      padding-bottom:6px;
-    }
-
-    /* remove default Tabulator periwinkle backgrounds */
-    .tabulator,
-    .tabulator .tabulator-tableholder,
-    .tabulator-row { background: none !important; }
-
-    /* group header colors: updated (yellower / slightly redder) */
-    /* groupHeader content is created in JS using COLORS.header values */
-
-    /* remove group arrow visuals */
-    .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
-    .tabulator .tabulator-group-header { padding-left: 0 !important; }
-
-    /* delete column cell - make the cell a flex container and remove default cell left padding */
+    /* Delete column centering */
     .tabulator .tabulator-cell.delete-col {
-      display:flex !important;
-      justify-content:center;
-      align-items:center;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+      text-align:center;
     }
-
-    /* delete button styling (inline-flex prevents line-break / new line) */
     .delete-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width: var(--deleteColumnWidth);
-      height: 28px;
-      border-radius: 6px;
-      background: transparent;
-      border: none;
-      font-family: "Courier New", monospace;
-      font-size: 1.15rem;
-      color: rgba(0,0,0,0.32);
-      cursor: pointer;
-      padding: 0;
-      line-height:1;
+      display:inline-block;
+      width: 100%;
+      border:none;
+      background:transparent;
+      font-size:1.2rem;
+      color:rgba(0,0,0,0.4);
+      cursor:pointer;
     }
-    .delete-btn:hover{ color: rgba(0,0,0,0.6); }
+    .delete-btn:hover{ color:rgba(0,0,0,0.7); }
 
-    /* export / import controls underneath table */
+    /* Export/Import controls aligned right */
     .data-controls{
-      margin-left: var(--tableLeftEdgePadding);
-      margin-top: 16px;
+      margin-top:16px;
+      margin-right:var(--tableRightEdgePadding);
       display:flex;
+      justify-content:flex-end;
       gap:10px;
-      align-items:center;
     }
     .data-controls button{
       padding: 8px 12px;
@@ -199,13 +137,6 @@
       background: white;
       cursor: pointer;
     }
-    .status {
-      font-size: 0.95rem;
-      color: #333;
-      opacity: 0.85;
-    }
-    .error { color: #a33b3b; font-weight: 600; }
-    .success { color: #2b7a2b; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -214,266 +145,104 @@
   <div class="form-wrap">
     <div class="form-container">
       <div class="select-wrap">
-        <select id="class-input" aria-label="Choose class">
+        <select id="class-input">
           <option value="MATH 1210">MATH 1210</option>
           <option value="PHYS 2210">PHYS 2210</option>
           <option value="ECE 1400">ECE 1400</option>
         </select>
       </div>
-
-      <input type="text" id="assignment-input" placeholder="Assignment Name" aria-label="Assignment name">
-      <input type="date" id="due-input" aria-label="Due date">
-      <input type="url" id="link-input" placeholder="https://..." aria-label="Link (optional)">
+      <input type="text" id="assignment-input" placeholder="Assignment Name">
+      <input type="date" id="due-input">
+      <input type="url" id="link-input" placeholder="https://...">
       <button id="add-btn">Add Assignment</button>
     </div>
   </div>
 
   <div id="assignment-table"></div>
 
-  <!-- Export / Import Controls -->
-  <div class="data-controls" aria-live="polite">
+  <div class="data-controls">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
     <input id="import-file" type="file" accept=".json" style="display:none" />
-    <div id="status" class="status" aria-atomic="true"></div>
   </div>
 
-  <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
-    // small helpers
-    function escapeHtml(str){
-      if (str == null) return "";
-      return String(str)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-    }
-
-    // nicer status messages
-    const statusEl = document.getElementById("status");
-    function status(msg, type){
-      statusEl.textContent = msg || "";
-      statusEl.className = type ? ("status "+type) : "status";
-    }
-
-    // color palette (headers and alternating rows)
-    const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#c13b3b" }, // slightly redder
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#d4b200" } // yellower
-    };
-
-    function parseISODateSafe(str){
-      if (!str) return null;
-      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
-      if (!m) return null;
-      return new Date(+m[1], +m[2]-1, +m[3]);
-    }
-
-    function formatDueDateISOToDDMONYYYY(iso){
-      const d = parseISODateSafe(iso);
-      if (!d) return "";
-      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
-    }
-
-    // initial data (or from localStorage)
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-    ];
-
-    // row background based on group and parity
-    function applyRowBackground(row){
-      try{
-        const cls = row.getData().class;
-        const rows = table.getRows().filter(r => r.getData().class === cls);
-        const idx = rows.indexOf(row);
-        const even = idx % 2 === 0;
-        let bg = "";
-        if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-        if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-        if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-        row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
-      }catch(e){ /* ignore */ }
-    }
-
-    // assignment cell formatter: link wraps assignment text if link present
-    function assignmentFormatter(cell){
-      const data = cell.getRow().getData();
-      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank" rel="noreferrer">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
-    }
-
-    // due date formatter for display
-    function dueFormatter(cell){ return formatDueDateISOToDDMONYYYY(cell.getValue()); }
-
-    // delete button element (returns html)
-    function deleteFormatter(){
-      return `<button class="delete-btn" title="Delete assignment" aria-label="Delete assignment">&times;</button>`;
-    }
-
-    // compute delete column width from CSS var (fallback to 40)
-    const cssDeleteWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--deleteColumnWidth")) || 40;
-
-    // build Tabulator
     const table = new Tabulator("#assignment-table", {
-      data: savedData,
-      layout: "fitColumns",
-      reactiveData: true,
-      groupBy: "class",
-      groupStartOpen: true,
-      groupHeader: function(value){
-        let bg = "#ddd", fg = "#fff";
-        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
-        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
-        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
-        // return an accessible group header
-        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${escapeHtml(value)}</div>`;
-      },
-      columns: [
-        { title: "Class", field: "class", visible: false },
-        { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
-        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
-        { title: "Link", field: "link", visible: false },
+      data: JSON.parse(localStorage.getItem("assignments")) || [],
+      layout:"fitColumns",
+      reactiveData:true,
+      groupBy:"class",
+      groupStartOpen:true,
+      columns:[
+        {title:"Class", field:"class", visible:false},
+        {title:"Assignment", field:"assignment", editor:"input"},
+        {title:"Due Date", field:"due", sorter:"date", editor:"date"},
+        {title:"Link", field:"link", visible:false},
         {
-          title: "",
-          field: "delete",
-          width: cssDeleteWidth,
-          hozAlign: "center",
-          headerSort: false,          // remove header sort arrow
-          cssClass: "delete-col",     // class on the cell to override padding and center
-          formatter: deleteFormatter,
-          cellClick: function(e, cell){
-            // handle click on the inside button specifically
-            // (Tabulator triggers cellClick for the cell itself; ensure clicked target is the button)
-            const target = e.target;
-            if (target && (target.classList.contains("delete-btn") || target.closest(".delete-btn"))){
+          title:"",
+          field:"delete",
+          width:40,
+          hozAlign:"center",
+          headerSort:false,
+          cssClass:"delete-col",
+          formatter:()=>`<button class="delete-btn">&times;</button>`,
+          cellClick:(e, cell)=>{
+            if(e.target.closest(".delete-btn")){
               cell.getRow().delete();
-              saveData();
-              status("Deleted row", "success");
+              localStorage.setItem("assignments", JSON.stringify(table.getData()));
             }
           }
         }
       ],
-      rowFormatter: applyRowBackground,
-      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
-      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
+      cellEdited:()=>localStorage.setItem("assignments", JSON.stringify(table.getData()))
     });
 
-    // save data
-    function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
-
-    // add new assignment from form
-    document.getElementById("add-btn").addEventListener("click", () => {
+    document.getElementById("add-btn").addEventListener("click", ()=>{
       const newRow = {
-        class: document.getElementById("class-input").value,
-        assignment: document.getElementById("assignment-input").value,
-        due: document.getElementById("due-input").value,
-        link: document.getElementById("link-input").value
+        class:document.getElementById("class-input").value,
+        assignment:document.getElementById("assignment-input").value,
+        due:document.getElementById("due-input").value,
+        link:document.getElementById("link-input").value
       };
-
-      // basic validation
-      if (!newRow.assignment){
-        status("Please enter an assignment name.", "error");
-        return;
-      }
-
-      table.addRow(newRow).then(row => {
-        saveData();
-        applyRowBackground(row);
-        status("Added assignment", "success");
-      }).catch(err => {
-        console.error(err);
-        status("Failed to add row.", "error");
-      });
-
-      // clear inputs
-      document.getElementById("assignment-input").value = "";
-      document.getElementById("due-input").value = "";
-      document.getElementById("link-input").value = "";
+      table.addRow(newRow);
+      localStorage.setItem("assignments", JSON.stringify(table.getData()));
+      document.getElementById("assignment-input").value="";
+      document.getElementById("due-input").value="";
+      document.getElementById("link-input").value="";
     });
 
-    /********************
-     * Export / Import
-     ********************/
-    const exportBtn = document.getElementById("export-btn");
-    const importBtn = document.getElementById("import-btn");
-    const importFile = document.getElementById("import-file");
-
-    exportBtn.addEventListener("click", () => {
-      try{
-        const data = table.getData();
-        const pretty = JSON.stringify(data, null, 2); // human readable
-        const blob = new Blob([pretty], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        const ts = new Date().toISOString().replace(/[:.]/g,"-");
-        a.download = `assignments-${ts}.json`;
-        a.href = url;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        status("Exported assignments JSON.", "success");
-      }catch(e){
-        console.error(e);
-        status("Export failed.", "error");
-      }
+    // Export/Import
+    document.getElementById("export-btn").addEventListener("click", ()=>{
+      const data = JSON.stringify(table.getData(), null, 2);
+      const blob = new Blob([data], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "assignments.json";
+      a.click();
+      URL.revokeObjectURL(url);
     });
 
-    importBtn.addEventListener("click", () => importFile.click());
+    document.getElementById("import-btn").addEventListener("click", ()=>{
+      document.getElementById("import-file").click();
+    });
 
-    importFile.addEventListener("change", (ev) => {
-      const file = ev.target.files && ev.target.files[0];
-      if (!file) return;
+    document.getElementById("import-file").addEventListener("change", e=>{
+      const file = e.target.files[0];
+      if(!file) return;
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = ev=>{
         try{
-          const text = e.target.result;
-          const parsed = JSON.parse(text);
-          if (!Array.isArray(parsed)){
-            throw new Error("Imported JSON must be an array of assignments.");
-          }
-          // basic validation and normalization
-          const normalized = parsed.map((item, idx) => {
-            if (typeof item !== "object" || item === null) throw new Error("Invalid item at index " + idx);
-            return {
-              class: item.class || "MATH 1210",
-              assignment: item.assignment || ("Item " + (idx+1)),
-              due: item.due || "",
-              link: item.link || ""
-            };
-          });
-
-          table.setData(normalized).then(()=>{
-            saveData();
-            table.getRows().forEach(applyRowBackground);
-            status("Imported assignments successfully.", "success");
-          }).catch(err=>{
-            console.error(err);
-            status("Failed to load imported data into table.", "error");
-          });
-
+          const parsed = JSON.parse(ev.target.result);
+          table.setData(parsed);
+          localStorage.setItem("assignments", JSON.stringify(parsed));
         }catch(err){
-          console.error(err);
-          status("Import error: " + (err.message||err), "error");
+          alert("Invalid JSON file");
         }
       };
-      reader.onerror = () => {
-        status("Failed to read file.", "error");
-      };
       reader.readAsText(file);
-      // reset input so same file can be selected again later
-      importFile.value = "";
     });
-
-    // on initial render, show nothing (or small message)
-    status("");
-
   </script>
 </body>
 </html>
