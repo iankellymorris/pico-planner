@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V2)</title>
+  <title>Assignment Tracker (Carlton V3)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -34,10 +34,11 @@
       /* spacing between fields inside */
       --entryGap: 10px;
 
-      /* buttons */
-      --addBtnColor: #d36ad3;          /* pinkish purple */
-      --exportBtnColor: #f2f2f2;
-      --importBtnColor: #f2f2f2;
+      /* button colors */
+      --addButtonBg: #d36ad3;   /* pinkish purple */
+      --addButtonText: #fff;
+      --dataButtonBg: #f2f2f2;
+      --dataButtonText: #888;
     }
 
     body {
@@ -103,21 +104,22 @@
       background: white;
       background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                         linear-gradient(135deg, #555 50%, transparent 50%);
-      background-position: calc(100% - 9px) calc(50% - 0px),
-                           calc(100% - 4px) calc(50% - 0px);
+      background-position: calc(100% - 19px) calc(50% - 0px),
+                           calc(100% - 14px) calc(50% - 0px);
       background-size: 6px 6px, 6px 6px;
       background-repeat: no-repeat;
     }
 
     /* Add Assignment button */
     #add-btn {
-      background: var(--addBtnColor);
+      background: var(--addButtonBg);
+      color: var(--addButtonText);
       border: none;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
     }
-    #add-btn:hover { opacity: 0.9; }
+
+    #add-btn:hover {
+      filter: brightness(0.9);
+    }
 
     /* Table font */
     .tabulator,
@@ -162,14 +164,15 @@
       font-size: 1.15rem;
       font-family: "Courier New", monospace;
       color: rgba(0,0,0,0.32);
-    }
-    .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
-    /* flex centering in delete column */
-    .tabulator-cell.delete-cell {
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .delete-btn:hover { 
+      color: rgba(0,0,0,0.6); 
+      transform: scale(1.25);
     }
 
     /* export/import buttons */
@@ -185,14 +188,11 @@
       padding: 8px 14px;
       border-radius: 9999px;
       border: 1px solid #bbb;
-      background: #f2f2f2;
-      color: #888;
+      background: var(--dataButtonBg);
+      color: var(--dataButtonText);
       font-size: 0.95rem;
       cursor: pointer;
     }
-
-    #export-btn { background: var(--exportBtnColor); }
-    #import-btn { background: var(--importBtnColor); }
 
     .data-buttons button:hover {
       background: #e0e0e0;
@@ -240,8 +240,8 @@
 
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }
+      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" }, 
+      MATH: { even: "#faf3d1", odd: "#fef9e4", header: "#c4b000" }  
     };
 
     function parseISODateSafe(str){
@@ -313,7 +313,6 @@
           width: 40, 
           hozAlign: "center", 
           headerSort: false,
-          cssClass: "delete-cell",   /* flex centering */
           formatter: deleteFormatter, 
           cellClick:(e,cell)=>{ 
             cell.getRow().delete(); 
