@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Terrence V3.2a)</title>
+  <title>Assignment Tracker (Terrence V3.2b)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -17,6 +17,10 @@
       --tableRightEdgePadding: 10px;
       --tableLeftEdgePadding: 300px;
       --dropdownWidth: 160px;
+      --fieldPaddingY: 10px;
+      --fieldPaddingX: 18px;
+      --fieldBorderRadius: 9999px; /* full pill */
+      --fieldFontSize: 1rem;
     }
 
     body {
@@ -35,10 +39,8 @@
       padding-left: var(--titleLeftEdgePadding);
     }
 
-    /* Force two spaces in title */
     h1 span.space { white-space: pre; }
 
-    /* center wrapper so the form can be centered reliably */
     .form-wrap {
       text-align: center;
     }
@@ -46,21 +48,24 @@
     .form-container {
       display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
-      padding: 20px 14px 20px 22px;
+      padding: 20px;
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
     }
 
+    /* pill-shaped fields shared */
     .form-container input,
-    .form-container button {
-      margin-right: 10px;
-      padding: 8px 12px;
-      border-radius: 32px;
+    .form-container button,
+    .form-container select {
+      border-radius: var(--fieldBorderRadius);
+      font-size: var(--fieldFontSize);
+      padding: var(--fieldPaddingY) var(--fieldPaddingX);
       border: 1px solid #ccc;
+      margin-right: 10px;
     }
 
-    /* pill-shaped dropdown wrapper */
+    /* dropdown wrapper to control arrow spacing */
     .form-container .select-wrap {
       display: inline-block;
       position: relative;
@@ -68,18 +73,13 @@
       margin-right: 10px;
     }
 
-    /* pill-shaped select */
-    .form-container select {
+    .form-container .select-wrap select {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
-      border-radius: 9999px;
-      padding: 8px 40px 8px 16px; /* extra right padding for arrow */
-      border: 1px solid #ccc;
-      background-color: #fff;
-      font-size: 1rem;
-      line-height: 1.4;
       width: 100%;
+      background-color: #fff;
+      padding-right: 42px; /* room for arrow */
     }
 
     /* custom arrow */
@@ -92,6 +92,17 @@
       pointer-events: none;
       font-size: 0.9rem;
       color: #555;
+    }
+
+    /* button look */
+    .form-container button {
+      background-color: #4b2e83;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-container button:hover {
+      background-color: #3a2366;
     }
 
     /* Table font */
@@ -116,14 +127,12 @@
       padding-bottom: 6px;
     }
 
-    /* Remove periwinkle backgrounds */
     .tabulator,
     .tabulator .tabulator-tableholder,
     .tabulator-row {
       background: none !important;
     }
 
-    /* Remove arrows/bars */
     .tabulator .tabulator-group .tabulator-arrow {
       display: none !important;
     }
