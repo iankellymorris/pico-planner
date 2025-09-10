@@ -53,8 +53,9 @@
       --dataBtnBg: #f2f2f2;
       --dataBtnText: #888;
 
-      /* table responsive breakpoint */
+      /* table responsive sizing */
       --tableBreakpointWidth: 1500px;
+      --tableWidthPercent: 80%;
     }
 
     body {
@@ -154,10 +155,10 @@
 
     @media (min-width: var(--tableBreakpointWidth)) {
       .tabulator {
-        width: 80%;
+        width: var(--tableWidthPercent);
       }
       .data-buttons {
-        width: 80%;
+        width: var(--tableWidthPercent);
       }
     }
 
@@ -243,6 +244,7 @@
     <input type="file" id="import-file" accept=".json" style="display:none;">
   </div>
 
+  <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
   <script>
     function escapeHtml(str){
