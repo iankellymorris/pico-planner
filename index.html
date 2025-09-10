@@ -1,99 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V15)</title>
-  <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carlton V16</title>
+  <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
   <style>
     :root {
-      /* layout + padding vars */
+      /* Layout variables */
       --entryTableDelta: 20px;
       --titleLeftEdgePadding: 25%;
-      --dropdownWidth: 180px;
-      --formScale: 0.85;
-      --formRowGap: 12px;
-
-      /* fonts */
-      --titleFont: 'Raleway', sans-serif;
-      --bodyFont: 'Lato', sans-serif;
-      --titleWeight: 900;
-      --bodyWeight: 400;
-      --bodyWeightBold: 700;
-
-      /* font sizes */
-      --titleFontSize: 3.2rem;
-      --bodyFontSize: 1rem;
-      --buttonFontSize: 0.95rem;
-      --tableFontSize: 1rem;
-
-      /* colors + spacing */
-      --titleColor: #4b2e83;
-      --backgroundColor: #ede3fa;
-      --pageBottomPadding: 20px;
-      --titleBottomMargin: 10px;
-
-      /* banner */
-      --bannerColor: #fdf1d6;
-      --bannerPaddingTop: 30px;
+      --tableWidthPercent: 80%;
+      --tableMinWidth: 550px;
+      --bannerPaddingTop: 10px;
       --bannerPaddingBottom: 25px;
 
-      /* table */
-      --tableWidthPercent: 80%;
-      --tableBreakpoint: 550px;
+      /* Fonts */
+      --titleFontSize: 40px;
+      --titleFontColor: #ffffff;
+      --titleFontFamily: "Arial", sans-serif;
+      --bodyFontFamily: "Verdana", sans-serif;
+      --bodyFontSize: 16px;
 
-      /* form container padding */
-      --entryPaddingTop: 18px;
-      --entryPaddingBottom: 18px;
-      --entryPaddingLeft: 22px;
-      --entryPaddingRight: 12px;
-      --entryGap: 10px;
+      /* Colors */
+      --bannerColor: #f5d46b; /* creamier yellow */
+      --addAssignmentColor: #c71585; /* red violet */
+      --exportImportColor: #e0e0e0;
+      --exportImportText: #666666;
+      --oddRowColor: #faf3d1;
+      --evenRowColor: #fdf9ec;
 
-      /* buttons */
-      --addBtnColor: #C71585;
-      --addBtnText: #fff;
-      --dataBtnBg: #f2f2f2;
-      --dataBtnText: #888;
+      /* Form adjustments */
+      --formScale: 0.85;
+      --formRowGap: 10px;
+      --entryGap: 8px;
+      --entryPaddingTop: 10px;
+      --entryPaddingRight: 10px;
+      --entryPaddingBottom: 10px;
+      --entryPaddingLeft: 10px;
+      --dropdownArrowSize: 6px;
     }
 
     html, body {
       margin: 0;
       padding: 0;
-      min-width: 0 !important;   /* 🚫 remove wall */
+      min-width: 0 !important;
       max-width: none !important;
       width: 100% !important;
       overflow-x: hidden;
-      background: var(--backgroundColor);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
+      font-family: var(--bodyFontFamily);
       font-size: var(--bodyFontSize);
-      padding-bottom: var(--pageBottomPadding);
     }
 
     .banner {
       background: var(--bannerColor);
       padding-top: var(--bannerPaddingTop);
       padding-bottom: var(--bannerPaddingBottom);
+      display: block;
+      text-align: left;
+      width: 100%;
     }
 
     h1 {
-      font-family: var(--titleFont);
-      font-weight: var(--titleWeight);
       font-size: var(--titleFontSize);
-      margin: 0 0 var(--titleBottomMargin) 0;
-      color: var(--titleColor);
-      padding-left: var(--titleLeftEdgePadding);
-      text-align: left;  /* 🔑 force left align */
+      color: var(--titleFontColor);
+      font-family: var(--titleFontFamily);
+      text-align: left;
+      margin-left: var(--titleLeftEdgePadding);
+      margin-right: 0;
     }
-    h1 span.space { white-space: pre; }
 
     .form-wrap {
       text-align: center;
     }
 
     .form-container {
-      display: inline-flex; /* 🔑 shrink-wrap to contents */
+      display: inline-flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
@@ -105,112 +87,135 @@
       border-radius: 40px;
       transform: scale(var(--formScale));
       transform-origin: center;
+      max-width: none;
     }
 
     .form-container select,
     .form-container input,
     .form-container button {
-      padding: 10px 16px;
-      border-radius: 9999px;
-      border: 1px solid #ccc;
-      font-size: var(--bodyFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
-    }
-
-    #assignment-input { padding-left: 16px; }
-
-    .form-container select {
-      width: var(--dropdownWidth);
-      appearance: none;
-      padding-right: 32px;
-      background: white;
-      background-image: linear-gradient(45deg, transparent 50%, #555 50%),
-                        linear-gradient(135deg, #555 50%, transparent 50%);
-      background-position: calc(100% - 19px) calc(50% - 0px),
-                           calc(100% - 14px) calc(50% - 0px);
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-    }
-
-    #add-btn {
-      background: var(--addBtnColor);
-      color: var(--addBtnText);
-      border: none;
-      cursor: pointer;
-      font-size: var(--buttonFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeightBold);
-    }
-    #add-btn:hover { opacity: 0.9; }
-
-    /* Tabulator */
-    .tabulator,
-    .tabulator .tabulator-header,
-    .tabulator .tabulator-cell {
-      font-family: var(--bodyFont) !important;
-      font-size: var(--tableFontSize) !important;
-    }
-
-    .tabulator {
-      width: var(--tableWidthPercent);
-      margin: 0 auto;
-    }
-
-    .data-buttons {
-      display: flex;
-      justify-content: flex-end;
-      margin: 15px auto 0 auto;
-      width: var(--tableWidthPercent);
-    }
-
-    .data-buttons button {
-      margin-left: 10px;
       padding: 8px 14px;
       border-radius: 9999px;
-      border: 1px solid #bbb;
-      background: var(--dataBtnBg);
-      color: var(--dataBtnText);
-      font-size: var(--buttonFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .form-container select {
+      appearance: none;
+      background-color: #fff;
+      position: relative;
+      padding-right: 30px;
+    }
+
+    .form-container select::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .add-assignment-btn {
+      background-color: var(--addAssignmentColor);
+      color: white;
+      border: none;
       cursor: pointer;
     }
-    .data-buttons button:hover { background: #e0e0e0; }
 
-    @media (max-width: 550px) {
-      .tabulator, .data-buttons { width: 100% !important; }
+    .add-assignment-btn:hover {
+      opacity: 0.9;
+    }
+
+    #assignment-table {
+      margin: 0 auto;
+      width: var(--tableWidthPercent);
+      min-width: var(--tableMinWidth);
+    }
+
+    .tabulator .tabulator-row.tabulator-row-odd {
+      background-color: var(--oddRowColor);
+    }
+
+    .tabulator .tabulator-row.tabulator-row-even {
+      background-color: var(--evenRowColor);
+    }
+
+    .delete-btn {
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+      padding-right: 10px;
+    }
+
+    .delete-btn:hover {
+      color: red;
+    }
+
+    .export-import {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      width: var(--tableWidthPercent);
+      min-width: var(--tableMinWidth);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .export-import button {
+      background-color: var(--exportImportColor);
+      color: var(--exportImportText);
+      border: none;
+      border-radius: 9999px;
+      padding: 6px 14px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .export-import button:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
   <div class="banner">
-    <h1>Assignment<span class="space">  </span>Tracker</h1>
+    <h1>Assignment Tracker</h1>
   </div>
 
   <div class="form-wrap">
     <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
+      <select id="course">
+        <option>Math</option>
+        <option>Science</option>
+        <option>History</option>
       </select>
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
-      <button id="add-btn">Add Assignment</button>
+      <input id="assignment" type="text" placeholder="Assignment Name">
+      <input id="due-date" type="date">
+      <button class="add-assignment-btn">Add Assignment</button>
     </div>
   </div>
 
   <div id="assignment-table"></div>
 
-  <div class="data-buttons">
-    <button id="export-btn">Export Data</button>
-    <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
+  <div class="export-import">
+    <button id="export">Export Data</button>
+    <button id="import">Import Data</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <!-- your existing Tabulator JS from V13 stays here -->
+  <script src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
+  <script>
+    // Sample table setup
+    const table = new Tabulator("#assignment-table", {
+      layout: "fitColumns",
+      columns: [
+        { title: "Course", field: "course", headerSort: true },
+        { title: "Assignment", field: "assignment", headerSort: true },
+        { title: "Due Date", field: "dueDate", sorter: "date", hozAlign: "center" },
+        {
+          title: "",
+          field: "delete",
+          hozAlign: "center",
+          formatter: () => "✖",
+          cellClick: (e, cell) => cell.getRow().delete()
+        },
+      ],
+    });
+  </script>
 </body>
 </html>
