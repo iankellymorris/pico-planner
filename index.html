@@ -10,65 +10,222 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-<style>
-  :root {
-    /* key variables */
-    --titleLeftEdgePadding: 25px;
-    --bannerHeightUnderTitle: 25px;
+  <style>
+    :root {
+      --entryTableDelta: 20px;
+      --titleLeftEdgePadding: 25px;
+      --tableRightEdgePadding: 16px;
+      --dropdownWidth: 180px;
+      --formScale: 0.85;
 
-    --entryPaddingTop: 18px;
-    --entryPaddingBottom: 18px;
-    --entryPaddingLeft: 22px;
-    --entryPaddingRight: 12px;
-    --entryRowGap: 12px;
-    --entryGap: 10px;
+      /* fonts */
+      --titleFont: 'Raleway', sans-serif;
+      --bodyFont: 'Lato', sans-serif;
+      --titleWeight: 900;
+      --bodyWeight: 400;
+      --bodyWeightBold: 700;
 
-    --tableBreakpointWidth: 1500px;
-    --tableWidthPercent: 80%;
-  }
+      /* font sizes */
+      --titleFontSize: 3.2rem;
+      --bodyFontSize: 1rem;
+      --buttonFontSize: 0.95rem;
+      --tableFontSize: 1rem;
 
-  /* assignment entry container */
-  .form-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--entryRowGap) var(--entryGap);
-    margin: 20px auto;
-    padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-    background: rgba(75, 46, 131, 0.16);
-    border: 1px solid rgba(75, 46, 131, 0.22);
-    border-radius: 40px;
-    width: max-content;
-    max-width: calc(
-      var(--dropdownWidth) + 300px
-    ); /* prevents runaway width */
-    margin-left: auto;
-    margin-right: auto;
-  }
+      /* title + page variables */
+      --titleColor: #4b2e83;
+      --backgroundColor: #ede3fa;
+      --pageBottomPadding: 20px;
+      --titleBottomMargin: 10px;
 
-  /* table defaults */
-  .tabulator {
-    margin: 0 auto;
-  }
+      /* banner background */
+      --bannerBg: #fdf6e3; /* cream */
+      --bannerHeightUnderTitle: 25px;
 
-  @media (min-width: var(--tableBreakpointWidth)) {
-    .tabulator {
-      width: var(--tableWidthPercent);
+      /* form container padding */
+      --entryPaddingTop: 18px;
+      --entryPaddingBottom: 18px;
+      --entryPaddingLeft: 22px;
+      --entryPaddingRight: 12px;
+      --entryRowGap: 12px;
+      --entryGap: 10px;
+
+      /* button colors */
+      --addBtnColor: #C71585;  /* red-violet */
+      --addBtnText: #fff;
+      --dataBtnBg: #f2f2f2;
+      --dataBtnText: #888;
+
+      /* table responsive */
+      --tableBreakpointWidth: 1500px;
+      --tableWidthPercent: 80%;
     }
-  }
 
-  @media (max-width: var(--tableBreakpointWidth)) {
-    .tabulator {
+    body {
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
+      font-size: var(--bodyFontSize);
+      margin: 0;
+      padding: 0;
+      background: var(--backgroundColor);
+    }
+
+    /* full-width banner */
+    .title-banner {
       width: 100%;
+      background: var(--bannerBg);
+      padding-top: 20px;
+      padding-bottom: var(--bannerHeightUnderTitle);
     }
-  }
 
-  /* fix group header bg (removes periwinkle) */
-  .tabulator .tabulator-group {
-    background: none !important;
-  }
-</style>
+    .title-banner h1 {
+      margin: 0;
+      padding-left: var(--titleLeftEdgePadding);
+      font-family: var(--titleFont);
+      font-weight: var(--titleWeight);
+      font-size: var(--titleFontSize);
+      color: var(--titleColor);
+    }
 
+    h1 span.space { white-space: pre; }
+
+    .form-wrap { text-align: center; }
+
+    .form-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--entryRowGap) var(--entryGap);
+      margin: 20px auto var(--entryTableDelta) auto;
+      padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
+      background: rgba(75, 46, 131, 0.16);
+      border: 1px solid rgba(75, 46, 131, 0.22);
+      border-radius: 40px;
+      width: max-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .form-container select,
+    .form-container input,
+    .form-container button {
+      margin-right: var(--entryGap);
+      padding: 10px 16px;
+      border-radius: 9999px;
+      border: 1px solid #ccc;
+      font-size: var(--bodyFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
+    }
+
+    #assignment-input { padding-left: 16px; }
+
+    .form-container select {
+      width: var(--dropdownWidth);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 32px;
+      background: white;
+      background-image: linear-gradient(45deg, transparent 50%, #555 50%),
+                        linear-gradient(135deg, #555 50%, transparent 50%);
+      background-position: calc(100% - 19px) calc(50% - 0px),
+                           calc(100% - 14px) calc(50% - 0px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    #add-btn {
+      background: var(--addBtnColor);
+      color: var(--addBtnText);
+      border: none;
+      cursor: pointer;
+      font-size: var(--buttonFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeightBold);
+    }
+
+    #add-btn:hover { opacity: 0.9; }
+
+    .tabulator,
+    .tabulator .tabulator-header,
+    .tabulator .tabulator-cell {
+      font-family: var(--bodyFont) !important;
+      font-size: var(--tableFontSize) !important;
+    }
+
+    /* table centering + responsive width */
+    .tabulator {
+      margin: 0 auto;
+    }
+
+    @media (min-width: 1500px) {
+      .tabulator {
+        width: var(--tableWidthPercent);
+      }
+    }
+
+    @media (max-width: 1499px) {
+      .tabulator {
+        width: 100%;
+      }
+    }
+
+    /* prevent periwinkle */
+    .tabulator .tabulator-group {
+      background: none !important;
+    }
+
+    .tabulator .tabulator-cell { padding-left: 15px !important; }
+
+    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+      font-weight: var(--bodyWeightBold);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    .tabulator,
+    .tabulator .tabulator-tableholder,
+    .tabulator-row { background: none !important; }
+
+    .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
+    .tabulator .tabulator-group-header { padding-left: 0 !important; }
+
+    .delete-btn {
+      cursor: pointer;
+      font-size: 1.15rem;
+      font-family: "Courier New", monospace;
+      color: rgba(0,0,0,0.32);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding-right: 10px;
+    }
+    .delete-btn:hover { color: rgba(0,0,0,0.6); }
+
+    .data-buttons {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+      margin-right: var(--tableRightEdgePadding);
+      padding-bottom: var(--pageBottomPadding);
+    }
+
+    .data-buttons button {
+      margin-left: 10px;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      border: 1px solid #bbb;
+      background: var(--dataBtnBg);
+      color: var(--dataBtnText);
+      font-size: var(--buttonFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
+      cursor: pointer;
+    }
+
+    .data-buttons button:hover { background: #e0e0e0; }
+  </style>
 </head>
 <body>
   <div class="title-banner">
