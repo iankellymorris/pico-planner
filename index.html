@@ -8,7 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -19,12 +19,24 @@
       --dropdownWidth: 180px;
       --formScale: 0.85;
 
-      /* title + page variables */
+      /* fonts */
+      --titleFont: 'Raleway', sans-serif;
+      --bodyFont: 'Lato', sans-serif;
+      --titleWeight: 900;
+      --bodyWeight: 400;
+      --bodyWeightBold: 700;
+
+      /* font sizes */
       --titleFontSize: 3.2rem;
+      --bodyFontSize: 1rem;
+      --buttonFontSize: 0.95rem;
+      --tableFontSize: 1rem;
+
+      /* title + page variables */
       --titleColor: #4b2e83;
       --backgroundColor: #ede3fa;
       --pageTopPadding: 10px;
-      --pageBottomPadding: 30px;    /* NEW: control space at bottom */
+      --pageBottomPadding: 20px;
       --titleBottomMargin: 10px;
 
       /* form container padding */
@@ -42,18 +54,20 @@
     }
 
     body {
-      font-family: 'Lato', sans-serif;
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
+      font-size: var(--bodyFontSize);
       margin: 0;
       padding-top: var(--pageTopPadding);
+      padding-bottom: var(--pageBottomPadding);
       padding-left: 20px;
       padding-right: 20px;
-      padding-bottom: var(--pageBottomPadding);
       background: var(--backgroundColor);
     }
 
     h1 {
-      font-family: 'Raleway', sans-serif;
-      font-weight: 900;
+      font-family: var(--titleFont);
+      font-weight: var(--titleWeight);
       text-align: left;
       font-size: var(--titleFontSize);
       margin-top: 0;
@@ -84,7 +98,9 @@
       padding: 10px 16px;
       border-radius: 9999px;
       border: 1px solid #ccc;
-      font-size: 1rem;
+      font-size: var(--bodyFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
     }
 
     #assignment-input { padding-left: 16px; }
@@ -109,6 +125,9 @@
       color: var(--addBtnText);
       border: none;
       cursor: pointer;
+      font-size: var(--buttonFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeightBold);
     }
 
     #add-btn:hover { opacity: 0.9; }
@@ -116,7 +135,8 @@
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
-      font-family: 'Lato', sans-serif !important;
+      font-family: var(--bodyFont) !important;
+      font-size: var(--tableFontSize) !important;
     }
 
     .tabulator {
@@ -127,7 +147,7 @@
     .tabulator .tabulator-cell { padding-left: 15px !important; }
 
     .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
-      font-weight: 700;
+      font-weight: var(--bodyWeightBold);
       padding-top: 6px;
       padding-bottom: 6px;
     }
@@ -166,7 +186,9 @@
       border: 1px solid #bbb;
       background: var(--dataBtnBg);
       color: var(--dataBtnText);
-      font-size: 0.95rem;
+      font-size: var(--buttonFontSize);
+      font-family: var(--bodyFont);
+      font-weight: var(--bodyWeight);
       cursor: pointer;
     }
 
@@ -214,7 +236,7 @@
     const COLORS = {
       PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
       ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fffceb", header: "#FFD300" } // lighter yellows
+      MATH: { even: "#ffffe0", odd: "#faf3d1", header: "#FFD300" }
     };
 
     function parseISODateSafe(str){
