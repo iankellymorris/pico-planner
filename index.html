@@ -52,6 +52,9 @@
       --addBtnText: #fff;
       --dataBtnBg: #f2f2f2;
       --dataBtnText: #888;
+
+      /* table responsive breakpoint */
+      --tableBreakpointWidth: 1500px;
     }
 
     body {
@@ -143,13 +146,13 @@
       font-size: var(--tableFontSize) !important;
     }
 
-    /* Responsive table width */
+    /* Table responsive width */
     .tabulator {
       width: 100%;
       margin: 0 auto;
     }
 
-    @media (min-width: 1500px) {
+    @media (min-width: var(--tableBreakpointWidth)) {
       .tabulator {
         width: 80%;
       }
