@@ -13,7 +13,7 @@
   <style>
     :root {
       --entryTableDelta: 20px;
-      --titleLeftEdgePadding: 20px;
+      --titleLeftEdgePadding: 25px; /* updated */
       --tableRightEdgePadding: 16px;
       --tableLeftEdgePadding: 280px;
       --dropdownWidth: 180px;
@@ -69,7 +69,7 @@
     .title-banner {
       width: 100%;
       background: var(--bannerBg);
-      padding-top: 20px; /* replaces pageTopPadding */
+      padding-top: 20px;
       padding-bottom: calc(var(--titleBottomMargin) + var(--bannerHeightUnderTitle));
     }
 
@@ -146,8 +146,9 @@
     }
 
     .tabulator {
-      margin-left: var(--tableLeftEdgePadding);
-      margin-right: var(--tableRightEdgePadding);
+      width: 80%; /* ensure it shows up */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .tabulator .tabulator-cell { padding-left: 15px !important; }
@@ -230,8 +231,7 @@
     <input type="file" id="import-file" accept=".json" style="display:none;">
   </div>
 
-  <!-- Tabulator -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <!-- your existing JS unchanged -->
+  <!-- existing JS (unchanged) -->
 </body>
 </html>
