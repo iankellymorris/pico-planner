@@ -1,388 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V9)</title>
+<style>
+  :root {
+    --entryTableDelta: 20px;
+    --titleLeftEdgePadding: 25px;
+    --dropdownWidth: 180px;
+    --formScale: 0.85;
 
-  <!-- Tabulator Modern CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
+    /* fonts */
+    --titleFont: 'Raleway', sans-serif;
+    --bodyFont: 'Lato', sans-serif;
+    --titleWeight: 900;
+    --bodyWeight: 400;
+    --bodyWeightBold: 700;
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    /* font sizes */
+    --titleFontSize: 3.2rem;
+    --bodyFontSize: 1rem;
+    --buttonFontSize: 0.95rem;
+    --tableFontSize: 1rem;
 
-  <style>
-    :root {
-      --entryTableDelta: 20px;
-      --titleLeftEdgePadding: 25px;
-      --dropdownWidth: 180px;
-      --formScale: 0.85;
+    /* title + page variables */
+    --titleColor: #4b2e83;
+    --backgroundColor: #ede3fa;
+    --pageBottomPadding: 20px;
+    --titleBottomMargin: 10px;
 
-      /* fonts */
-      --titleFont: 'Raleway', sans-serif;
-      --bodyFont: 'Lato', sans-serif;
-      --titleWeight: 900;
-      --bodyWeight: 400;
-      --bodyWeightBold: 700;
+    /* banner background + height */
+    --bannerBg: #fdf6e3;
+    --bannerHeightUnderTitle: 25px;
 
-      /* font sizes */
-      --titleFontSize: 3.2rem;
-      --bodyFontSize: 1rem;
-      --buttonFontSize: 0.95rem;
-      --tableFontSize: 1rem;
+    /* form container padding + spacing */
+    --entryPaddingTop: 18px;
+    --entryPaddingBottom: 18px;
+    --entryPaddingLeft: 22px;
+    --entryPaddingRight: 12px;
+    --entryGap: 10px;
+    --entryRowGap: 12px; /* NEW for multiline spacing */
 
-      /* title + page variables */
-      --titleColor: #4b2e83;
-      --backgroundColor: #ede3fa;
-      --pageBottomPadding: 20px;
-      --titleBottomMargin: 10px;
+    /* button colors */
+    --addBtnColor: #C71585;
+    --addBtnText: #fff;
+    --dataBtnBg: #f2f2f2;
+    --dataBtnText: #888;
 
-      /* banner background + height */
-      --bannerBg: #fdf6e3; /* cream */
-      --bannerHeightUnderTitle: 25px;
+    /* table responsive sizing */
+    --tableBreakpointWidth: 1500px;
+    --tableWidthPercent: 80%;
+  }
 
-      /* form container padding */
-      --entryPaddingTop: 18px;
-      --entryPaddingBottom: 18px;
-      --entryPaddingLeft: 22px;
-      --entryPaddingRight: 12px;
-      --entryGap: 10px;
+  body {
+    font-family: var(--bodyFont);
+    font-weight: var(--bodyWeight);
+    font-size: var(--bodyFontSize);
+    margin: 0;
+    padding: 0;
+    background: var(--backgroundColor);
+  }
 
-      /* button colors */
-      --addBtnColor: #C71585;  /* red-violet */
-      --addBtnText: #fff;
-      --dataBtnBg: #f2f2f2;
-      --dataBtnText: #888;
+  .title-banner {
+    width: 100%;
+    background: var(--bannerBg);
+    padding-top: 20px;
+    padding-bottom: calc(var(--titleBottomMargin) + var(--bannerHeightUnderTitle));
+  }
 
-      /* table responsive sizing */
-      --tableBreakpointWidth: 20px;
-      --tableWidthPercent: 82%;
-    }
+  .title-banner h1 {
+    margin: 0;
+    padding-left: var(--titleLeftEdgePadding);
+    font-family: var(--titleFont);
+    font-weight: var(--titleWeight);
+    font-size: var(--titleFontSize);
+    color: var(--titleColor);
+    text-align: left;
+  }
 
-    body {
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
-      font-size: var(--bodyFontSize);
-      margin: 0;
-      padding: 0;
-      background: var(--backgroundColor);
-    }
+  h1 span.space { white-space: pre; }
 
-    /* full-width banner */
-    .title-banner {
-      width: 100%;
-      background: var(--bannerBg);
-      padding-top: 20px;
-      padding-bottom: calc(var(--titleBottomMargin) + var(--bannerHeightUnderTitle));
-    }
+  .form-wrap { text-align: center; }
 
-    .title-banner h1 {
-      margin: 0;
-      padding-left: var(--titleLeftEdgePadding);
-      font-family: var(--titleFont);
-      font-weight: var(--titleWeight);
-      font-size: var(--titleFontSize);
-      color: var(--titleColor);
-    }
+  .form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--entryRowGap) var(--entryGap); /* column + row spacing */
+    margin: 20px auto var(--entryTableDelta) auto;
+    padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
+    background: rgba(75, 46, 131, 0.16);
+    border: 1px solid rgba(75, 46, 131, 0.22);
+    border-radius: 40px;
+    transform: scale(var(--formScale));
+    transform-origin: center;
+  }
 
-    h1 span.space { white-space: pre; }
+  .form-container select,
+  .form-container input,
+  .form-container button {
+    margin-right: 0;
+    padding: 10px 16px;
+    border-radius: 9999px;
+    border: 1px solid #ccc;
+    font-size: var(--bodyFontSize);
+    font-family: var(--bodyFont);
+    font-weight: var(--bodyWeight);
+  }
 
-    .form-wrap { text-align: center; }
+  #assignment-input { padding-left: 16px; }
 
-    .form-container {
-      display: inline-block;
-      margin: 20px auto var(--entryTableDelta) auto;
-      padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-      background: rgba(75, 46, 131, 0.16);
-      border: 1px solid rgba(75, 46, 131, 0.22);
-      border-radius: 40px;
-      transform: scale(var(--formScale));
-      transform-origin: center;
-    }
+  .form-container select {
+    width: var(--dropdownWidth);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 32px;
+    background: white;
+    background-image: linear-gradient(45deg, transparent 50%, #555 50%),
+                      linear-gradient(135deg, #555 50%, transparent 50%);
+    background-position: calc(100% - 19px) calc(50% - 0px),
+                         calc(100% - 14px) calc(50% - 0px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
 
-    .form-container select,
-    .form-container input,
-    .form-container button {
-      margin-right: var(--entryGap);
-      padding: 10px 16px;
-      border-radius: 9999px;
-      border: 1px solid #ccc;
-      font-size: var(--bodyFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
-    }
+  #add-btn {
+    background: var(--addBtnColor);
+    color: var(--addBtnText);
+    border: none;
+    cursor: pointer;
+    font-size: var(--buttonFontSize);
+    font-family: var(--bodyFont);
+    font-weight: var(--bodyWeightBold);
+  }
+  #add-btn:hover { opacity: 0.9; }
 
-    #assignment-input { padding-left: 16px; }
+  .tabulator,
+  .tabulator .tabulator-header,
+  .tabulator .tabulator-cell {
+    font-family: var(--bodyFont) !important;
+    font-size: var(--tableFontSize) !important;
+  }
 
-    .form-container select {
-      width: var(--dropdownWidth);
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      padding-right: 32px;
-      background: white;
-      background-image: linear-gradient(45deg, transparent 50%, #555 50%),
-                        linear-gradient(135deg, #555 50%, transparent 50%);
-      background-position: calc(100% - 19px) calc(50% - 0px),
-                           calc(100% - 14px) calc(50% - 0px);
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-    }
+  /* Table responsive width */
+  .tabulator {
+    width: 100%;
+    margin: 0 auto;
+  }
 
-    #add-btn {
-      background: var(--addBtnColor);
-      color: var(--addBtnText);
-      border: none;
-      cursor: pointer;
-      font-size: var(--buttonFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeightBold);
-    }
-
-    #add-btn:hover { opacity: 0.9; }
-
-    .tabulator,
-    .tabulator .tabulator-header,
-    .tabulator .tabulator-cell {
-      font-family: var(--bodyFont) !important;
-      font-size: var(--tableFontSize) !important;
-    }
-
-    /* Table responsive width */
+  @media (min-width: var(--tableBreakpointWidth)) {
     .tabulator {
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    @media (min-width: var(--tableBreakpointWidth)) {
-      .tabulator {
-        width: var(--tableWidthPercent);
-      }
-      .data-buttons {
-        width: var(--tableWidthPercent);
-      }
-    }
-
-    .tabulator .tabulator-cell { padding-left: 15px !important; }
-
-    .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
-      font-weight: var(--bodyWeightBold);
-      padding-top: 6px;
-      padding-bottom: 6px;
-    }
-
-    .tabulator,
-    .tabulator .tabulator-tableholder,
-    .tabulator-row { background: none !important; }
-
-    .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
-    .tabulator .tabulator-group-header { padding-left: 0 !important; }
-
-    .delete-btn {
-      cursor: pointer;
-      font-size: 1.15rem;
-      font-family: "Courier New", monospace;
-      color: rgba(0,0,0,0.32);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      padding-right: 10px;
-    }
-    .delete-btn:hover { color: rgba(0,0,0,0.6); }
-
-    .data-buttons {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 15px;
-      width: 100%;
+      width: var(--tableWidthPercent);
+      max-width: var(--tableWidthPercent);
       margin-left: auto;
       margin-right: auto;
-      padding-bottom: var(--pageBottomPadding);
     }
-
-    .data-buttons button {
-      margin-left: 10px;
-      padding: 8px 14px;
-      border-radius: 9999px;
-      border: 1px solid #bbb;
-      background: var(--dataBtnBg);
-      color: var(--dataBtnText);
-      font-size: var(--buttonFontSize);
-      font-family: var(--bodyFont);
-      font-weight: var(--bodyWeight);
-      cursor: pointer;
+    .data-buttons {
+      width: var(--tableWidthPercent);
     }
+  }
 
-    .data-buttons button:hover { background: #e0e0e0; }
-  </style>
-</head>
-<body>
-  <div class="title-banner">
-    <h1>Assignment<span class="space">  </span>Tracker</h1>
-  </div>
+  .tabulator .tabulator-cell { padding-left: 15px !important; }
 
-  <div class="form-wrap">
-    <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
-      </select>
+  .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+    font-weight: var(--bodyWeightBold);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
 
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
-      <button id="add-btn">Add Assignment</button>
-    </div>
-  </div>
+  .delete-btn {
+    cursor: pointer;
+    font-size: 1.15rem;
+    font-family: "Courier New", monospace;
+    color: rgba(0,0,0,0.32);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding-right: 10px;
+  }
+  .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
-  <div id="assignment-table"></div>
+  .data-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: var(--pageBottomPadding);
+  }
 
-  <div class="data-buttons">
-    <button id="export-btn">Export Data</button>
-    <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
-  </div>
-
-  <!-- Tabulator JS -->
-  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-  <script>
-    function escapeHtml(str){
-      if (str == null) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    const COLORS = {
-      PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-      ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-      MATH: { even: "#faf3d1", odd: "#fffceb", header: "#FFB400" }
-    };
-
-    function parseISODateSafe(str){
-      if (!str) return null;
-      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
-      if (!m) return null;
-      return new Date(+m[1], +m[2]-1, +m[3]);
-    }
-
-    function formatDueDateISOToDDMONYYYY(iso){
-      const d = parseISODateSafe(iso);
-      if (!d) return "";
-      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
-    }
-
-    let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-      { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
-      { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
-      { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
-    ];
-
-    function applyRowBackground(row){
-      const cls = row.getData().class;
-      const rows = table.getRows().filter(r => r.getData().class === cls);
-      const idx = rows.indexOf(row);
-      const even = idx % 2 === 0;
-      let bg = "";
-      if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-      if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-      if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-      row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
-    }
-
-    function assignmentFormatter(cell){
-      const data = cell.getRow().getData();
-      return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
-    }
-
-    function dueFormatter(cell){ return formatDueDateISOToDDMONYYYY(cell.getValue()); }
-    function deleteFormatter(){ return "<span class='delete-btn'>&times;</span>"; }
-
-    const table = new Tabulator("#assignment-table", {
-      data: savedData,
-      layout: "fitColumns",
-      reactiveData: true,
-      groupBy: "class",
-      groupStartOpen: true,
-      groupHeader: function(value){
-        let bg = "#ddd", fg = "#fff";
-        if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
-        if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
-        if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
-        return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
-      },
-      columns: [
-        { title: "Class", field: "class", visible: false },
-        { title: "Assignment", field: "assignment", editor: "input", formatter: assignmentFormatter },
-        { title: "Due Date", field: "due", sorter:(a,b)=>parseISODateSafe(a)-parseISODateSafe(b), editor: "date", formatter: dueFormatter },
-        { title: "Link", field: "link", visible: false },
-        { 
-          title: "", 
-          field: "delete", 
-          width: 40, 
-          hozAlign: "center", 
-          headerSort: false, 
-          formatter: deleteFormatter, 
-          cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } 
-        }
-      ],
-      rowFormatter: applyRowBackground,
-      renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
-      cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
-    });
-
-    function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
-
-    document.getElementById("add-btn").addEventListener("click", () => {
-      const newRow = {
-        class: document.getElementById("class-input").value,
-        assignment: document.getElementById("assignment-input").value,
-        due: document.getElementById("due-input").value,
-        link: document.getElementById("link-input").value
-      };
-      table.addRow(newRow).then(row => { saveData(); applyRowBackground(row); });
-      document.getElementById("assignment-input").value = "";
-      document.getElementById("due-input").value = "";
-      document.getElementById("link-input").value = "";
-    });
-
-    document.getElementById("export-btn").addEventListener("click", () => {
-      const dataStr = JSON.stringify(table.getData(), null, 2);
-      const blob = new Blob([dataStr], {type: "application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "assignments.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-
-    document.getElementById("import-btn").addEventListener("click", () => {
-      document.getElementById("import-file").click();
-    });
-
-    document.getElementById("import-file").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const imported = JSON.parse(ev.target.result);
-          table.replaceData(imported);
-          saveData();
-        } catch {
-          alert("Invalid file format. Please select a valid JSON export.");
-        }
-      };
-      reader.readAsText(file);
-    });
-  </script>
-</body>
-</html>
+  .data-buttons button {
+    margin-left: 10px;
+    padding: 8px 14px;
+    border-radius: 9999px;
+    border: 1px solid #bbb;
+    background: var(--dataBtnBg);
+    color: var(--dataBtnText);
+    font-size: var(--buttonFontSize);
+    font-family: var(--bodyFont);
+    font-weight: var(--bodyWeight);
+    cursor: pointer;
+  }
+  .data-buttons button:hover { background: #e0e0e0; }
+</style>
