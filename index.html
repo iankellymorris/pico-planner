@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V8a)</title>
+  <title>Assignment Tracker (Carlton V8b)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -14,8 +14,6 @@
     :root {
       --entryTableDelta: 20px;
       --titleLeftEdgePadding: 25px;
-      --tableRightEdgePadding: 16px;
-      --tableLeftEdgePadding: 280px;
       --dropdownWidth: 180px;
       --formScale: 0.85;
 
@@ -40,7 +38,7 @@
 
       /* banner background + height */
       --bannerBg: #fdf6e3; /* cream */
-      --bannerHeightUnderTitle: 20px;
+      --bannerHeightUnderTitle: 25px;
 
       /* form container padding */
       --entryPaddingTop: 18px;
@@ -146,8 +144,8 @@
     }
 
     .tabulator {
-      margin-left: var(--tableLeftEdgePadding);
-      margin-right: var(--tableRightEdgePadding);
+      width: 80%;
+      margin: 0 auto;
     }
 
     .tabulator .tabulator-cell { padding-left: 15px !important; }
@@ -182,7 +180,9 @@
       display: flex;
       justify-content: flex-end;
       margin-top: 15px;
-      margin-right: var(--tableRightEdgePadding);
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
       padding-bottom: var(--pageBottomPadding);
     }
 
