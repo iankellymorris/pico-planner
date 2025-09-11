@@ -16,7 +16,7 @@
   --titleFontSize: 3.2rem;
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
-  --: 1rem;
+  --tableFontSize: 1rem;
 
   /* title + page variables */
   --titleColor: #4b2e83;
@@ -169,8 +169,8 @@ h1 span.space { white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
-.tabulator .tabulator-row .tabulator-cell:nth-child(2),
-.tabulator .tabulator-row .tabulator-cell:nth-child(3) {
+/* ✅ apply left padding only to BODY cells */
+.tabulator-row .tabulator-cell {
   padding-left: var(--tableCellLeftPadding) !important;
 }
 
