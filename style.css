@@ -4,19 +4,23 @@
   --body-font: 'Lato', sans-serif;
 
   /* Font sizes */
-  --title-size: 42px;
-  --body-size: 16px;
+  --title-size: 3.2rem;
+  --body-size: 1rem;
+  --button-size: 0.95rem;
+  --table-font-size: 1rem;
 
   /* Colors */
-  --banner-bg: #fdf6e3;   /* cream background */
-  --banner-text: #4b2e83; /* deep purple text */
+  --banner-bg: #fdf6e3;   /* cream */
+  --banner-text: #4b2e83; /* purple */
   --add-btn-bg: #c71585;  /* red violet */
+  --add-btn-text: #fff;
 
-  /* Export/Import colors (new ones kept, old ones commented) */
-  --export-btn-bg: #4caf50; /* ✅ new green */
-  /* --export-btn-bg: #6a5acd; old slate blue */
-  --import-btn-bg: #2196f3; /* ✅ new blue */
-  /* --import-btn-bg: #ff8c00; old orange */
+  /* Export/Import (new active, old commented) */
+  --export-btn-bg: #4caf50; /* green */
+  --import-btn-bg: #2196f3; /* blue */
+  /* --export-btn-bg: #f2f2f2; old */
+  /* --import-btn-bg: #f2f2f2; old */
+  --data-btn-text: #fff;
 
   /* Table row colors */
   --row-odd: #faf3d1;
@@ -25,32 +29,33 @@
   /* Layout variables */
   --titleLeftEdgePadding: 25px;
   --bannerPaddingBottom: 25px;
-  --form-padding-x: 15px;
-  --form-padding-y: 10px;
-  --form-gap: 10px;
-  --form-line-gap: 20px;
+  --entryGap: 10px;
+  --entryPaddingX: 22px;
+  --entryPaddingY: 18px;
+  --entryLineGap: 20px;
   --table-width-percent: 80%;
   --table-breakpoint: 1500px;
+  --formScale: 0.85;
 
   /* Form container background */
-  --form-bg: #ede7f6; /* light purple background for entry box */
-  --form-border: #ccc;
+  --form-bg: rgba(75, 46, 131, 0.16);
+  --form-border: rgba(75, 46, 131, 0.22);
 }
 
-/* Reset body */
+/* Body */
 body {
   margin: 0;
   font-family: var(--body-font);
   font-size: var(--body-size);
-  background-color: #ffffff;
-  color: #333;
+  background: #ede3fa;
 }
 
 /* Title banner */
 .title-banner {
-  background-color: var(--banner-bg);
-  color: var(--banner-text);
-  padding: 20px var(--titleLeftEdgePadding) var(--bannerPaddingBottom) var(--titleLeftEdgePadding);
+  background: var(--banner-bg);
+  padding-top: 20px;
+  padding-bottom: var(--bannerPaddingBottom);
+  padding-left: var(--titleLeftEdgePadding);
 }
 
 .title-banner h1 {
@@ -58,4 +63,118 @@ body {
   font-size: var(--title-size);
   font-family: var(--title-font);
   font-weight: 900;
+  color: var(--banner-text) !important; /* force Chrome */
 }
+
+/* Form */
+.form-wrap { text-align: center; }
+
+.form-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--entryGap);
+  padding: var(--entryPaddingY) var(--entryPaddingX);
+  background: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 40px;
+  transform: scale(var(--formScale));
+  transform-origin: center;
+}
+
+.form-container select,
+.form-container input,
+.form-container button {
+  padding: 10px 16px;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  font-size: var(--body-size);
+}
+
+#assignment-input { padding-left: 16px; }
+
+.form-container select {
+  width: 180px;
+  appearance: none;
+  padding-right: 32px;
+  background: white;
+  background-image: linear-gradient(45deg, transparent 50%, #555 50%),
+                    linear-gradient(135deg, #555 50%, transparent 50%);
+  background-position: calc(100% - 19px) center,
+                       calc(100% - 14px) center;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* Add Assignment button */
+#add-btn {
+  background: var(--add-btn-bg);
+  color: var(--add-btn-text);
+  border: none;
+  cursor: pointer;
+  font-size: var(--button-size);
+  font-weight: bold;
+}
+#add-btn:hover { opacity: 0.9; }
+
+/* Table container */
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.table-container .tabulator {
+  width: var(--table-width-percent);
+}
+
+@media (max-width: var(--table-breakpoint)) {
+  .table-container .tabulator {
+    width: 100%;
+  }
+}
+
+/* Tabulator font override */
+.tabulator,
+.tabulator .tabulator-header,
+.tabulator .tabulator-cell {
+  font-family: var(--body-font) !important;
+  font-size: var(--table-font-size) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col-title {
+  font-weight: bold;
+  padding: 6px;
+}
+
+/* Delete button */
+.delete-btn {
+  cursor: pointer;
+  font-size: 1.15rem;
+  font-family: "Courier New", monospace;
+  color: rgba(0,0,0,0.32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.delete-btn:hover { color: rgba(0,0,0,0.6); }
+
+/* Data buttons */
+.data-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin: 15px 20px 20px 0;
+}
+
+.data-buttons button {
+  margin-left: 10px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--export-btn-bg);
+  color: var(--data-btn-text);
+  font-size: var(--button-size);
+  cursor: pointer;
+}
+#import-btn { background: var(--import-btn-bg); }
