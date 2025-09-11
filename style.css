@@ -54,6 +54,9 @@
   /* table responsiveness */
   --tableWidthPercent: 80%;
   --tableBreakpoint: 1500px;
+
+  /* table cell padding */
+  --tableCellLeftPadding: 15px;
 }
 
 body {
@@ -174,6 +177,12 @@ h1 span.space { white-space: pre; }
   font-weight: var(--bodyWeightBold);
   padding-top: 6px;
   padding-bottom: 6px;
+}
+
+/* ✅ Only apply left padding to body cells in Assignment and Due Date */
+.tabulator .tabulator-row .tabulator-cell:nth-child(2),
+.tabulator .tabulator-row .tabulator-cell:nth-child(3) {
+  padding-left: var(--tableCellLeftPadding) !important;
 }
 
 .tabulator,
