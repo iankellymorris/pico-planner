@@ -169,7 +169,9 @@ h1 span.space { white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
-.tabulator .tabulator-cell { padding-left: var(--tableCellLeftPadding) !important; } /* NEW */
+.tabulator .tabulator-row .tabulator-cell {
+  padding-left: var(--tableCellLeftPadding) !important;
+}
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
   font-weight: var(--bodyWeightBold);
