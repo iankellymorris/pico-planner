@@ -8,11 +8,15 @@
   --body-size: 16px;
 
   /* Colors */
-  --banner-bg: #f7e9b0; /* creamy yellow */
-  --banner-text: #ffffff;
-  --add-btn-bg: #c71585; /* red violet */
-  --export-btn-bg: #4caf50;
-  --import-btn-bg: #2196f3;
+  --banner-bg: #fdf6e3;   /* cream background */
+  --banner-text: #4b2e83; /* deep purple text */
+  --add-btn-bg: #c71585;  /* red violet */
+
+  /* Export/Import colors (new ones kept, old ones commented) */
+  --export-btn-bg: #4caf50; /* ✅ new green */
+  /* --export-btn-bg: #6a5acd; old slate blue */
+  --import-btn-bg: #2196f3; /* ✅ new blue */
+  /* --import-btn-bg: #ff8c00; old orange */
 
   /* Table row colors */
   --row-odd: #faf3d1;
@@ -21,12 +25,16 @@
   /* Layout variables */
   --titleLeftEdgePadding: 25px;
   --bannerPaddingBottom: 25px;
-  --form-padding-x: 15px; /* horizontal padding inside form */
-  --form-padding-y: 10px; /* vertical padding inside form */
-  --form-gap: 10px; /* spacing between items on same row */
-  --form-line-gap: 20px; /* spacing between lines if wrapping */
+  --form-padding-x: 15px;
+  --form-padding-y: 10px;
+  --form-gap: 10px;
+  --form-line-gap: 20px;
   --table-width-percent: 80%;
   --table-breakpoint: 1500px;
+
+  /* Form container background */
+  --form-bg: #ede7f6; /* light purple background for entry box */
+  --form-border: #ccc;
 }
 
 /* Reset body */
@@ -50,100 +58,4 @@ body {
   font-size: var(--title-size);
   font-family: var(--title-font);
   font-weight: 900;
-}
-
-/* Assignment entry */
-.form-wrap {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.form-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--form-gap);
-  padding: var(--form-padding-y) var(--form-padding-x);
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  max-width: fit-content;
-  line-height: 1.5;
-}
-
-/* Control spacing between wrapped lines */
-.form-container > * {
-  margin-bottom: var(--form-line-gap);
-}
-.form-container > *:last-child {
-  margin-bottom: 0;
-}
-
-/* Inputs & selects */
-.form-container select,
-.form-container input,
-.form-container button {
-  padding: 8px 12px;
-  font-family: var(--body-font);
-  font-size: var(--body-size);
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Buttons */
-#add-btn {
-  background-color: var(--add-btn-bg);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-#export-btn {
-  background-color: var(--export-btn-bg);
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  margin-right: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#import-btn {
-  background-color: var(--import-btn-bg);
-  color: #fff;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* Table container */
-.table-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-#assignment-table {
-  width: var(--table-width-percent);
-}
-
-@media (max-width: var(--table-breakpoint)) {
-  #assignment-table {
-    width: 100%;
-  }
-}
-
-/* Table styling overrides */
-.tabulator-row:nth-child(odd) {
-  background-color: var(--row-odd);
-}
-.tabulator-row:nth-child(even) {
-  background-color: var(--row-even);
-}
-
-/* Data buttons */
-.data-buttons {
-  text-align: center;
-  margin: 20px 0;
 }
