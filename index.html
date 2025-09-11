@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V11)</title>
+  <title>Assignment Tracker (Carlton V9)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
@@ -10,15 +10,14 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-  <!-- Your stylesheet (with cache-busting) -->
-  <link rel="stylesheet" href="style.css?v=1.1" />
+  <!-- Our stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
   <div class="title-banner">
-    <h1>Assignment<span class="space"> </span>Tracker</h1>
+    <h1>Assignment<span class="space">  </span>Tracker</h1>
   </div>
 
-  <!-- Assignment entry -->
   <div class="form-wrap">
     <div class="form-container">
       <select id="class-input">
@@ -34,12 +33,10 @@
     </div>
   </div>
 
-  <!-- Table -->
   <div class="table-container">
     <div id="assignment-table"></div>
   </div>
 
-  <!-- Export/Import -->
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
@@ -48,8 +45,7 @@
 
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-
-  <!-- Your script (with cache-busting) -->
-  <script src="script.js?v=1.1"></script>
+  <!-- Our script -->
+  <script src="script.js?v=2"></script>
 </body>
 </html>
