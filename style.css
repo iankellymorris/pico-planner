@@ -179,9 +179,8 @@ h1 span.space { white-space: pre; }
   padding-bottom: 6px;
 }
 
-/* ✅ Only apply left padding to body cells in Assignment and Due Date */
-.tabulator .tabulator-row .tabulator-cell:nth-child(2),
-.tabulator .tabulator-row .tabulator-cell:nth-child(3) {
+/* ✅ Apply consistent padding to ALL body cells */
+.tabulator .tabulator-row .tabulator-cell {
   padding-left: var(--tableCellLeftPadding) !important;
 }
 
