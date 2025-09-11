@@ -56,7 +56,7 @@
   --tableBreakpoint: 1500px;
 
   /* table cell padding */
-  --tableCellLeftPadding: 15px;
+  --tableCellLeftPadding: 14px;
 }
 
 body {
