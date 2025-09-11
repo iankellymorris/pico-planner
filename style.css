@@ -29,7 +29,7 @@
 
   /* banner padding */
   --bannerPaddingBottom: 25px;
-  --bannerToFormSpacing: 15px;
+  --bannerToFormSpacing: 15px; /* NEW */
 
   /* form container padding */
   --entryPaddingTop: 18px;
@@ -37,7 +37,7 @@
   --entryPaddingLeft: 22px;
   --entryPaddingRight: 12px;
   --entryGap: 10px;
-  --entryRowGap: 12px; /* NEW: spacing between wrapped lines */
+  --entryLineGap: 12px; /* NEW: vertical spacing for wrapped lines */
 
   /* button colors */
   --addBtnColor: #C71585;  /* red-violet */
@@ -55,7 +55,7 @@
   --tableWidthPercent: 80%;
   --tableBreakpoint: 1500px;
 
-  /* table padding */
+  /* NEW table padding variable */
   --tableCellLeftPadding: 5px;
 }
 
@@ -92,22 +92,19 @@ h1 span.space { white-space: pre; }
   margin-top: var(--bannerToFormSpacing);
 }
 
-/* Assignment entry container */
 .form-container {
-  display: inline-flex;                /* use flex for wrapping */
-  flex-wrap: wrap;                     /* allow items to wrap */
-  justify-content: center;             /* keep centered */
-  align-items: flex-start;
-  gap: var(--entryRowGap) var(--entryGap); /* NEW: row and column gap */
+  display: inline-flex;             /* flex so it sizes to children */
+  flex-wrap: wrap;                  /* allows wrapping */
+  justify-content: center;          /* center items on each row */
+  gap: var(--entryGap) var(--entryLineGap); /* horiz gap, vertical gap */
   margin: 0 auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
-  width: fit-content;                  /* no wider than content + padding */
-  max-width: 100%;                     /* prevent overflow */
   transform: scale(var(--formScale));
   transform-origin: center;
+  max-width: fit-content; /* keeps container tight around children */
 }
 
 .form-container select,
@@ -175,7 +172,7 @@ h1 span.space { white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
-/* ✅ apply padding only to first two body columns, not headers */
+/* Apply left padding ONLY to first two body columns */
 .tabulator-row .tabulator-cell:nth-child(2),
 .tabulator-row .tabulator-cell:nth-child(3) {
   padding-left: var(--tableCellLeftPadding) !important;
