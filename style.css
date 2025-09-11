@@ -35,7 +35,7 @@
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 18px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 22px; /* TEST value */
+  --entryPaddingRight: 22px;
   --entryGap: 10px;
   --entryLineGap: 12px;
 
@@ -54,9 +54,6 @@
   /* table responsiveness */
   --tableWidthPercent: 80%;
   --tableBreakpoint: 1500px;
-
-  /* NEW table padding variable */
-  --tableCellLeftPadding: 5px;
 }
 
 body {
@@ -104,8 +101,8 @@ h1 span.space { white-space: pre; }
   border-radius: 40px;
   transform: scale(var(--formScale));
   transform-origin: center;
-  box-sizing: content-box; /* ensures padding contributes */
-  max-width: max-content; /* container fits children + padding */
+  box-sizing: content-box;
+  max-width: max-content;
 }
 
 .form-container select,
@@ -171,12 +168,6 @@ h1 span.space { white-space: pre; }
 .tabulator .tabulator-cell {
   font-family: var(--bodyFont) !important;
   font-size: var(--tableFontSize) !important;
-}
-
-/* left padding ONLY for body cells in first two cols */
-.tabulator-row .tabulator-cell:nth-child(2),
-.tabulator-row .tabulator-cell:nth-child(3) {
-  padding-left: var(--tableCellLeftPadding) !important;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
