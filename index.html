@@ -15,6 +15,7 @@
       --entryTableDelta: 20px;
       --titleLeftEdgePadding: 25px;
       --tableRightEdgePadding: 16px;
+      --tableLeftEdgePadding: 280px; /* no longer used */
       --dropdownWidth: 180px;
       --formScale: 0.85;
 
@@ -39,14 +40,15 @@
 
       /* banner background */
       --bannerBg: #fdf6e3; /* cream */
-      --bannerHeightUnderTitle: 25px;
+
+      /* banner padding */
+      --bannerPaddingBottom: 25px;
 
       /* form container padding */
       --entryPaddingTop: 18px;
       --entryPaddingBottom: 18px;
       --entryPaddingLeft: 22px;
       --entryPaddingRight: 12px;
-      --entryRowGap: 12px;
       --entryGap: 10px;
 
       /* button colors */
@@ -55,9 +57,9 @@
       --dataBtnBg: #f2f2f2;
       --dataBtnText: #888;
 
-      /* table responsive */
-      --tableBreakpointWidth: 1500px;
+      /* table responsiveness */
       --tableWidthPercent: 80%;
+      --tableBreakpoint: 1500px;
     }
 
     body {
@@ -74,7 +76,7 @@
       width: 100%;
       background: var(--bannerBg);
       padding-top: 20px;
-      padding-bottom: var(--bannerHeightUnderTitle);
+      padding-bottom: var(--bannerPaddingBottom);
     }
 
     .title-banner h1 {
@@ -91,24 +93,21 @@
     .form-wrap { text-align: center; }
 
     .form-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--entryRowGap) var(--entryGap);
+      display: inline-block;
       margin: 20px auto var(--entryTableDelta) auto;
       padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
       background: rgba(75, 46, 131, 0.16);
       border: 1px solid rgba(75, 46, 131, 0.22);
       border-radius: 40px;
-      width: max-content;
-      margin-left: auto;
-      margin-right: auto;
+      transform: scale(var(--formScale));
+      transform-origin: center;
     }
 
     .form-container select,
     .form-container input,
     .form-container button {
       margin-right: var(--entryGap);
+      margin-bottom: var(--entryGap); /* allows wrapping */
       padding: 10px 16px;
       border-radius: 9999px;
       border: 1px solid #ccc;
@@ -146,33 +145,29 @@
 
     #add-btn:hover { opacity: 0.9; }
 
+    /* table container for centering */
+    .table-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 0 var(--tableRightEdgePadding);
+    }
+
+    .table-container .tabulator {
+      width: var(--tableWidthPercent);
+    }
+
+    @media (max-width: var(--tableBreakpoint)) {
+      .table-container .tabulator {
+        width: 100%;
+      }
+    }
+
     .tabulator,
     .tabulator .tabulator-header,
     .tabulator .tabulator-cell {
       font-family: var(--bodyFont) !important;
       font-size: var(--tableFontSize) !important;
-    }
-
-    /* table centering + responsive width */
-    .tabulator {
-      margin: 0 auto;
-    }
-
-    @media (min-width: 1500px) {
-      .tabulator {
-        width: var(--tableWidthPercent);
-      }
-    }
-
-    @media (max-width: 1499px) {
-      .tabulator {
-        width: 100%;
-      }
-    }
-
-    /* prevent periwinkle */
-    .tabulator .tabulator-group {
-      background: none !important;
     }
 
     .tabulator .tabulator-cell { padding-left: 15px !important; }
@@ -247,7 +242,9 @@
     </div>
   </div>
 
-  <div id="assignment-table"></div>
+  <div class="table-container">
+    <div id="assignment-table"></div>
+  </div>
 
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
