@@ -25,28 +25,28 @@
   --titleBottomMargin: 10px;
 
   /* banner background */
-  --bannerBg: #fdf6e3; /* cream */
+  --bannerBg: #fdf6e3;
 
   /* banner padding */
   --bannerPaddingBottom: 25px;
-  --bannerToFormSpacing: 15px; /* NEW */
+  --bannerToFormSpacing: 15px;
 
   /* form container padding */
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 18px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 70px;
+  --entryPaddingRight: 77px; /* TEST value */
   --entryGap: 10px;
-  --entryLineGap: 12px; /* NEW: vertical spacing for wrapped lines */
+  --entryLineGap: 12px;
 
   /* button colors */
-  --addBtnColor: #C71585;  /* red-violet */
+  --addBtnColor: #C71585;
   --addBtnText: #fff;
 
   /* data buttons */
-  --dataBtnBg: #4CAF50;   /* green (kept new default) */
+  --dataBtnBg: #4CAF50;
   --dataBtnText: #fff;
-  /* old data button colors:
+  /* old:
      --dataBtnBg: #f2f2f2;
      --dataBtnText: #888;
   */
@@ -93,10 +93,10 @@ h1 span.space { white-space: pre; }
 }
 
 .form-container {
-  display: inline-flex;             /* flex so it sizes to children */
-  flex-wrap: wrap;                  /* allows wrapping */
-  justify-content: center;          /* center items on each row */
-  gap: var(--entryGap) var(--entryLineGap); /* horiz gap, vertical gap */
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--entryGap) var(--entryLineGap);
   margin: 0 auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
@@ -104,7 +104,8 @@ h1 span.space { white-space: pre; }
   border-radius: 40px;
   transform: scale(var(--formScale));
   transform-origin: center;
-  max-width: fit-content; /* keeps container tight around children */
+  box-sizing: content-box; /* ensures padding contributes */
+  max-width: max-content; /* container fits children + padding */
 }
 
 .form-container select,
@@ -147,7 +148,7 @@ h1 span.space { white-space: pre; }
 
 #add-btn:hover { opacity: 0.9; }
 
-/* table container for centering */
+/* table container */
 .table-container {
   display: flex;
   justify-content: center;
@@ -172,7 +173,7 @@ h1 span.space { white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
-/* Apply left padding ONLY to first two body columns */
+/* left padding ONLY for body cells in first two cols */
 .tabulator-row .tabulator-cell:nth-child(2),
 .tabulator-row .tabulator-cell:nth-child(3) {
   padding-left: var(--tableCellLeftPadding) !important;
