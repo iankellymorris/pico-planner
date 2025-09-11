@@ -1,0 +1,211 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 :root \{\
+  --entryTableDelta: 20px;\
+  --titleLeftEdgePadding: 25px;\
+  --tableWidthPercent: 80%;\
+  --tableBreakpoint: 1500px;\
+\
+  --dropdownWidth: 180px;\
+  --formScale: 0.85;\
+\
+  /* fonts */\
+  --titleFont: 'Raleway', sans-serif;\
+  --bodyFont: 'Lato', sans-serif;\
+  --titleWeight: 900;\
+  --bodyWeight: 400;\
+  --bodyWeightBold: 700;\
+\
+  /* font sizes */\
+  --titleFontSize: 3.2rem;\
+  --bodyFontSize: 1rem;\
+  --buttonFontSize: 0.95rem;\
+  --tableFontSize: 1rem;\
+\
+  /* title + page variables */\
+  --titleColor: #4b2e83;\
+  --backgroundColor: #ede3fa;\
+  --pageBottomPadding: 20px;\
+  --titleBottomMargin: 10px;\
+\
+  /* banner background */\
+  --bannerBg: #fdf6e3; /* cream */\
+  --bannerPaddingTop: 20px;\
+  --bannerPaddingBottom: 25px;\
+\
+  /* form container padding */\
+  --entryPaddingTop: 18px;\
+  --entryPaddingBottom: 18px;\
+  --entryPaddingLeft: 22px;\
+  --entryPaddingRight: 12px;\
+  --entryGap: 10px;\
+\
+  /* button colors */\
+  --addBtnColor: #C71585;  /* red-violet */\
+  --addBtnText: #fff;\
+  --dataBtnBg: #f2f2f2;\
+  --dataBtnText: #888;\
+\}\
+\
+body \{\
+  font-family: var(--bodyFont);\
+  font-weight: var(--bodyWeight);\
+  font-size: var(--bodyFontSize);\
+  margin: 0;\
+  padding: 0;\
+  background: var(--backgroundColor);\
+\}\
+\
+/* full-width banner */\
+.title-banner \{\
+  width: 100%;\
+  background: var(--bannerBg);\
+  padding-top: var(--bannerPaddingTop);\
+  padding-bottom: var(--bannerPaddingBottom);\
+\}\
+\
+.title-banner h1 \{\
+  margin: 0;\
+  padding-left: var(--titleLeftEdgePadding);\
+  font-family: var(--titleFont);\
+  font-weight: var(--titleWeight);\
+  font-size: var(--titleFontSize);\
+  color: var(--titleColor);\
+\}\
+\
+h1 span.space \{ white-space: pre; \}\
+\
+.form-wrap \{ text-align: center; \}\
+\
+.form-container \{\
+  display: inline-block;\
+  margin: 20px auto var(--entryTableDelta) auto;\
+  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);\
+  background: rgba(75, 46, 131, 0.16);\
+  border: 1px solid rgba(75, 46, 131, 0.22);\
+  border-radius: 40px;\
+  transform: scale(var(--formScale));\
+  transform-origin: center;\
+\}\
+\
+.form-container select,\
+.form-container input,\
+.form-container button \{\
+  margin-right: var(--entryGap);\
+  margin-bottom: var(--entryGap); /* allows spacing when wrapping to multiple lines */\
+  padding: 10px 16px;\
+  border-radius: 9999px;\
+  border: 1px solid #ccc;\
+  font-size: var(--bodyFontSize);\
+  font-family: var(--bodyFont);\
+  font-weight: var(--bodyWeight);\
+\}\
+\
+#assignment-input \{ padding-left: 16px; \}\
+\
+.form-container select \{\
+  width: var(--dropdownWidth);\
+  appearance: none;\
+  -webkit-appearance: none;\
+  -moz-appearance: none;\
+  padding-right: 32px;\
+  background: white;\
+  background-image: linear-gradient(45deg, transparent 50%, #555 50%),\
+                    linear-gradient(135deg, #555 50%, transparent 50%);\
+  background-position: calc(100% - 19px) calc(50% - 0px),\
+                       calc(100% - 14px) calc(50% - 0px);\
+  background-size: 6px 6px, 6px 6px;\
+  background-repeat: no-repeat;\
+\}\
+\
+#add-btn \{\
+  background: var(--addBtnColor);\
+  color: var(--addBtnText);\
+  border: none;\
+  cursor: pointer;\
+  font-size: var(--buttonFontSize);\
+  font-family: var(--bodyFont);\
+  font-weight: var(--bodyWeightBold);\
+\}\
+\
+#add-btn:hover \{ opacity: 0.9; \}\
+\
+/* table container controls width + centering */\
+.table-container \{\
+  display: flex;\
+  justify-content: center;\
+\}\
+\
+#assignment-table \{\
+  width: var(--tableWidthPercent);\
+\}\
+\
+@media (max-width: var(--tableBreakpoint)) \{\
+  #assignment-table \{\
+    width: 100%;\
+  \}\
+\}\
+\
+.tabulator,\
+.tabulator .tabulator-header,\
+.tabulator .tabulator-cell \{\
+  font-family: var(--bodyFont) !important;\
+  font-size: var(--tableFontSize) !important;\
+\}\
+\
+.tabulator .tabulator-cell \{ padding-left: 15px !important; \}\
+\
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title \{\
+  font-weight: var(--bodyWeightBold);\
+  padding-top: 6px;\
+  padding-bottom: 6px;\
+\}\
+\
+.tabulator,\
+.tabulator .tabulator-tableholder,\
+.tabulator-row \{ background: none !important; \}\
+\
+.tabulator .tabulator-group .tabulator-arrow \{ display: none !important; \}\
+.tabulator .tabulator-group-header \{ padding-left: 0 !important; \}\
+\
+.delete-btn \{\
+  cursor: pointer;\
+  font-size: 1.15rem;\
+  font-family: "Courier New", monospace;\
+  color: rgba(0,0,0,0.32);\
+  display: flex;\
+  justify-content: center;\
+  align-items: center;\
+  height: 100%;\
+  padding-right: 10px;\
+\}\
+.delete-btn:hover \{ color: rgba(0,0,0,0.6); \}\
+\
+.data-buttons \{\
+  display: flex;\
+  justify-content: flex-end;\
+  margin-top: 15px;\
+  margin-right: 16px;\
+  padding-bottom: var(--pageBottomPadding);\
+\}\
+\
+.data-buttons button \{\
+  margin-left: 10px;\
+  padding: 8px 14px;\
+  border-radius: 9999px;\
+  border: 1px solid #bbb;\
+  background: var(--dataBtnBg);\
+  color: var(--dataBtnText);\
+  font-size: var(--buttonFontSize);\
+  font-family: var(--bodyFont);\
+  font-weight: var(--bodyWeight);\
+  cursor: pointer;\
+\}\
+\
+.data-buttons button:hover \{ background: #e0e0e0; \}\
+}
