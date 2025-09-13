@@ -1,57 +1,231 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker</title>
+:root{
+  --entryTableDelta: 20px;
+  --titleLeftEdgePadding: 25px;
+  --tableRightEdgePadding: 16px;
+  --dropdownWidth: 180px;
+  --formScale: 0.85;
 
-  <!-- Tabulator Modern CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
+  /* fonts */
+  --titleFont: 'Fraunces', serif;
+  --bodyFont: 'Lato', sans-serif;
+  --titleWeight: 900;
+  --bodyWeight: 400;
+  --bodyWeightBold: 700;
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Raleway:wght@300;400;700;900&display=swap" rel="stylesheet">
+  --titleFontSize: 3.2rem;
+  --bodyFontSize: 1rem;
+  --buttonFontSize: 0.95rem;
+  --tableFontSize: 1rem;
 
-  <!-- Your stylesheet -->
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="title-banner">
-    <h1 id="title-text">Assignment<span class="space"></span>Tracker</h1>
+  /* colors */
+  --titleColor: #4b2e83;
+  --backgroundColor: #ede3fa;
+  --bannerBg: #fdf6e3;
 
-    <label class="switch">
-      <input type="checkbox" id="table-toggle">
-      <span class="slider round"></span>
-    </label>
-  </div>
+  --bannerPaddingBottom: 25px;
+  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
 
-  <div class="form-wrap">
-    <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
-      </select>
+  --entryPaddingTop: 18px;
+  --entryPaddingBottom: 18px;
+  --entryPaddingLeft: 22px;
+  --entryPaddingRight: 22px;
+  --entryGap: 10px;
 
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
-      <button id="add-btn">Add Assignment</button>
-    </div>
-  </div>
+  --addBtnColor: #C71585;
+  --addBtnText: #fff;
 
-  <div class="table-container">
-    <div id="assignment-table"></div>
-  </div>
+  /* data button colors */
+  --dataBtnBg: #f2f2f2; /* old: keep as comment */
+  --dataBtnText: #888;
+  /* --dataBtnBg: #f2f2f2;  old value */
+  /* --dataBtnText: #888;   old value */
 
-  <div class="data-buttons">
-    <button id="export-btn">Export Data</button>
-    <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
-  </div>
+  --tableWidthPercent: 80%;
+}
 
-  <!-- Tabulator JS -->
-  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+body {
+  font-family: var(--bodyFont);
+  font-weight: var(--bodyWeight);
+  font-size: var(--bodyFontSize);
+  margin: 0;
+  padding: 0;
+  background: var(--backgroundColor);
+}
 
-  <!-- Your script -->
-  <script src="script.js"></script>
-</body>
-</html>
+.title-banner {
+  width: 100%;
+  background: var(--bannerBg);
+  padding-top: 20px;
+  padding-bottom: var(--bannerPaddingBottom);
+  position: relative;
+}
+
+.title-banner h1 {
+  margin: 0;
+  padding-left: var(--titleLeftEdgePadding);
+  font-family: var(--titleFont);
+  font-weight: var(--titleWeight);
+  font-size: var(--titleFontSize);
+  color: var(--titleColor);
+}
+
+h1 span.space { white-space: pre; }
+
+/* toggle switch */
+.switch {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.switch input { display: none; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .3s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+.switch input:checked + .slider {
+  background-color: #4b2e83;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* form */
+.form-wrap { text-align: center; }
+
+.form-container {
+  display: inline-block;
+  margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
+  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
+  background: rgba(75,46,131,0.16);
+  border: 1px solid rgba(75,46,131,0.22);
+  border-radius: 40px;
+  transform: scale(var(--formScale));
+  transform-origin: center;
+}
+
+.form-container select,
+.form-container input,
+.form-container button {
+  margin-right: var(--entryGap);
+  margin-bottom: var(--entryGap);
+  padding: 10px 16px;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  font-size: var(--bodyFontSize);
+  font-family: var(--bodyFont);
+  font-weight: var(--bodyWeight);
+}
+
+#assignment-input { padding-left: 16px; }
+
+.form-container select {
+  width: var(--dropdownWidth);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 32px;
+  background: white;
+  background-image: linear-gradient(45deg, transparent 50%, #555 50%),
+                    linear-gradient(135deg, #555 50%, transparent 50%);
+  background-position: calc(100% - 19px) calc(50% - 0px),
+                       calc(100% - 14px) calc(50% - 0px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+#add-btn {
+  background: var(--addBtnColor);
+  color: var(--addBtnText);
+  border: none;
+  cursor: pointer;
+  font-size: var(--buttonFontSize);
+  font-family: var(--bodyFont);
+  font-weight: var(--bodyWeightBold);
+}
+#add-btn:hover { opacity: 0.92; }
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+}
+.table-container .tabulator {
+  width: var(--tableWidthPercent);
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.tabulator,
+.tabulator .tabulator-header,
+.tabulator .tabulator-cell {
+  font-family: var(--bodyFont) !important;
+  font-size: var(--tableFontSize) !important;
+}
+
+.tabulator .tabulator-cell { padding-left: 15px !important; }
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+  font-weight: var(--bodyWeightBold);
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.tabulator,
+.tabulator .tabulator-tableholder,
+.tabulator-row { background: none !important; }
+
+.tabulator .tabulator-group .tabulator-arrow { display: none !important; }
+.tabulator .tabulator-group-header { padding-left: 0 !important; }
+
+.delete-btn {
+  cursor: pointer;
+  font-size: 1.15rem;
+  font-family: "Courier New", monospace;
+  color: rgba(0,0,0,0.32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-right: 10px;
+}
+.delete-btn:hover { color: rgba(0,0,0,0.6); }
+
+.data-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  margin-right: 16px;
+  padding-bottom: var(--pageBottomPadding, 20px);
+}
+.data-buttons button {
+  margin-left: 10px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  border: 1px solid #bbb;
+  background: var(--dataBtnBg);
+  color: var(--dataBtnText);
+  font-size: var(--buttonFontSize);
+  font-family: var(--bodyFont);
+  font-weight: var(--bodyWeight);
+  cursor: pointer;
+}
+.data-buttons button:hover { background: #e0e0e0; }
