@@ -4,6 +4,7 @@
 const toggleInput = document.getElementById("table-toggle");
 const root = document.documentElement;
 const titleEl = document.querySelector(".title-banner h1");
+const tableEl = document.querySelector(".table-container .tabulator");
 
 function getCurrentTableWidth(){
   const val = getComputedStyle(root).getPropertyValue("--tableWidthPercent").trim();
@@ -17,8 +18,16 @@ function applyToggleState(isMobile){
   const fontVal = isMobile ? getComputedStyle(root).getPropertyValue("--titleFontSizeMobile").trim() 
                            : getComputedStyle(root).getPropertyValue("--titleFontSizeDesktop").trim();
 
+  // update CSS var for table width
   root.style.setProperty("--tableWidthPercent", widthVal);
+
+  // smooth font resize
   titleEl.style.fontSize = fontVal;
+
+  // smooth table width transition
+  if (tableEl) {
+    tableEl.style.width = widthVal;
+  }
 
   try { localStorage.setItem("tableWidthChoice", widthVal); } catch(e){}
 }
