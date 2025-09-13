@@ -7,27 +7,23 @@ const titleEl = document.querySelector(".title-banner h1");
 const tableEl = document.querySelector(".table-container .tabulator");
 
 function getCurrentTableWidth(){
-  const val = getComputedStyle(root).getPropertyValue("--tableWidthPercent").trim();
-  return val || "80%";
+  return getComputedStyle(root).getPropertyValue("--tableWidthPercent").trim() || "80%";
 }
 let current = getCurrentTableWidth();
 toggleInput.checked = (current === "100%");
 
 function applyToggleState(isMobile){
   const widthVal = isMobile ? "100%" : "80%";
-  const fontVal = isMobile ? getComputedStyle(root).getPropertyValue("--titleFontSizeMobile").trim() 
-                           : getComputedStyle(root).getPropertyValue("--titleFontSizeDesktop").trim();
+  const fontVal = isMobile 
+    ? getComputedStyle(root).getPropertyValue("--titleFontSizeMobile").trim() 
+    : getComputedStyle(root).getPropertyValue("--titleFontSizeDesktop").trim();
 
-  // update CSS var for table width
+  // update CSS var for reference
   root.style.setProperty("--tableWidthPercent", widthVal);
-
-  // smooth font resize
+  // update actual element style for smooth transition
+  if (tableEl) tableEl.style.width = widthVal;
+  // resize title font
   titleEl.style.fontSize = fontVal;
-
-  // smooth table width transition
-  if (tableEl) {
-    tableEl.style.width = widthVal;
-  }
 
   try { localStorage.setItem("tableWidthChoice", widthVal); } catch(e){}
 }
