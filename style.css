@@ -23,24 +23,28 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
+  --bannerEntryGap: 15px; /* gap between banner and entry */
 
+  /* form padding variables */
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 18px;
   --entryPaddingLeft: 22px;
   --entryPaddingRight: 22px;
+
   --entryGap: 10px;
 
   --addBtnColor: #C71585;
   --addBtnText: #fff;
 
   /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old: keep as comment */
+  --dataBtnBg: #f2f2f2; /* old value, kept commented */
   --dataBtnText: #888;
-  /* --dataBtnBg: #f2f2f2;  old value */
-  /* --dataBtnText: #888;   old value */
 
+  /* table */
   --tableWidthPercent: 80%;
+
+  /* toggle positioning */
+  --toggleRightOffset: 20px;
 }
 
 body {
@@ -58,6 +62,9 @@ body {
   padding-top: 20px;
   padding-bottom: var(--bannerPaddingBottom);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title-banner h1 {
@@ -74,8 +81,9 @@ h1 span.space { white-space: pre; }
 /* toggle switch */
 .switch {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  right: var(--toggleRightOffset);
+  top: 50%;
+  transform: translateY(-50%);
   display: inline-block;
   width: 50px;
   height: 28px;
