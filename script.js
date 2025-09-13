@@ -1,3 +1,4 @@
+// small helpers
 function escapeHtml(str){
   if (str == null) return "";
   return String(str)
@@ -7,12 +8,6 @@ function escapeHtml(str){
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-const COLORS = {
-  PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
-  ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
-  MATH: { even: "#faf3d1", odd: "#fffceb", header: "#FFB400" }
-};
 
 function parseISODateSafe(str){
   if (!str) return null;
@@ -28,32 +23,29 @@ function formatDueDateISOToDDMONYYYY(iso){
   return String(d.getDate()).padStart(2,"0")+" "+months[d.getMonth()]+" "+d.getFullYear();
 }
 
+/* color palette for group headers / row backgrounds */
+const COLORS = {
+  PHYS: { even: "#dbe7f8", odd: "#edf4fc", header: "#5b78b0" },
+  ECE:  { even: "#f8dbdb", odd: "#fceeee", header: "#b04b4b" },
+  MATH: { even: "#faf3d1", odd: "#fffceb", header: "#FFB400" }
+};
+
+// data load fallback
 let savedData = JSON.parse(localStorage.getItem("assignments")) || [
   { class: "MATH 1210", assignment: "HW 1", due: "2025-09-01", link: "" },
   { class: "PHYS 2210", assignment: "Lab 1", due: "2025-09-03", link: "" },
   { class: "ECE 1400", assignment: "Project Proposal", due: "2025-09-05", link: "" }
 ];
 
-function applyRowBackground(row){
-  const cls = row.getData().class;
-  const rows = table.getRows().filter(r => r.getData().class === cls);
-  const idx = rows.indexOf(row);
-  const even = idx % 2 === 0;
-  let bg = "";
-  if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-  if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-  if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-  row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
-}
-
+// Render helpers used by Tabulator
 function assignmentFormatter(cell){
   const data = cell.getRow().getData();
   return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
 }
-
 function dueFormatter(cell){ return formatDueDateISOToDDMONYYYY(cell.getValue()); }
 function deleteFormatter(){ return "<span class='delete-btn'>&times;</span>"; }
 
+// Create Tabulator
 const table = new Tabulator("#assignment-table", {
   data: savedData,
   layout: "fitColumns",
@@ -62,9 +54,9 @@ const table = new Tabulator("#assignment-table", {
   groupStartOpen: true,
   groupHeader: function(value){
     let bg = "#ddd", fg = "#fff";
-    if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; }
-    if (value === "ECE 1400"){ bg = COLORS.ECE.header; }
-    if (value === "MATH 1210"){ bg = COLORS.MATH.header; }
+    if (value === "PHYS 2210"){ bg = COLORS.PHYS.header; fg = "#fff"; }
+    if (value === "ECE 1400"){ bg = COLORS.ECE.header; fg = "#fff"; }
+    if (value === "MATH 1210"){ bg = COLORS.MATH.header; fg = "#fff"; }
     return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
   },
   columns: [
@@ -79,16 +71,55 @@ const table = new Tabulator("#assignment-table", {
       hozAlign: "center", 
       headerSort: false, 
       formatter: deleteFormatter, 
-      cellClick:(e,cell)=>{ cell.getRow().delete(); saveData(); } 
+      cellClick:(e,cell)=>{ 
+        cell.getRow().delete(); 
+        saveData(); 
+      } 
     }
   ],
-  rowFormatter: applyRowBackground,
-  renderComplete: function(){ this.getRows().forEach(applyRowBackground); },
-  cellEdited: function(cell){ saveData(); applyRowBackground(cell.getRow()); }
+  rowFormatter: function(row){
+    const cls = row.getData().class;
+    const rows = table.getRows().filter(r => r.getData().class === cls);
+    const idx = rows.indexOf(row);
+    const even = idx % 2 === 0;
+    let bg = "";
+    if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+    if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+    if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+    row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+  },
+  renderComplete: function(){ this.getRows().forEach(r => {
+    // ensure row bg applied after render
+    const cls = r.getData().class;
+    const rows = table.getRows().filter(rr => rr.getData().class === cls);
+    const idx = rows.indexOf(r);
+    const even = idx % 2 === 0;
+    let bg = "";
+    if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+    if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+    if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+    r.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+  })},
+  cellEdited: function(cell){ saveData(); /* maintain row bg */ 
+    const row = cell.getRow();
+    const cls = row.getData().class;
+    const rows = table.getRows().filter(r => r.getData().class === cls);
+    const idx = rows.indexOf(row);
+    const even = idx % 2 === 0;
+    let bg = "";
+    if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+    if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+    if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+    row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+  }
 });
 
-function saveData(){ localStorage.setItem("assignments", JSON.stringify(table.getData())); }
+// Save helper
+function saveData(){
+  localStorage.setItem("assignments", JSON.stringify(table.getData()));
+}
 
+// Add assignment button
 document.getElementById("add-btn").addEventListener("click", () => {
   const newRow = {
     class: document.getElementById("class-input").value,
@@ -96,12 +127,23 @@ document.getElementById("add-btn").addEventListener("click", () => {
     due: document.getElementById("due-input").value,
     link: document.getElementById("link-input").value
   };
-  table.addRow(newRow).then(row => { saveData(); applyRowBackground(row); });
+  table.addRow(newRow).then(row => { saveData(); /* ensure bg */ 
+    const cls = row.getData().class;
+    const rows = table.getRows().filter(r => r.getData().class === cls);
+    const idx = rows.indexOf(row);
+    const even = idx % 2 === 0;
+    let bg = "";
+    if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
+    if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
+    if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+    row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
+  });
   document.getElementById("assignment-input").value = "";
   document.getElementById("due-input").value = "";
   document.getElementById("link-input").value = "";
 });
 
+// Export Data
 document.getElementById("export-btn").addEventListener("click", () => {
   const dataStr = JSON.stringify(table.getData(), null, 2);
   const blob = new Blob([dataStr], {type: "application/json"});
@@ -115,6 +157,7 @@ document.getElementById("export-btn").addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+// Import Data
 document.getElementById("import-btn").addEventListener("click", () => {
   document.getElementById("import-file").click();
 });
@@ -134,3 +177,36 @@ document.getElementById("import-file").addEventListener("change", (e) => {
   };
   reader.readAsText(file);
 });
+
+/* ------------------------
+   Table-width toggle logic
+   ------------------------ */
+const toggleBtn = document.getElementById("table-toggle");
+const root = document.documentElement;
+
+// initialize icon based on CSS variable (or fallback)
+function getCurrentTableWidth(){
+  const val = getComputedStyle(root).getPropertyValue("--tableWidthPercent").trim();
+  return val || "80%";
+}
+let current = getCurrentTableWidth();
+toggleBtn.textContent = (current === "100%") ? "📱" : "💻";
+
+// toggle action: flips between 80% and 100%
+toggleBtn.addEventListener("click", () => {
+  const now = getComputedStyle(root).getPropertyValue("--tableWidthPercent").trim();
+  const newVal = (now === "100%") ? "80%" : "100%";
+  root.style.setProperty("--tableWidthPercent", newVal);
+  toggleBtn.textContent = (newVal === "100%") ? "📱" : "💻";
+  // store choice so reload keeps it
+  try { localStorage.setItem("tableWidthChoice", newVal); } catch(e){}
+});
+
+// restore saved toggle state if present
+try {
+  const saved = localStorage.getItem("tableWidthChoice");
+  if (saved) {
+    root.style.setProperty("--tableWidthPercent", saved);
+    toggleBtn.textContent = (saved === "100%") ? "📱" : "💻";
+  }
+} catch(e){}
