@@ -1,6 +1,4 @@
-/* ------------------------
-   Table-width + font-size toggle logic
-   ------------------------ */
+// Grab toggle
 const toggleInput = document.getElementById("table-toggle");
 const root = document.documentElement;
 const titleEl = document.querySelector(".title-banner h1");
@@ -11,14 +9,13 @@ function applyToggleState(isMobile){
     ? getComputedStyle(root).getPropertyValue("--titleFontSizeMobile").trim() 
     : getComputedStyle(root).getPropertyValue("--titleFontSizeDesktop").trim();
 
-  // update CSS vars directly
   root.style.setProperty("--tableWidthPercent", widthVal);
   titleEl.style.fontSize = fontVal;
 
   try { localStorage.setItem("tableWidthChoice", widthVal); } catch(e){}
 }
 
-// Always make sure we start with a defined value
+// Load saved preference or set default
 let saved = null;
 try {
   saved = localStorage.getItem("tableWidthChoice");
@@ -29,12 +26,11 @@ if (saved) {
   toggleInput.checked = isMobile;
   applyToggleState(isMobile);
 } else {
-  // default to desktop (80%)
-  toggleInput.checked = false;
+  toggleInput.checked = false; // desktop default
   applyToggleState(false);
 }
 
-// listen for user toggling
+// Listen for toggle
 toggleInput.addEventListener("change", () => {
   applyToggleState(toggleInput.checked);
 });
