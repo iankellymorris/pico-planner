@@ -8,7 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
   <!-- local stylesheet -->
   <link rel="stylesheet" href="style.css" />
@@ -16,8 +16,11 @@
 <body>
   <div class="title-banner">
     <h1>Assignment<span class="space">  </span>Tracker</h1>
-    <!-- toggle sits top-right of banner -->
-    <button id="table-toggle" aria-label="Toggle table width" title="Toggle table width">💻</button>
+    <!-- toggle: actual switch -->
+    <label class="switch">
+      <input type="checkbox" id="table-toggle">
+      <span class="slider"></span>
+    </label>
   </div>
 
   <div class="form-wrap">
