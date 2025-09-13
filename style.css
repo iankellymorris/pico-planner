@@ -1,4 +1,5 @@
-:root {
+:root{
+  /* layout & spacing */
   --entryTableDelta: 20px;
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
@@ -18,47 +19,30 @@
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
 
-  /* title + page variables */
+  /* colors */
   --titleColor: #4b2e83;
   --backgroundColor: #ede3fa;
-  --pageBottomPadding: 20px;
-  --titleBottomMargin: 10px;
-
-  /* banner background */
-  --bannerBg: #fdf6e3;
-
-  /* banner padding */
-  --bannerPaddingBottom: 25px;
-  --bannerToFormSpacing: 15px;
+  --bannerBg: #fdf6e3; /* cream */
+  --bannerPaddingBottom: 25px; /* adjustable banner height */
 
   /* form container padding */
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 18px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 22px;
+  --entryPaddingRight: 77px; /* user asked to test with 77px */
   --entryGap: 10px;
-  --entryLineGap: 12px;
 
   /* button colors */
-  --addBtnColor: #C71585;
+  --addBtnColor: #C71585;  /* red-violet */
   --addBtnText: #fff;
+  --dataBtnBg: #f2f2f2;
+  --dataBtnText: #888;
 
-  /* data buttons */
-  --dataBtnBg: #4CAF50;
-  --dataBtnText: #fff;
-  /* old:
-     --dataBtnBg: #f2f2f2;
-     --dataBtnText: #888;
-  */
-
-  /* table responsiveness */
+  /* table sizing controlled only by toggle now */
   --tableWidthPercent: 80%;
-  --tableBreakpoint: 1500px;
-
-  /* table cell padding */
-  --tableCellLeftPadding: 14px;
 }
 
+/* page */
 body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
@@ -68,15 +52,16 @@ body {
   background: var(--backgroundColor);
 }
 
-/* full-width banner */
-.title-banner {
+/* banner */
+.title-banner{
   width: 100%;
   background: var(--bannerBg);
   padding-top: 20px;
   padding-bottom: var(--bannerPaddingBottom);
+  position: relative; /* for toggle button */
 }
 
-.title-banner h1 {
+.title-banner h1{
   margin: 0;
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
@@ -84,33 +69,41 @@ body {
   font-size: var(--titleFontSize);
   color: var(--titleColor);
 }
+h1 span.space{ white-space: pre; }
 
-h1 span.space { white-space: pre; }
-
-.form-wrap { 
-  text-align: center;
-  margin-top: var(--bannerToFormSpacing);
+/* toggle button top-right inside banner */
+#table-toggle{
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 6px;
 }
 
+/* form */
+.form-wrap { text-align: center; }
+
 .form-container {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--entryGap) var(--entryLineGap);
-  margin: 0 auto var(--entryTableDelta) auto;
+  display: inline-block;
+  margin: 20px auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-  background: rgba(75, 46, 131, 0.16);
-  border: 1px solid rgba(75, 46, 131, 0.22);
+  background: rgba(75,46,131,0.16);
+  border: 1px solid rgba(75,46,131,0.22);
   border-radius: 40px;
   transform: scale(var(--formScale));
   transform-origin: center;
-  box-sizing: content-box;
-  max-width: max-content;
 }
 
+/* inputs inside form */
 .form-container select,
 .form-container input,
 .form-container button {
+  margin-right: var(--entryGap);
+  margin-bottom: var(--entryGap); /* allow wrapping */
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
@@ -119,14 +112,16 @@ h1 span.space { white-space: pre; }
   font-weight: var(--bodyWeight);
 }
 
+/* comfy inner padding for assignment name */
 #assignment-input { padding-left: 16px; }
 
+/* pill dropdown + custom triangle arrow (pure-CSS) */
 .form-container select {
   width: var(--dropdownWidth);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  padding-right: 32px;
+  padding-right: 32px; /* room for arrow */
   background: white;
   background-image: linear-gradient(45deg, transparent 50%, #555 50%),
                     linear-gradient(135deg, #555 50%, transparent 50%);
@@ -136,6 +131,7 @@ h1 span.space { white-space: pre; }
   background-repeat: no-repeat;
 }
 
+/* add button style variable */
 #add-btn {
   background: var(--addBtnColor);
   color: var(--addBtnText);
@@ -145,10 +141,9 @@ h1 span.space { white-space: pre; }
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeightBold);
 }
+#add-btn:hover { opacity: 0.92; }
 
-#add-btn:hover { opacity: 0.9; }
-
-/* table container */
+/* table container centered; table width controlled by CSS variable only (no breakpoint) */
 .table-container {
   display: flex;
   justify-content: center;
@@ -156,16 +151,13 @@ h1 span.space { white-space: pre; }
   padding: 0 var(--tableRightEdgePadding);
 }
 
+/* Tabulator element itself picks up the width variable */
 .table-container .tabulator {
   width: var(--tableWidthPercent);
+  box-sizing: border-box;
 }
 
-@media (max-width: var(--tableBreakpoint)) {
-  .table-container .tabulator {
-    width: 100%;
-  }
-}
-
+/* global tabulator font sizing */
 .tabulator,
 .tabulator .tabulator-header,
 .tabulator .tabulator-cell {
@@ -173,24 +165,30 @@ h1 span.space { white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
+/* general table cell left padding for all cells (user requested) */
+.tabulator .tabulator-cell {
+  padding-left: 15px !important;
+}
+
+/* header title style */
 .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
   font-weight: var(--bodyWeightBold);
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
-/* ✅ Apply consistent padding to ALL body cells */
-.tabulator .tabulator-row .tabulator-cell {
-  padding-left: var(--tableCellLeftPadding) !important;
-}
-
+/* remove Tabulator's default periwinkle backgrounds */
 .tabulator,
 .tabulator .tabulator-tableholder,
-.tabulator-row { background: none !important; }
+.tabulator-row {
+  background: none !important;
+}
 
+/* hide built-in group arrow */
 .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
 .tabulator .tabulator-group-header { padding-left: 0 !important; }
 
+/* delete button centering */
 .delete-btn {
   cursor: pointer;
   font-size: 1.15rem;
@@ -200,18 +198,18 @@ h1 span.space { white-space: pre; }
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding-right: 10px;
+  padding-right: 10px; /* extra right padding to visually center */
 }
 .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
+/* export/import area */
 .data-buttons {
   display: flex;
   justify-content: flex-end;
   margin-top: 15px;
   margin-right: var(--tableRightEdgePadding);
-  padding-bottom: var(--pageBottomPadding);
+  padding-bottom: var(--pageBottomPadding, 20px);
 }
-
 .data-buttons button {
   margin-left: 10px;
   padding: 8px 14px;
@@ -224,5 +222,4 @@ h1 span.space { white-space: pre; }
   font-weight: var(--bodyWeight);
   cursor: pointer;
 }
-
-.data-buttons button:hover { background: #3e8e41; }
+.data-buttons button:hover { background: #e0e0e0; }
