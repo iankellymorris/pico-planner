@@ -12,7 +12,8 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  --titleFontSize: 3.2rem;
+  --titleFontSizeDesktop: 3.2rem;
+  --titleFontSizeMobile: 2.4rem;
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
@@ -23,27 +24,22 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* gap between banner and entry */
+  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
 
-  /* form padding variables */
   --entryPaddingTop: 18px;
-  --entryPaddingBottom: 10px;
+  --entryPaddingBottom: 10px; /* updated */
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 14px;
-
+  --entryPaddingRight: 14px; /* updated */
   --entryGap: 10px;
 
   --addBtnColor: #C71585;
   --addBtnText: #fff;
 
   /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old value, kept commented */
+  --dataBtnBg: #f2f2f2; /* old: keep as comment */
   --dataBtnText: #888;
 
-  /* table */
   --tableWidthPercent: 80%;
-
-  /* toggle positioning */
   --toggleRightOffset: 30px;
 }
 
@@ -62,9 +58,6 @@ body {
   padding-top: 20px;
   padding-bottom: var(--bannerPaddingBottom);
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .title-banner h1 {
@@ -72,7 +65,7 @@ body {
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
   font-weight: var(--titleWeight);
-  font-size: var(--titleFontSize);
+  font-size: var(--titleFontSizeDesktop);
   color: var(--titleColor);
 }
 
@@ -81,9 +74,8 @@ h1 span.space { white-space: pre; }
 /* toggle switch */
 .switch {
   position: absolute;
+  top: 20px;
   right: var(--toggleRightOffset);
-  top: 50%;
-  transform: translateY(-50%);
   display: inline-block;
   width: 50px;
   height: 28px;
