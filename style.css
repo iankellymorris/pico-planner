@@ -16,6 +16,7 @@
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
+  --tableFontSizeMobile: 0.6rem; /* new variable for mobile toggle font size */
 
   /* colors */
   --titleColor: #4b2e83;
@@ -23,13 +24,13 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* gap between banner and entry */
+  --bannerEntryGap: 15px;
 
   /* form padding variables */
   --entryPaddingTop: 18px;
-  --entryPaddingBottom: 18px;
+  --entryPaddingBottom: 18px; /* match top so margins are even */
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 22px;
+  --entryPaddingRight: 30px; /* adjusted per request */
 
   --entryGap: 10px;
 
@@ -37,7 +38,7 @@
   --addBtnText: #fff;
 
   /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old value, kept commented */
+  --dataBtnBg: #f2f2f2; /* old value kept */
   --dataBtnText: #888;
 
   /* table */
@@ -180,6 +181,13 @@ h1 span.space { white-space: pre; }
   width: var(--tableWidthPercent);
   margin: 0;
   box-sizing: border-box;
+}
+
+/* table font sizes (default & mobile) */
+.table-container.mobile .tabulator,
+.table-container.mobile .tabulator .tabulator-header,
+.table-container.mobile .tabulator .tabulator-cell {
+  font-size: var(--tableFontSizeMobile) !important;
 }
 
 .tabulator,
