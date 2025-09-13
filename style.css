@@ -67,7 +67,7 @@ body {
   font-weight: var(--titleWeight);
   font-size: var(--titleFontSizeDesktop);
   color: var(--titleColor);
-  transition: font-size 0.35s ease;
+  transition: font-size 0.35s ease; /* smooth font resize */
 }
 
 h1 span.space { white-space: pre; }
@@ -170,10 +170,9 @@ h1 span.space { white-space: pre; }
   padding: 0;
 }
 .table-container .tabulator {
-  width: var(--tableWidthPercent) !important; /* fix: override Tabulator inline style */
+  width: var(--tableWidthPercent);
   margin: 0;
   box-sizing: border-box;
-  transition: width 0.35s ease; /* smooth width resize */
 }
 
 .tabulator,
