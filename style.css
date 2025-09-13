@@ -24,19 +24,19 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
+  --bannerEntryGap: 15px; /* gap between banner and entry */
 
   --entryPaddingTop: 18px;
-  --entryPaddingBottom: 10px; /* updated */
+  --entryPaddingBottom: 10px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 14px; /* updated */
+  --entryPaddingRight: 14px;
   --entryGap: 10px;
 
   --addBtnColor: #C71585;
   --addBtnText: #fff;
 
   /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old: keep as comment */
+  --dataBtnBg: #f2f2f2; /* old default kept in comment */
   --dataBtnText: #888;
 
   --tableWidthPercent: 80%;
@@ -67,6 +67,7 @@ body {
   font-weight: var(--titleWeight);
   font-size: var(--titleFontSizeDesktop);
   color: var(--titleColor);
+  transition: font-size 0.35s ease; /* smooth font resize */
 }
 
 h1 span.space { white-space: pre; }
