@@ -1,9 +1,7 @@
 :root{
-  /* layout & spacing */
   --entryTableDelta: 20px;
   --titleLeftEdgePadding: 25px;
-  --tableRightEdgePadding: 0px;   /* remove margin on right */
-  --tableLeftEdgePadding: 0px;    /* remove margin on left */
+  --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
   --formScale: 0.85;
 
@@ -14,7 +12,6 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  /* font sizes */
   --titleFontSize: 3.2rem;
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
@@ -23,27 +20,29 @@
   /* colors */
   --titleColor: #4b2e83;
   --backgroundColor: #ede3fa;
-  --bannerBg: #fdf6e3; /* cream */
-  --bannerPaddingBottom: 25px; /* adjustable banner height */
+  --bannerBg: #fdf6e3;
 
-  /* form container padding */
+  --bannerPaddingBottom: 25px;
+  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
+
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 18px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 77px;
+  --entryPaddingRight: 22px;
   --entryGap: 10px;
 
-  /* button colors */
   --addBtnColor: #C71585;
   --addBtnText: #fff;
-  --dataBtnBg: #f2f2f2;
-  --dataBtnText: #888;
 
-  /* table sizing controlled only by toggle now */
+  /* data button colors */
+  --dataBtnBg: #f2f2f2; /* old: keep as comment */
+  --dataBtnText: #888;
+  /* --dataBtnBg: #f2f2f2;  old value */
+  /* --dataBtnText: #888;   old value */
+
   --tableWidthPercent: 80%;
 }
 
-/* page */
 body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
@@ -53,8 +52,7 @@ body {
   background: var(--backgroundColor);
 }
 
-/* banner */
-.title-banner{
+.title-banner {
   width: 100%;
   background: var(--bannerBg);
   padding-top: 20px;
@@ -62,7 +60,7 @@ body {
   position: relative;
 }
 
-.title-banner h1{
+.title-banner h1 {
   margin: 0;
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
@@ -70,9 +68,10 @@ body {
   font-size: var(--titleFontSize);
   color: var(--titleColor);
 }
-h1 span.space{ white-space: pre; }
 
-/* switch toggle */
+h1 span.space { white-space: pre; }
+
+/* toggle switch */
 .switch {
   position: absolute;
   top: 20px;
@@ -81,7 +80,7 @@ h1 span.space{ white-space: pre; }
   width: 50px;
   height: 28px;
 }
-.switch input { display:none; }
+.switch input { display: none; }
 .slider {
   position: absolute;
   cursor: pointer;
@@ -113,7 +112,7 @@ h1 span.space{ white-space: pre; }
 
 .form-container {
   display: inline-block;
-  margin: 20px auto var(--entryTableDelta) auto;
+  margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75,46,131,0.16);
   border: 1px solid rgba(75,46,131,0.22);
@@ -122,7 +121,6 @@ h1 span.space{ white-space: pre; }
   transform-origin: center;
 }
 
-/* inputs inside form */
 .form-container select,
 .form-container input,
 .form-container button {
@@ -136,10 +134,8 @@ h1 span.space{ white-space: pre; }
   font-weight: var(--bodyWeight);
 }
 
-/* assignment input spacing */
 #assignment-input { padding-left: 16px; }
 
-/* dropdown styling */
 .form-container select {
   width: var(--dropdownWidth);
   appearance: none;
@@ -155,7 +151,6 @@ h1 span.space{ white-space: pre; }
   background-repeat: no-repeat;
 }
 
-/* add button */
 #add-btn {
   background: var(--addBtnColor);
   color: var(--addBtnText);
@@ -167,21 +162,18 @@ h1 span.space{ white-space: pre; }
 }
 #add-btn:hover { opacity: 0.92; }
 
-/* table container fix for 100% (no margins) */
 .table-container {
   display: flex;
   justify-content: center;
   width: 100%;
   padding: 0;
-  margin: 0;
 }
 .table-container .tabulator {
   width: var(--tableWidthPercent);
-  margin: 0; /* ensure no extra space */
+  margin: 0;
   box-sizing: border-box;
 }
 
-/* Tabulator fonts */
 .tabulator,
 .tabulator .tabulator-header,
 .tabulator .tabulator-cell {
@@ -189,30 +181,21 @@ h1 span.space{ white-space: pre; }
   font-size: var(--tableFontSize) !important;
 }
 
-/* all cells padding */
-.tabulator .tabulator-cell {
-  padding-left: 15px !important;
-}
+.tabulator .tabulator-cell { padding-left: 15px !important; }
 
-/* header title style */
 .tabulator .tabulator-header .tabulator-col .tabulator-col-title {
   font-weight: var(--bodyWeightBold);
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
-/* background cleanup */
 .tabulator,
 .tabulator .tabulator-tableholder,
-.tabulator-row {
-  background: none !important;
-}
+.tabulator-row { background: none !important; }
 
-/* group arrow off */
 .tabulator .tabulator-group .tabulator-arrow { display: none !important; }
 .tabulator .tabulator-group-header { padding-left: 0 !important; }
 
-/* delete button style */
 .delete-btn {
   cursor: pointer;
   font-size: 1.15rem;
@@ -226,7 +209,6 @@ h1 span.space{ white-space: pre; }
 }
 .delete-btn:hover { color: rgba(0,0,0,0.6); }
 
-/* export/import area */
 .data-buttons {
   display: flex;
   justify-content: flex-end;
