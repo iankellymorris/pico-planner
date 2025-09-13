@@ -27,9 +27,9 @@
 
   /* form padding variables */
   --entryPaddingTop: 18px;
-  --entryPaddingBottom: 18px;
+  --entryPaddingBottom: 10px;
   --entryPaddingLeft: 22px;
-  --entryPaddingRight: 22px;
+  --entryPaddingRight: 14px;
 
   --entryGap: 10px;
 
@@ -44,7 +44,7 @@
   --tableWidthPercent: 80%;
 
   /* toggle positioning */
-  --toggleRightOffset: 20px;
+  --toggleRightOffset: 30px;
 }
 
 body {
