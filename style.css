@@ -35,7 +35,6 @@
   --addBtnColor: #C71585;
   --addBtnText: #fff;
 
-  /* data button colors */
   --dataBtnBg: #f2f2f2;
   --dataBtnText: #888;
 
@@ -67,7 +66,7 @@ body {
   font-weight: var(--titleWeight);
   font-size: var(--titleFontSizeDesktop);
   color: var(--titleColor);
-  transition: font-size 0.35s ease; /* smooth font resize */
+  transition: font-size 0.35s ease;
 }
 
 h1 span.space { white-space: pre; }
@@ -101,12 +100,8 @@ h1 span.space { white-space: pre; }
   transition: .3s;
   border-radius: 50%;
 }
-.switch input:checked + .slider {
-  background-color: #4b2e83;
-}
-.switch input:checked + .slider:before {
-  transform: translateX(22px);
-}
+.switch input:checked + .slider { background-color: #4b2e83; }
+.switch input:checked + .slider:before { transform: translateX(22px); }
 
 /* form */
 .form-wrap { text-align: center; }
@@ -173,7 +168,7 @@ h1 span.space { white-space: pre; }
   width: var(--tableWidthPercent);
   margin: 0;
   box-sizing: border-box;
-  transition: width 0.35s ease; /* smooth width resize */
+  transition: width 0.35s ease; /* smooth resizing */
 }
 
 .tabulator,
