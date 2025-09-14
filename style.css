@@ -1,251 +1,209 @@
 :root {
-    --purple-primary: #5a2f8c;
-    --purple-light: #7b4d9e;
-    --gold-primary: #ffd700;
-    --gold-dark: #ccaa00;
-    --background-light: #f4f2f7;
-    --text-color: #333;
-    --accent-color: #6a1a72;
-}
+    /* Customization Variables */
+    --entryTableDelta: 25px;
+    --titleLeftEdgePadding: 20px;
+    --tableRightEdgePadding: 30px;
+    --dropdownWidth: 150px;
+    --desktopTitleFontSize: 3.2rem;
+    --mobileTitleFontSize: 2.4rem;
+    --bodyFontSize: 1rem;
+    --buttonFontSize: 1.1rem;
+    --tableFontSize: 1rem;
+    --titleColor: #4b2e83;
+    --backgroundColor: #f0f0f0;
+    --bannerBg: #fdf6e3;
+    --bannerHeight: 100px;
+    --bannerEntryGap: 30px;
+    --addBtnColor: #C71585;
+    --addBtnText: #ffffff;
+    --dataBtnBg: #4b2e83;
+    --dataBtnText: #ffffff;
+    --toggleRightOffset: 30px;
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    /* Responsive-controlled variables */
+    --tableWidthPercent: 80%;
+    --currentTitleFontSize: var(--desktopTitleFontSize);
 }
 
 body {
+    margin: 0;
     font-family: 'Lato', sans-serif;
-    background-color: var(--background-light);
-    color: var(--text-color);
+    background-color: var(--backgroundColor);
+    font-size: var(--bodyFontSize);
 }
 
+/* Banner Section */
 .banner {
-    background: linear-gradient(90deg, var(--purple-primary), var(--purple-light));
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    position: relative;
-    height: 100px;
+    background-color: var(--bannerBg);
+    height: var(--bannerHeight);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 var(--toggleRightOffset) 0 var(--titleLeftEdgePadding);
 }
 
 .title {
     font-family: 'Fraunces', serif;
-    font-size: 3rem;
-    transition: font-size 0.5s ease-in-out;
-}
-
-.toggle-container {
-    position: absolute;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    color: white;
-}
-
-.toggle-label {
-    margin-right: 10px;
+    font-size: var(--currentTitleFontSize);
+    color: var(--titleColor);
+    transition: font-size 0.3s ease;
 }
 
 /* Toggle Switch */
-.switch {
+.toggle-container {
+    display: flex;
+    align-items: center;
     position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.toggle-checkbox {
+    display: none;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.toggle-label {
+    display: block;
+    width: 50px;
+    height: 28px;
     background-color: #ccc;
-    transition: .4s;
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.slider:before {
+.toggle-label::after {
+    content: '';
     position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
     background-color: white;
-    transition: .4s;
-}
-
-input:checked + .slider {
-    background-color: var(--gold-primary);
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
     border-radius: 50%;
+    transition: transform 0.3s ease;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
+.toggle-checkbox:checked + .toggle-label {
+    background-color: var(--dataBtnBg);
 }
 
-.form-container {
-    background-color: white;
+.toggle-checkbox:checked + .toggle-label::after {
+    transform: translateX(22px);
+}
+
+/* Form Section */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--bannerEntryGap);
+}
+
+.assignment-form {
+    background-color: rgba(75, 46, 131, 0.16);
+    border-radius: 15px;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-#assignmentForm {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     justify-content: center;
+    gap: 10px;
+    width: 90%;
+    max-width: 900px;
+    box-sizing: border-box;
 }
 
-#assignmentForm input, #assignmentForm button {
+.form-input {
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    flex: 1;
-    min-width: 200px;
-    font-size: 1rem;
+    border-radius: 8px;
+    flex-grow: 1;
+    font-family: 'Lato', sans-serif;
 }
 
-#addBtn {
-    background-color: var(--purple-primary);
-    color: white;
-    cursor: pointer;
+#class-select {
+    min-width: var(--dropdownWidth);
+}
+
+.add-button {
+    padding: 10px 20px;
+    background-color: var(--addBtnColor);
+    color: var(--addBtnText);
     border: none;
-    transition: background-color 0.3s ease;
-}
-
-#addBtn:hover {
-    background-color: var(--purple-light);
-}
-
-.data-management {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.data-management button {
-    background-color: var(--gold-primary);
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.data-management button:hover {
-    background-color: var(--gold-dark);
-}
-
-.table-container {
-    overflow-x: auto;
-    transition: max-width 0.5s ease-in-out, width 0.5s ease-in-out;
-    margin: 0 auto;
-    width: 80%; /* Default width */
-}
-
-#assignmentsTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#assignmentsTable th, #assignmentsTable td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-#assignmentsTable th {
-    background-color: var(--purple-primary);
-    color: white;
-    cursor: pointer;
-    user-select: none;
-}
-
-#assignmentsTable th:hover {
-    background-color: var(--purple-light);
-}
-
-#assignmentsTable tbody tr.row-group-odd {
-    background-color: #f2eaff; /* Lighter purple for odd rows */
-}
-
-#assignmentsTable tbody tr.row-group-even {
-    background-color: #e6d3ff; /* Even lighter purple for even rows */
-}
-
-.actions-cell {
+    font-size: var(--buttonFontSize);
+    font-weight: bold;
     white-space: nowrap;
 }
 
-.actions-cell button {
-    background-color: transparent;
-    border: none;
+/* Table Section */
+.assignment-table {
+    margin-top: var(--entryTableDelta);
+    width: var(--tableWidthPercent);
+    transition: width 0.3s ease;
+}
+
+.tabulator {
+    border-radius: 15px !important;
+    overflow: hidden;
+    font-size: var(--tableFontSize);
+}
+
+.tabulator-group-header {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* Specific class group headers */
+.tabulator-group[tabulator-group="MATH 1210"] .tabulator-group-header {
+    background-color: #FFB400;
+}
+
+.tabulator-group[tabulator-group="PHYS 2210"] .tabulator-group-header {
+    background-color: #5b78b0;
+}
+
+.tabulator-group[tabulator-group="ECE 1400"] .tabulator-group-header {
+    background-color: #b04b4b;
+}
+
+/* Alternating row colors */
+.tabulator-row {
+    background-color: #ffffff;
+}
+
+.tabulator-row.tabulator-row-even {
+    background-color: #f7f7f7;
+}
+
+/* Delete button column */
+.delete-cell {
     cursor: pointer;
-    font-size: 1rem;
-    margin-right: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #C71585;
 }
 
-.actions-cell .edit-btn {
-    color: var(--purple-primary);
+/* Data Management Buttons */
+.data-buttons-container {
+    margin-top: 20px;
+    align-self: flex-end;
+    margin-right: calc(100% - var(--tableWidthPercent) - var(--tableRightEdgePadding));
 }
 
-.actions-cell .delete-btn {
-    color: #e74c3c;
+.data-button {
+    padding: 10px 15px;
+    background-color: var(--dataBtnBg);
+    color: var(--dataBtnText);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: var(--buttonFontSize);
+    font-weight: bold;
+    margin-left: 10px;
 }
 
-#assignmentsTable a {
-    color: var(--accent-color);
-    text-decoration: none;
-}
-
-#assignmentsTable a:hover {
-    text-decoration: underline;
-}
-
-/* Mobile View Adjustments */
-body.mobile-view .table-container {
-    width: 100%;
-}
-
-body.mobile-view .title {
-    font-size: 2.4rem;
-}
-
-@media (max-width: 768px) {
-    #assignmentForm {
-        flex-direction: column;
-    }
-    .data-management {
-        flex-direction: column;
-    }
+.hidden-file-input {
+    display: none;
 }
