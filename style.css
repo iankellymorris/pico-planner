@@ -1,276 +1,251 @@
 :root {
-  --entryTableDelta: 20px;
-  --titleLeftEdgePadding: 25px;
-  --tableRightEdgePadding: 16px;
-  --dropdownWidth: 180px;
-  --formScale: 0.85;
+    --purple-primary: #5a2f8c;
+    --purple-light: #7b4d9e;
+    --gold-primary: #ffd700;
+    --gold-dark: #ccaa00;
+    --background-light: #f4f2f7;
+    --text-color: #333;
+    --accent-color: #6a1a72;
+}
 
-  /* fonts */
-  --titleFont: 'Fraunces', serif;
-  --bodyFont: 'Lato', sans-serif;
-  --titleWeight: 900;
-  --bodyWeight: 400;
-  --bodyWeightBold: 700;
-
-  --desktopTitleFontSize: 3.2rem;
-  --mobileTitleFontSize: 2.4rem;
-  --bodyFontSize: 1rem;
-  --buttonFontSize: 0.95rem;
-  --tableFontSize: 1rem;
-
-  /* colors */
-  --titleColor: #4b2e83;
-  --backgroundColor: #ede3fa;
-  --bannerBg: #fdf6e3;
-
-  --bannerHeight: 100px;
-  --bannerEntryGap: 15px;
-
-  --entryPaddingTop: 18px;
-  --entryPaddingBottom: 10px;
-  --entryPaddingLeft: 22px;
-  --entryPaddingRight: 14px;
-  --entryGap: 10px;
-
-  --addBtnColor: #C71585;
-  --addBtnText: #fff;
-
-  --dataBtnBg: #f2f2f2;
-  --dataBtnText: #888;
-
-  --tableWidthPercent: 80%;
-  --toggleRightOffset: 30px;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
-  font-size: var(--bodyFontSize);
-  margin: 0;
-  padding: 0;
-  background: var(--backgroundColor);
+    font-family: 'Lato', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
 }
 
-.title-banner {
-  width: 100%;
-  background: var(--bannerBg);
-  height: var(--bannerHeight);
-  padding: 0;
-  position: relative;
-  display: flex;
-  align-items: center;
+.banner {
+    background: linear-gradient(90deg, var(--purple-primary), var(--purple-light));
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.title-banner h1 {
-  margin: 0;
-  padding-left: var(--titleLeftEdgePadding);
-  font-family: var(--titleFont);
-  font-weight: var(--titleWeight);
-  font-size: var(--desktopTitleFontSize);
-  color: var(--titleColor);
-  transition: font-size 0.3s ease;
+.title {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    transition: font-size 0.5s ease-in-out;
 }
 
-h1 span.space {
-  white-space: pre;
+.toggle-container {
+    position: absolute;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    color: white;
 }
 
-/* toggle switch */
+.toggle-label {
+    margin-right: 10px;
+}
+
+/* Toggle Switch */
 .switch {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: var(--toggleRightOffset);
-  display: inline-block;
-  width: 50px;
-  height: 28px;
-}
-.switch input {
-  display: none;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .3s;
-  border-radius: 34px;
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .3s;
-  border-radius: 50%;
-}
-.switch input:checked + .slider {
-  background-color: #4b2e83;
-}
-.switch input:checked + .slider:before {
-  transform: translateX(22px);
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
-/* form */
-.form-wrap {
-  text-align: center;
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--gold-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
 }
 
 .form-container {
-  display: inline-block;
-  min-width: 320px; /* Added min-width for consistent padding */
-  margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
-  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-  background: rgba(75, 46, 131, 0.16);
-  border: 1px solid rgba(75, 46, 131, 0.22);
-  border-radius: 40px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-/* The new wrapper to control width and layout */
-.form-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Use gap for spacing instead of margins */
-  justify-content: center;
+#assignmentForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
-.form-container select,
-.form-container input,
-.form-container button {
-  /* Removed margin properties as they are now controlled by gap */
-  padding: 10px 16px;
-  border-radius: 9999px;
-  border: 1px solid #ccc;
-  font-size: var(--bodyFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
+#assignmentForm input, #assignmentForm button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1;
+    min-width: 200px;
+    font-size: 1rem;
 }
 
-#assignment-input {
-  padding-left: 16px;
+#addBtn {
+    background-color: var(--purple-primary);
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
-.form-container select {
-  width: var(--dropdownWidth);
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 32px;
-  background: white;
-  background-image: linear-gradient(45deg, transparent 50%, #555 50%),
-    linear-gradient(135deg, #555 50%, transparent 50%);
-  background-position: calc(100% - 19px) calc(50% - 0px),
-    calc(100% - 14px) calc(50% - 0px);
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
+#addBtn:hover {
+    background-color: var(--purple-light);
 }
 
-#add-btn {
-  background: var(--addBtnColor);
-  color: var(--addBtnText);
-  border: none;
-  cursor: pointer;
-  font-size: var(--buttonFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeightBold);
+.data-management {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 15px;
 }
-#add-btn:hover {
-  opacity: 0.92;
+
+.data-management button {
+    background-color: var(--gold-primary);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.data-management button:hover {
+    background-color: var(--gold-dark);
 }
 
 .table-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 0;
-}
-.table-container .tabulator {
-  width: var(--tableWidthPercent);
-  margin: 0;
-  box-sizing: border-box;
-  transition: width 0.3s ease;
+    overflow-x: auto;
+    transition: max-width 0.5s ease-in-out, width 0.5s ease-in-out;
+    margin: 0 auto;
+    width: 80%; /* Default width */
 }
 
-.tabulator,
-.tabulator .tabulator-header,
-.tabulator .tabulator-cell {
-  font-family: var(--bodyFont) !important;
-  font-size: var(--tableFontSize) !important;
+#assignmentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.tabulator .tabulator-cell {
-  padding-left: 15px !important;
+#assignmentsTable th, #assignmentsTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
-  font-weight: var(--bodyWeightBold);
-  padding-top: 6px;
-  padding-bottom: 6px;
+#assignmentsTable th {
+    background-color: var(--purple-primary);
+    color: white;
+    cursor: pointer;
+    user-select: none;
 }
 
-.tabulator,
-.tabulator .tabulator-tableholder,
-.tabulator-row {
-  background: none !important;
+#assignmentsTable th:hover {
+    background-color: var(--purple-light);
 }
 
-.tabulator .tabulator-group .tabulator-arrow {
-  display: none !important;
-}
-.tabulator .tabulator-group-header {
-  padding-left: 0 !important;
+#assignmentsTable tbody tr.row-group-odd {
+    background-color: #f2eaff; /* Lighter purple for odd rows */
 }
 
-.delete-btn {
-  cursor: pointer;
-  font-size: 1.15rem;
-  font-family: "Courier New", monospace;
-  color: rgba(0, 0, 0, 0.32);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding-right: 10px;
-}
-.delete-btn:hover {
-  color: rgba(0, 0, 0, 0.6);
+#assignmentsTable tbody tr.row-group-even {
+    background-color: #e6d3ff; /* Even lighter purple for even rows */
 }
 
-.data-buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-  margin-right: 16px;
-  padding-bottom: var(--pageBottomPadding, 20px);
+.actions-cell {
+    white-space: nowrap;
 }
-.data-buttons button {
-  margin-left: 10px;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  border: 1px solid #bbb;
-  background: var(--dataBtnBg);
-  color: var(--dataBtnText);
-  font-size: var(--buttonFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
-  cursor: pointer;
+
+.actions-cell button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 5px;
 }
-.data-buttons button:hover {
-  background: #e0e0e0;
+
+.actions-cell .edit-btn {
+    color: var(--purple-primary);
+}
+
+.actions-cell .delete-btn {
+    color: #e74c3c;
+}
+
+#assignmentsTable a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+#assignmentsTable a:hover {
+    text-decoration: underline;
+}
+
+/* Mobile View Adjustments */
+body.mobile-view .table-container {
+    width: 100%;
+}
+
+body.mobile-view .title {
+    font-size: 2.4rem;
 }
 
 @media (max-width: 768px) {
-  .title-banner h1 {
-    font-size: var(--mobileTitleFontSize);
-  }
-
-  :root {
-    --tableWidthPercent: 100%;
-  }
+    #assignmentForm {
+        flex-direction: column;
+    }
+    .data-management {
+        flex-direction: column;
+    }
 }
