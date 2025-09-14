@@ -12,8 +12,8 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  --desktopTitleFontSize: 3.2rem;
-  --mobileTitleFontSize: 2.4rem;
+  --desktopTitleFontSize: 3.2rem; /* Renamed for clarity */
+  --mobileTitleFontSize: 2.4rem; /* New variable for mobile font size */
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
@@ -22,37 +22,63 @@
   --titleColor: #4b2e83;
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
+  --formBg: rgba(75, 46, 131, 0.16);
+  --formBorder: rgba(75, 46, 131, 0.22);
   --addBtnColor: #C71585;
   --addBtnText: #fff;
   --dataBtnBg: #f2f2f2;
   --dataBtnText: #888;
-  --formBg: rgba(75, 46, 131, 0.16);
-  --formBorder: rgba(75, 46, 131, 0.22);
-  --inputBorder: #ccc;
-  --inputBg: white;
-  --inputColor: #000;
-  --selectArrow: #555;
-  --deleteBtnColor: rgba(0, 0, 0, 0.32);
+  --deleteBtn: rgba(0, 0, 0, 0.32);
   --deleteBtnHover: rgba(0, 0, 0, 0.6);
-  --tabulatorBorder: #ddd;
+  --inputBorder: #ccc;
+  --inputPlaceholder: #999;
+  --dropdownArrow: #555;
+  --dropdownArrowHover: #333;
 
   /* dark mode colors */
-  --darkTitleColor: #a983e8;
-  --darkBackgroundColor: #1e1e1e;
+  --darkTitleColor: #a98fe3;
+  --darkBackgroundColor: #1c1c1c;
   --darkBannerBg: #2b2b2b;
-  --darkAddBtnColor: #e57373;
+  --darkFormBg: rgba(169, 143, 227, 0.16);
+  --darkFormBorder: rgba(169, 143, 227, 0.22);
+  --darkAddBtnColor: #C71585;
   --darkAddBtnText: #fff;
-  --darkDataBtnBg: #333;
+  --darkDataBtnBg: #444;
   --darkDataBtnText: #bbb;
-  --darkFormBg: rgba(169, 131, 232, 0.16);
-  --darkFormBorder: rgba(169, 131, 232, 0.22);
-  --darkInputBorder: #555;
-  --darkInputBg: #333;
-  --darkInputColor: #ddd;
-  --darkSelectArrow: #bbb;
-  --darkDeleteBtnColor: rgba(255, 255, 255, 0.32);
+  --darkDeleteBtn: rgba(255, 255, 255, 0.32);
   --darkDeleteBtnHover: rgba(255, 255, 255, 0.6);
-  --darkTabulatorBorder: #555;
+  --darkInputBorder: #555;
+  --darkInputPlaceholder: #777;
+  --darkDropdownArrow: #bbb;
+  --darkDropdownArrowHover: #ddd;
+
+  /* theme-specific variables */
+  --currentTitleColor: var(--titleColor);
+  --currentBackgroundColor: var(--backgroundColor);
+  --currentBannerBg: var(--bannerBg);
+  --currentFormBg: var(--formBg);
+  --currentFormBorder: var(--formBorder);
+  --currentAddBtnColor: var(--addBtnColor);
+  --currentAddBtnText: var(--addBtnText);
+  --currentDataBtnBg: var(--dataBtnBg);
+  --currentDataBtnText: var(--dataBtnText);
+  --currentDeleteBtn: var(--deleteBtn);
+  --currentDeleteBtnHover: var(--deleteBtnHover);
+  --currentInputBorder: var(--inputBorder);
+  --currentInputPlaceholder: var(--inputPlaceholder);
+  --currentDropdownArrow: var(--dropdownArrow);
+  --currentDropdownArrowHover: var(--dropdownArrowHover);
+
+  /* Tabulator colors for dark mode, using COLORS object */
+  --PHYS-even-bg: #dbe7f8;
+  --PHYS-odd-bg: #edf4fc;
+  --PHYS-header-bg: #5b78b0;
+  --ECE-even-bg: #f8dbdb;
+  --ECE-odd-bg: #fceeee;
+  --ECE-header-bg: #b04b4b;
+  --MATH-even-bg: #faf3d1;
+  --MATH-odd-bg: #fffceb;
+  --MATH-header-bg: #FFB400;
 
   --bannerPaddingBottom: 25px;
   --bannerEntryGap: 15px;
@@ -66,92 +92,52 @@
   --bannerHeight: 100px;
 }
 
-/* Dark mode styles */
-body.dark-mode {
-  color: var(--darkDataBtnText);
-  background: var(--darkBackgroundColor);
+/* Dark mode theme */
+html[data-theme='dark'] {
+  --currentTitleColor: var(--darkTitleColor);
+  --currentBackgroundColor: var(--darkBackgroundColor);
+  --currentBannerBg: var(--darkBannerBg);
+  --currentFormBg: var(--darkFormBg);
+  --currentFormBorder: var(--darkFormBorder);
+  --currentAddBtnColor: var(--darkAddBtnColor);
+  --currentAddBtnText: var(--darkAddBtnText);
+  --currentDataBtnBg: var(--darkDataBtnBg);
+  --currentDataBtnText: var(--darkDataBtnText);
+  --currentDeleteBtn: var(--darkDeleteBtn);
+  --currentDeleteBtnHover: var(--darkDeleteBtnHover);
+  --currentInputBorder: var(--darkInputBorder);
+  --currentInputPlaceholder: var(--darkInputPlaceholder);
+  --currentDropdownArrow: var(--darkDropdownArrow);
+  --currentDropdownArrowHover: var(--darkDropdownArrowHover);
+
+  --PHYS-even-bg: #2d3b51;
+  --PHYS-odd-bg: #202b3c;
+  --PHYS-header-bg: #4b5e82;
+  --ECE-even-bg: #512d2d;
+  --ECE-odd-bg: #3c2020;
+  --ECE-header-bg: #7a4b4b;
+  --MATH-even-bg: #514a2d;
+  --MATH-odd-bg: #3c3520;
+  --MATH-header-bg: #826e4b;
 }
 
-body.dark-mode .title-banner {
-  background: var(--darkBannerBg);
-}
-
-body.dark-mode .title-banner h1 {
-  color: var(--darkTitleColor);
-}
-
-body.dark-mode .form-container {
-  background: var(--darkFormBg);
-  border: 1px solid var(--darkFormBorder);
-}
-
-body.dark-mode .form-container select,
-body.dark-mode .form-container input,
-body.dark-mode .form-container button {
-  border: 1px solid var(--darkInputBorder);
-  background: var(--darkInputBg);
-  color: var(--darkInputColor);
-}
-
-body.dark-mode .form-container select {
-  background-image: linear-gradient(45deg, transparent 50%, var(--darkSelectArrow) 50%),
-    linear-gradient(135deg, var(--darkSelectArrow) 50%, transparent 50%);
-}
-
-body.dark-mode #add-btn {
-  background: var(--darkAddBtnColor);
-  color: var(--darkAddBtnText);
-}
-
-body.dark-mode #add-btn:hover {
-  opacity: 0.82;
-}
-
-body.dark-mode .data-buttons button {
-  background: var(--darkDataBtnBg);
-  color: var(--darkDataBtnText);
-  border: 1px solid var(--darkInputBorder);
-}
-
-body.dark-mode .data-buttons button:hover {
-  background: #444;
-}
-
-body.dark-mode .delete-btn {
-  color: var(--darkDeleteBtnColor);
-}
-
-body.dark-mode .delete-btn:hover {
-  color: var(--darkDeleteBtnHover);
-}
-
-body.dark-mode .tabulator-row.tabulator-group-header {
-  border-bottom: 1px solid var(--darkTabulatorBorder);
-  border-top: 1px solid var(--darkTabulatorBorder);
-}
-
-body.dark-mode .tabulator-group-header .tabulator-group-level-0 {
-  border-bottom: none;
-}
-
-/* Base styles */
 body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
   font-size: var(--bodyFontSize);
   margin: 0;
   padding: 0;
-  background: var(--backgroundColor);
-  color: #000;
+  background: var(--currentBackgroundColor);
+  color: var(--currentTitleColor); /* Apply a default text color for the body */
+  transition: background-color 0.3s ease;
 }
 
 .title-banner {
   width: 100%;
-  background: var(--bannerBg);
-  padding-top: 20px;
-  padding-bottom: var(--bannerPaddingBottom);
+  background: var(--currentBannerBg);
   position: relative;
   height: var(--bannerHeight);
+  transition: background-color 0.3s ease;
 }
 
 .title-banner h1 {
@@ -160,7 +146,7 @@ body {
   font-family: var(--titleFont);
   font-weight: var(--titleWeight);
   font-size: var(--desktopTitleFontSize);
-  color: var(--titleColor);
+  color: var(--currentTitleColor);
   display: flex;
   align-items: center;
   height: 100%;
@@ -170,6 +156,7 @@ h1 span.space {
   white-space: pre;
 }
 
+/* toggle switch */
 .switch {
   position: absolute;
   top: 50%;
@@ -211,6 +198,7 @@ h1 span.space {
   transform: translateX(22px);
 }
 
+/* form */
 .form-wrap {
   text-align: center;
 }
@@ -219,11 +207,12 @@ h1 span.space {
   display: inline-block;
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-  background: var(--formBg);
-  border: 1px solid var(--formBorder);
+  background: var(--currentFormBg);
+  border: 1px solid var(--currentFormBorder);
   border-radius: 40px;
   transform: scale(var(--formScale));
   transform-origin: center;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .form-container select,
@@ -233,35 +222,43 @@ h1 span.space {
   margin-bottom: var(--entryGap);
   padding: 10px 16px;
   border-radius: 9999px;
-  border: 1px solid var(--inputBorder);
-  background: var(--inputBg);
+  border: 1px solid var(--currentInputBorder);
   font-size: var(--bodyFontSize);
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
-  color: var(--inputColor);
+  background: white; /* Keep inputs white for readability */
 }
-
-#assignment-input {
-  padding-left: 16px;
+html[data-theme='dark'] .form-container select,
+html[data-theme='dark'] .form-container input {
+  background: #333;
+  color: #fff;
+  border-color: var(--currentInputBorder);
 }
-
+.form-container input::placeholder {
+  color: var(--currentInputPlaceholder);
+}
 .form-container select {
   width: var(--dropdownWidth);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 32px;
-  background-image: linear-gradient(45deg, transparent 50%, var(--selectArrow) 50%),
-    linear-gradient(135deg, var(--selectArrow) 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--currentDropdownArrow) 50%),
+    linear-gradient(135deg, var(--currentDropdownArrow) 50%, transparent 50%);
   background-position: calc(100% - 19px) calc(50% - 0px),
     calc(100% - 14px) calc(50% - 0px);
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
+  transition: background-image 0.3s ease;
+}
+.form-container select:hover {
+  background-image: linear-gradient(45deg, transparent 50%, var(--currentDropdownArrowHover) 50%),
+    linear-gradient(135deg, var(--currentDropdownArrowHover) 50%, transparent 50%);
 }
 
 #add-btn {
-  background: var(--addBtnColor);
-  color: var(--addBtnText);
+  background: var(--currentAddBtnColor);
+  color: var(--currentAddBtnText);
   border: none;
   cursor: pointer;
   font-size: var(--buttonFontSize);
@@ -289,6 +286,8 @@ h1 span.space {
 .tabulator .tabulator-cell {
   font-family: var(--bodyFont) !important;
   font-size: var(--tableFontSize) !important;
+  color: var(--currentTitleColor) !important; /* Set text color for table */
+  transition: color 0.3s ease;
 }
 
 .tabulator .tabulator-cell {
@@ -318,15 +317,16 @@ h1 span.space {
   cursor: pointer;
   font-size: 1.15rem;
   font-family: "Courier New", monospace;
-  color: var(--deleteBtnColor);
+  color: var(--currentDeleteBtn);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   padding-right: 10px;
+  transition: color 0.3s ease;
 }
 .delete-btn:hover {
-  color: var(--deleteBtnHover);
+  color: var(--currentDeleteBtnHover);
 }
 
 .data-buttons {
@@ -340,38 +340,37 @@ h1 span.space {
   margin-left: 10px;
   padding: 8px 14px;
   border-radius: 9999px;
-  border: 1px solid #bbb;
-  background: var(--dataBtnBg);
-  color: var(--dataBtnText);
+  border: 1px solid var(--currentInputBorder);
+  background: var(--currentDataBtnBg);
+  color: var(--currentDataBtnText);
   font-size: var(--buttonFontSize);
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
   cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 .data-buttons button:hover {
-  background: #e0e0e0;
+  background: #e0e0e0; /* This is a hardcoded hover state, could be a variable */
+}
+html[data-theme='dark'] .data-buttons button:hover {
+  background: #555;
 }
 
 @media (max-width: 768px) {
   .form-wrap {
     display: none;
   }
-  
   .title-banner h1 {
     font-size: var(--mobileTitleFontSize);
   }
-
   :root {
     --tableWidthPercent: 100%;
   }
 }
 
-/* These rules are no longer needed as the JS now handles the toggle logic */
-/*
 .switch input:checked + .slider ~ .title-banner h1 {
   font-size: var(--mobileTitleFontSize);
 }
 .switch input:checked + .slider ~ .table-container .tabulator {
   width: 100%;
 }
-*/
