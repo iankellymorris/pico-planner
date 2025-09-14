@@ -42,13 +42,13 @@
   --toggleRightOffset: 30px;
 }
 
-body {
+body, html {
+  margin: 0;
+  padding: 0;
+  background: var(--backgroundColor);
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
   font-size: var(--bodyFontSize);
-  margin: 0; /* This removes the default body margin */
-  padding: 0;
-  background: var(--backgroundColor);
 }
 
 .title-banner {
@@ -183,23 +183,37 @@ h1 span.space {
   width: 100%;
   padding: 0;
 }
-.table-container .tabulator {
+
+/* Fixes the table margins and padding */
+.tabulator {
   width: var(--tableWidthPercent);
-  margin: 0;
+  margin: 0 !important;
   box-sizing: border-box;
   transition: width 0.3s ease;
+  padding: 0 !important;
+}
+
+/* Tabulator-specific overrides */
+.tabulator .tabulator-header,
+.tabulator .tabulator-cell {
+  font-family: var(--bodyFont) !important;
+  font-size: var(--tableFontSize) !important;
+}
+
+.tabulator .tabulator-cell {
+  padding-left: 15px !important;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+  font-weight: var(--bodyWeightBold);
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .tabulator,
-.tabulator .tabulator-header,
 .tabulator .tabulator-tableholder,
 .tabulator-row {
   background: none !important;
-}
-
-.tabulator-tableholder {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 .tabulator .tabulator-group .tabulator-arrow {
