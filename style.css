@@ -3,7 +3,7 @@
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
-  --formScale: 0.85; /* This variable is no longer used in the updated form container styles */
+  --formScale: 0.85;
 
   /* fonts */
   --titleFont: 'Fraunces', serif;
@@ -23,8 +23,7 @@
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
 
-  --bannerPaddingBottom: 25px;
-  --bannerPaddingTop: 20px;
+  --bannerHeight: 70px; /* New variable for fixed banner height */
   --bannerEntryGap: 15px;
 
   --entryPaddingTop: 18px;
@@ -41,7 +40,6 @@
 
   --tableWidthPercent: 80%;
   --toggleRightOffset: 30px;
-  --toggleTopOffset: 35px; /* Updated to 35px */
 }
 
 body {
@@ -56,9 +54,11 @@ body {
 .title-banner {
   width: 100%;
   background: var(--bannerBg);
-  padding-top: var(--bannerPaddingTop);
-  padding-bottom: var(--bannerPaddingBottom);
+  height: var(--bannerHeight);
+  padding: 0; /* Remove padding as height is now fixed */
   position: relative;
+  display: flex;
+  align-items: center; /* Vertically center content */
 }
 
 .title-banner h1 {
@@ -78,7 +78,8 @@ h1 span.space {
 /* toggle switch */
 .switch {
   position: absolute;
-  top: var(--toggleTopOffset);
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the switch */
   right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
@@ -121,22 +122,22 @@ h1 span.space {
   text-align: center;
 }
 
-/* Updated form container */
 .form-container {
-  display: flex; /* Use flexbox for layout */
-  flex-wrap: wrap; /* Allow items to wrap to a new line */
-  justify-content: center; /* Center items on the main axis */
+  display: inline-block; /* Revert to inline-block to prevent full-width stretching */
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
-  padding: 18px 22px; /* Set consistent padding */
+  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
+  transform: scale(var(--formScale)); /* Re-add the scaling effect */
+  transform-origin: center;
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
-  margin: 5px; /* Use a consistent margin for spacing between items */
+  margin-right: var(--entryGap);
+  margin-bottom: var(--entryGap);
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
