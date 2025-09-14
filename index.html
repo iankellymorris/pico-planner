@@ -4,45 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
 </head>
 <body>
-
-    <header class="banner">
-        <h1 class="title">Assignment Tracker</h1>
-        <div class="toggle-container">
-            <input type="checkbox" id="width-toggle" class="toggle-checkbox">
-            <label for="width-toggle" class="toggle-label"></label>
+    <header class="title-banner">
+        <h1 class="title-banner__text">Assignment&nbsp;Tracker</h1>
+        <div class="toggle-switch">
+            <input type="checkbox" id="mode-toggle" class="toggle-switch__checkbox">
+            <label class="toggle-switch__label" for="mode-toggle"></label>
         </div>
     </header>
 
-    <main class="content-wrapper">
-        <form id="assignment-form" class="assignment-form">
-            <select id="class-select" class="form-input">
-                <option value="MATH 1210">MATH 1210</option>
-                <option value="PHYS 2210">PHYS 2210</option>
-                <option value="ECE 1400">ECE 1400</option>
-            </select>
-            <input type="text" id="assignment-name" class="form-input" placeholder="Assignment Name" required>
-            <input type="url" id="assignment-link" class="form-input" placeholder="Link (Optional)">
-            <input type="date" id="due-date" class="form-input" required>
-            <button type="submit" id="add-assignment-btn" class="add-button">Add Assignment</button>
-        </form>
-
-        <div id="assignment-table" class="assignment-table"></div>
-
-        <div class="data-buttons-container">
-            <button id="export-data-btn" class="data-button">Export Data</button>
-            <button id="import-data-btn" class="data-button">Import Data</button>
-            <input type="file" id="import-file-input" class="hidden-file-input">
+    <main class="main-content">
+        <div class="assignment-entry-form">
+            <form id="assignment-form" class="form-container">
+                <select id="class-input" class="form-input">
+                    <option value="MATH 1210">MATH 1210</option>
+                    <option value="PHYS 2210">PHYS 2210</option>
+                    <option value="ECE 1400">ECE 1400</option>
+                </select>
+                <input type="text" id="assignment-input" placeholder="Assignment Name" class="form-input" required>
+                <input type="date" id="due-date-input" class="form-input" required>
+                <input type="url" id="link-input" placeholder="Link (Optional)" class="form-input">
+                <button type="submit" id="add-assignment-btn" class="form-button">Add Assignment</button>
+            </form>
         </div>
+
+        <div id="assignment-table" class="data-table-container"></div>
     </main>
 
-    <script src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
+    <footer class="data-management">
+        <button id="export-data-btn" class="data-button">Export Data</button>
+        <input type="file" id="import-data-input" accept=".json" style="display: none;">
+        <button id="import-data-btn" class="data-button">Import Data</button>
+    </footer>
+
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
