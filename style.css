@@ -23,7 +23,7 @@
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
 
-  --bannerHeight: 100px;
+  --bannerHeight: 70px; /* New variable for fixed banner height */
   --bannerEntryGap: 15px;
 
   --entryPaddingTop: 18px;
@@ -42,23 +42,23 @@
   --toggleRightOffset: 30px;
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
-  background: var(--backgroundColor);
+body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
   font-size: var(--bodyFontSize);
+  margin: 0;
+  padding: 0;
+  background: var(--backgroundColor);
 }
 
 .title-banner {
   width: 100%;
   background: var(--bannerBg);
   height: var(--bannerHeight);
-  padding: 0;
+  padding: 0; /* Remove padding as height is now fixed */
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically center content */
 }
 
 .title-banner h1 {
@@ -79,7 +79,7 @@ h1 span.space {
 .switch {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* Vertically center the switch */
   right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
@@ -123,24 +123,21 @@ h1 span.space {
 }
 
 .form-container {
-  display: inline-block;
+  display: inline-block; /* Revert to inline-block to prevent full-width stretching */
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
-}
-
-.form-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  transform: scale(var(--formScale)); /* Re-add the scaling effect */
+  transform-origin: center;
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
+  margin-right: var(--entryGap);
+  margin-bottom: var(--entryGap);
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
@@ -187,15 +184,14 @@ h1 span.space {
   width: 100%;
   padding: 0;
 }
-
-.tabulator {
+.table-container .tabulator {
   width: var(--tableWidthPercent);
-  margin: 0 !important;
+  margin: 0;
   box-sizing: border-box;
   transition: width 0.3s ease;
-  padding: 0 !important;
 }
 
+.tabulator,
 .tabulator .tabulator-header,
 .tabulator .tabulator-cell {
   font-family: var(--bodyFont) !important;
