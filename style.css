@@ -45,7 +45,7 @@
   --toggleRightOffset: 30px; /* New variable for toggle right padding */
 
   /* new variable for banner height */
-  --bannerHeight: 80px;
+  --bannerHeight: 100px;
 }
 
 body {
@@ -268,6 +268,7 @@ h1 span.space {
 }
 
 @media (max-width: 768px) {
+  /* This rule now sets the font size directly for mobile */
   .title-banner h1 {
     font-size: var(--mobileTitleFontSize);
   }
@@ -276,7 +277,6 @@ h1 span.space {
     --tableWidthPercent: 100%;
   }
 
-  /* New rule to hide assignment entry in mobile mode */
   .form-wrap {
     display: none;
   }
