@@ -3,7 +3,7 @@
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
-  --formScale: 0.85;
+  --formScale: 0.85; /* This variable is no longer used */
 
   /* fonts */
   --titleFont: 'Fraunces', serif;
@@ -23,7 +23,7 @@
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
 
-  --bannerHeight: 70px; /* New variable for fixed banner height */
+  --bannerHeight: 100px; /* Updated banner height */
   --bannerEntryGap: 15px;
 
   --entryPaddingTop: 18px;
@@ -55,10 +55,10 @@ body {
   width: 100%;
   background: var(--bannerBg);
   height: var(--bannerHeight);
-  padding: 0; /* Remove padding as height is now fixed */
+  padding: 0;
   position: relative;
   display: flex;
-  align-items: center; /* Vertically center content */
+  align-items: center;
 }
 
 .title-banner h1 {
@@ -79,7 +79,7 @@ h1 span.space {
 .switch {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%); /* Vertically center the switch */
+  transform: translateY(-50%);
   right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
@@ -122,22 +122,28 @@ h1 span.space {
   text-align: center;
 }
 
+/* Re-designed form container */
 .form-container {
-  display: inline-block; /* Revert to inline-block to prevent full-width stretching */
+  display: inline-block;
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
-  transform: scale(var(--formScale)); /* Re-add the scaling effect */
-  transform-origin: center;
+}
+
+/* The new wrapper to control width and layout */
+.form-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 800px; /* Adjust this value as needed for the desired width */
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
-  margin-right: var(--entryGap);
-  margin-bottom: var(--entryGap);
+  margin: 5px; /* Use consistent margin for spacing between items */
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
