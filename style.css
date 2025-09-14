@@ -1,209 +1,270 @@
 :root {
-    /* Customization Variables */
-    --entryTableDelta: 25px;
-    --titleLeftEdgePadding: 20px;
-    --tableRightEdgePadding: 30px;
-    --dropdownWidth: 150px;
+    /* Fonts and Sizing */
     --desktopTitleFontSize: 3.2rem;
     --mobileTitleFontSize: 2.4rem;
     --bodyFontSize: 1rem;
-    --buttonFontSize: 1.1rem;
+    --buttonFontSize: 1rem;
     --tableFontSize: 1rem;
-    --titleColor: #4b2e83;
-    --backgroundColor: #f0f0f0;
-    --bannerBg: #fdf6e3;
     --bannerHeight: 100px;
-    --bannerEntryGap: 30px;
-    --addBtnColor: #C71585;
-    --addBtnText: #ffffff;
-    --dataBtnBg: #4b2e83;
-    --dataBtnText: #ffffff;
-    --toggleRightOffset: 30px;
 
-    /* Responsive-controlled variables */
+    /* Colors */
+    --titleColor: #4b2e83;
+    --backgroundColor: #fff8eb;
+    --bannerBg: #fdf6e3;
+    --addBtnColor: #C71585;
+    --addBtnText: #fff;
+    --dataBtnBg: #4b2e83;
+    --dataBtnText: #fff;
+    
+    /* Spacing */
+    --titleLeftEdgePadding: 25px;
+    --toggleRightOffset: 30px;
+    --entryTableDelta: 20px;
+    --bannerEntryGap: 20px;
+    --entryPaddingTop: 10px;
+    --entryPaddingBottom: 10px;
+    --entryPaddingLeft: 16px;
+    --entryPaddingRight: 16px;
+    --entryGap: 10px;
+    --dropdownWidth: 150px;
+    
+    /* Responsive */
     --tableWidthPercent: 80%;
-    --currentTitleFontSize: var(--desktopTitleFontSize);
 }
 
 body {
-    margin: 0;
     font-family: 'Lato', sans-serif;
     background-color: var(--backgroundColor);
+    margin: 0;
+    padding: 0;
     font-size: var(--bodyFontSize);
+    box-sizing: border-box;
 }
 
-/* Banner Section */
-.banner {
+.title-banner {
     background-color: var(--bannerBg);
     height: var(--bannerHeight);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--toggleRightOffset) 0 var(--titleLeftEdgePadding);
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.title {
+.title-banner__text {
     font-family: 'Fraunces', serif;
-    font-size: var(--currentTitleFontSize);
+    font-weight: 900;
     color: var(--titleColor);
+    padding-left: var(--titleLeftEdgePadding);
+    font-size: var(--desktopTitleFontSize);
+    margin: 0;
     transition: font-size 0.3s ease;
 }
 
-/* Toggle Switch */
-.toggle-container {
+.main-content {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    position: relative;
+    gap: var(--entryTableDelta);
+    padding: var(--bannerEntryGap) 20px;
 }
 
-.toggle-checkbox {
+.assignment-entry-form {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-container {
+    background: rgba(75, 46, 131, 0.16);
+    border: 1px solid rgba(75, 46, 131, 0.22);
+    border-radius: 40px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--entryGap);
+    min-width: 320px;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-input, .form-button {
+    font-family: 'Lato', sans-serif;
+    padding: var(--entryPaddingTop) var(--entryPaddingLeft) var(--entryPaddingBottom) var(--entryPaddingRight);
+    border-radius: 9999px;
+    border: 1px solid #ccc;
+    font-size: var(--buttonFontSize);
+    outline: none;
+}
+
+.form-input:focus, .form-button:focus {
+    border-color: var(--titleColor);
+}
+
+#class-input {
+    width: var(--dropdownWidth);
+}
+
+#due-date-input::-webkit-calendar-picker-indicator {
+    filter: invert(30%);
+}
+
+.form-button {
+    background-color: var(--addBtnColor);
+    color: var(--addBtnText);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+    background-color: #a3116a;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: absolute;
+    right: var(--toggleRightOffset);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.toggle-switch__checkbox {
     display: none;
 }
 
-.toggle-label {
+.toggle-switch__label {
     display: block;
-    width: 50px;
-    height: 28px;
+    width: 60px;
+    height: 34px;
     background-color: #ccc;
-    border-radius: 14px;
+    border-radius: 34px;
     position: relative;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.toggle-label::after {
+.toggle-switch__label:after {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 24px;
-    height: 24px;
-    background-color: white;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
+    background-color: #fff;
+    top: 4px;
+    left: 4px;
     transition: transform 0.3s ease;
 }
 
-.toggle-checkbox:checked + .toggle-label {
-    background-color: var(--dataBtnBg);
+.toggle-switch__checkbox:checked + .toggle-switch__label {
+    background-color: var(--titleColor);
 }
 
-.toggle-checkbox:checked + .toggle-label::after {
-    transform: translateX(22px);
+.toggle-switch__checkbox:checked + .toggle-switch__label:after {
+    transform: translateX(26px);
 }
 
-/* Form Section */
-.content-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: var(--bannerEntryGap);
-}
-
-.assignment-form {
-    background-color: rgba(75, 46, 131, 0.16);
-    border-radius: 15px;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    width: 90%;
-    max-width: 900px;
-    box-sizing: border-box;
-}
-
-.form-input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    flex-grow: 1;
-    font-family: 'Lato', sans-serif;
-}
-
-#class-select {
-    min-width: var(--dropdownWidth);
-}
-
-.add-button {
-    padding: 10px 20px;
-    background-color: var(--addBtnColor);
-    color: var(--addBtnText);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: var(--buttonFontSize);
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-/* Table Section */
-.assignment-table {
-    margin-top: var(--entryTableDelta);
+.data-table-container {
     width: var(--tableWidthPercent);
     transition: width 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .tabulator {
-    border-radius: 15px !important;
+    border-radius: 8px;
     overflow: hidden;
-    font-size: var(--tableFontSize);
 }
 
 .tabulator-group-header {
     font-weight: bold;
-    font-size: 1.2rem;
+    text-align: left;
+    padding: 8px 15px;
+    border-bottom: 2px solid #ddd;
+    font-size: var(--tableFontSize);
+}
+
+/* Group Header Colors */
+.tabulator-group[tabulator-group-level="0"] .tabulator-group-header[data-group-value="ECE 1400"] {
+    background-color: #b04b4b;
     color: white;
 }
-
-/* Specific class group headers */
-.tabulator-group[tabulator-group="MATH 1210"] .tabulator-group-header {
-    background-color: #FFB400;
-}
-
-.tabulator-group[tabulator-group="PHYS 2210"] .tabulator-group-header {
+.tabulator-group[tabulator-group-level="0"] .tabulator-group-header[data-group-value="PHYS 2210"] {
     background-color: #5b78b0;
+    color: white;
+}
+.tabulator-group[tabulator-group-level="0"] .tabulator-group-header[data-group-value="MATH 1210"] {
+    background-color: #FFB400;
+    color: var(--titleColor);
 }
 
-.tabulator-group[tabulator-group="ECE 1400"] .tabulator-group-header {
-    background-color: #b04b4b;
+/* Row Alternating Colors */
+.tabulator-group[tabulator-group-level="0"][data-group-value="PHYS 2210"] .tabulator-row:nth-child(even) { background-color: #dbe7f8; }
+.tabulator-group[tabulator-group-level="0"][data-group-value="PHYS 2210"] .tabulator-row:nth-child(odd) { background-color: #edf4fc; }
+
+.tabulator-group[tabulator-group-level="0"][data-group-value="ECE 1400"] .tabulator-row:nth-child(even) { background-color: #f8dbdb; }
+.tabulator-group[tabulator-group-level="0"][data-group-value="ECE 1400"] .tabulator-row:nth-child(odd) { background-color: #fceeee; }
+
+.tabulator-group[tabulator-group-level="0"][data-group-value="MATH 1210"] .tabulator-row:nth-child(even) { background-color: #faf3d1; }
+.tabulator-group[tabulator-group-level="0"][data-group-value="MATH 1210"] .tabulator-row:nth-child(odd) { background-color: #fffceb; }
+
+.tabulator-cell {
+    font-size: var(--tableFontSize);
+    padding: 10px;
 }
 
-/* Alternating row colors */
-.tabulator-row {
-    background-color: #ffffff;
-}
-
-.tabulator-row.tabulator-row-even {
-    background-color: #f7f7f7;
-}
-
-/* Delete button column */
-.delete-cell {
-    cursor: pointer;
-    text-align: center;
+.delete-btn {
+    color: red;
     font-weight: bold;
-    color: #C71585;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
 }
 
-/* Data Management Buttons */
-.data-buttons-container {
-    margin-top: 20px;
-    align-self: flex-end;
-    margin-right: calc(100% - var(--tableWidthPercent) - var(--tableRightEdgePadding));
+.delete-btn:hover {
+    transform: scale(1.2);
+}
+
+.data-management {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    margin-right: 20px;
 }
 
 .data-button {
-    padding: 10px 15px;
     background-color: var(--dataBtnBg);
     color: var(--dataBtnText);
     border: none;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 9999px;
+    font-family: 'Lato', sans-serif;
     cursor: pointer;
     font-size: var(--buttonFontSize);
     font-weight: bold;
-    margin-left: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.hidden-file-input {
-    display: none;
+.data-button:hover {
+    background-color: #382463;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .title-banner__text {
+        font-size: var(--mobileTitleFontSize);
+    }
+}
+
+/* CSS for when the toggle is on */
+body.mobile-mode .title-banner__text {
+    font-size: var(--mobileTitleFontSize);
+}
+
+body.mobile-mode .data-table-container {
+    width: 100%;
 }
