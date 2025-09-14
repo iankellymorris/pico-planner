@@ -3,7 +3,7 @@
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
-  --formScale: 0.85;
+  --formScale: 0.85; /* This variable is no longer used in the updated form container styles */
 
   /* fonts */
   --titleFont: 'Fraunces', serif;
@@ -24,9 +24,9 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerPaddingTop: 20px; /* added for consistent calculation */
+  --bannerPaddingTop: 20px;
   --bannerEntryGap: 15px;
-  
+
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 10px;
   --entryPaddingLeft: 22px;
@@ -38,10 +38,10 @@
 
   --dataBtnBg: #f2f2f2;
   --dataBtnText: #888;
-  
+
   --tableWidthPercent: 80%;
   --toggleRightOffset: 30px;
-  --toggleTopOffset: calc(var(--bannerPaddingTop) + (var(--desktopTitleFontSize) / 2));
+  --toggleTopOffset: 35px; /* Updated to 35px */
 }
 
 body {
@@ -68,7 +68,7 @@ body {
   font-weight: var(--titleWeight);
   font-size: var(--desktopTitleFontSize);
   color: var(--titleColor);
-  transition: font-size 0.3s ease; /* Transition for font size */
+  transition: font-size 0.3s ease;
 }
 
 h1 span.space {
@@ -78,7 +78,7 @@ h1 span.space {
 /* toggle switch */
 .switch {
   position: absolute;
-  top: var(--toggleTopOffset); /* Use the new variable */
+  top: var(--toggleTopOffset);
   right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
@@ -121,22 +121,22 @@ h1 span.space {
   text-align: center;
 }
 
+/* Updated form container */
 .form-container {
-  display: inline-block;
+  display: flex; /* Use flexbox for layout */
+  flex-wrap: wrap; /* Allow items to wrap to a new line */
+  justify-content: center; /* Center items on the main axis */
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
-  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
+  padding: 18px 22px; /* Set consistent padding */
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
-  transform: scale(var(--formScale));
-  transform-origin: center;
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
-  margin-right: var(--entryGap);
-  margin-bottom: var(--entryGap);
+  margin: 5px; /* Use a consistent margin for spacing between items */
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
@@ -187,7 +187,7 @@ h1 span.space {
   width: var(--tableWidthPercent);
   margin: 0;
   box-sizing: border-box;
-  transition: width 0.3s ease; /* Transition for table width */
+  transition: width 0.3s ease;
 }
 
 .tabulator,
