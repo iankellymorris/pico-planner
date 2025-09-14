@@ -12,8 +12,8 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  --desktopTitleFontSize: 3.2rem; /* Renamed for clarity */
-  --mobileTitleFontSize: 2.4rem; /* New variable for mobile font size */
+  --desktopTitleFontSize: 3.2rem;
+  --mobileTitleFontSize: 2.4rem;
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
@@ -24,8 +24,9 @@
   --bannerBg: #fdf6e3;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
-
+  --bannerPaddingTop: 20px; /* added for consistent calculation */
+  --bannerEntryGap: 15px;
+  
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 10px;
   --entryPaddingLeft: 22px;
@@ -35,14 +36,12 @@
   --addBtnColor: #C71585;
   --addBtnText: #fff;
 
-  /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old: keep as comment */
+  --dataBtnBg: #f2f2f2;
   --dataBtnText: #888;
-  /* --dataBtnBg: #f2f2f2;  old value */
-  /* --dataBtnText: #888;   old value */
-
+  
   --tableWidthPercent: 80%;
-  --toggleRightOffset: 30px; /* New variable for toggle right padding */
+  --toggleRightOffset: 30px;
+  --toggleTopOffset: calc(var(--bannerPaddingTop) + (var(--desktopTitleFontSize) / 2));
 }
 
 body {
@@ -57,7 +56,7 @@ body {
 .title-banner {
   width: 100%;
   background: var(--bannerBg);
-  padding-top: 20px;
+  padding-top: var(--bannerPaddingTop);
   padding-bottom: var(--bannerPaddingBottom);
   position: relative;
 }
@@ -67,8 +66,9 @@ body {
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
   font-weight: var(--titleWeight);
-  font-size: var(--desktopTitleFontSize); /* Use the new variable */
+  font-size: var(--desktopTitleFontSize);
   color: var(--titleColor);
+  transition: font-size 0.3s ease; /* Transition for font size */
 }
 
 h1 span.space {
@@ -78,8 +78,8 @@ h1 span.space {
 /* toggle switch */
 .switch {
   position: absolute;
-  top: 20px;
-  right: var(--toggleRightOffset); /* Use the new variable */
+  top: var(--toggleTopOffset); /* Use the new variable */
+  right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
   height: 28px;
@@ -187,6 +187,7 @@ h1 span.space {
   width: var(--tableWidthPercent);
   margin: 0;
   box-sizing: border-box;
+  transition: width 0.3s ease; /* Transition for table width */
 }
 
 .tabulator,
