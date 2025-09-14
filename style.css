@@ -3,7 +3,7 @@
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
-  --formScale: 0.85; /* This variable is no longer used */
+  --formScale: 0.85;
 
   /* fonts */
   --titleFont: 'Fraunces', serif;
@@ -23,7 +23,7 @@
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
 
-  --bannerHeight: 100px; /* Updated banner height */
+  --bannerHeight: 100px;
   --bannerEntryGap: 15px;
 
   --entryPaddingTop: 18px;
@@ -122,9 +122,9 @@ h1 span.space {
   text-align: center;
 }
 
-/* Re-designed form container */
 .form-container {
   display: inline-block;
+  min-width: 320px; /* Added min-width for consistent padding */
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
@@ -136,14 +136,14 @@ h1 span.space {
 .form-content {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px; /* Use gap for spacing instead of margins */
   justify-content: center;
-  max-width: 800px; /* Adjust this value as needed for the desired width */
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
-  margin: 5px; /* Use consistent margin for spacing between items */
+  /* Removed margin properties as they are now controlled by gap */
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
