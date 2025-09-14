@@ -123,15 +123,19 @@ h1 span.space {
 }
 
 .form-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  display: inline-block;
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
+}
+
+.form-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 .form-container select,
@@ -184,7 +188,6 @@ h1 span.space {
   padding: 0;
 }
 
-/* Fixes the table margins and padding */
 .tabulator {
   width: var(--tableWidthPercent);
   margin: 0 !important;
@@ -193,7 +196,6 @@ h1 span.space {
   padding: 0 !important;
 }
 
-/* Tabulator-specific overrides */
 .tabulator .tabulator-header,
 .tabulator .tabulator-cell {
   font-family: var(--bodyFont) !important;
