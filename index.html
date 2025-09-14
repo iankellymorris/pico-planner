@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton Toggle)</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="title-banner">
-    <h1>Assignment<span class="space">  </span>Tracker</h1>
-        <label class="switch">
-      <input type="checkbox" id="table-toggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-
-  <div class="form-wrap">
-    <div class="form-container">
-      <div class="form-content">
-        <select id="class-input">
-          <option value="MATH 1210">MATH 1210</option>
-          <option value="PHYS 2210">PHYS 2210</option>
-          <option value="ECE 1400">ECE 1400</option>
-        </select>
-
-        <input type="text" id="assignment-input" placeholder="Assignment Name">
-        <input type="date" id="due-input">
-        <input type="url" id="link-input" placeholder="https://...">
-        <button id="add-btn">Add Assignment</button>
-      </div>
+    <div class="banner">
+        <h1 class="title">Assignment Tracker</h1>
+        <div class="toggle-container">
+            <span class="toggle-label">Mobile View</span>
+            <label class="switch">
+                <input type="checkbox" id="viewToggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
     </div>
-  </div>
+    <div class="container">
+        <div class="form-container">
+            <form id="assignmentForm">
+                <input type="text" id="class" placeholder="Class" required>
+                <input type="text" id="name" placeholder="Assignment Name" required>
+                <input type="date" id="dueDate" required>
+                <input type="url" id="link" placeholder="Link (optional)">
+                <button type="submit" id="addBtn">Add Assignment</button>
+            </form>
+        </div>
+        <div class="data-management">
+            <button id="exportBtn">Export Data</button>
+            <input type="file" id="importFile" accept=".json" style="display:none;">
+            <button id="importBtn">Import Data</button>
+        </div>
+        <div class="table-container">
+            <table id="assignmentsTable">
+                <thead>
+                    <tr>
+                        <th data-sort="class">Class</th>
+                        <th data-sort="name">Assignment</th>
+                        <th data-sort="dueDate">Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
 
-  <div class="table-container">
-    <div id="assignment-table"></div>
-  </div>
-
-  <div class="data-buttons">
-    <button id="export-btn">Export Data</button>
-    <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
-  </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
-
-    <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
