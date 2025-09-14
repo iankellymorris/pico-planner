@@ -45,7 +45,7 @@
   --toggleRightOffset: 30px; /* New variable for toggle right padding */
 
   /* new variable for banner height */
-  --bannerHeight: 80px;
+  --bannerHeight: 100px;
 }
 
 body {
@@ -74,6 +74,10 @@ body {
   font-weight: var(--titleWeight);
   font-size: var(--desktopTitleFontSize); /* Use the new variable */
   color: var(--titleColor);
+  /* new lines for vertical centering */
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 h1 span.space {
@@ -270,5 +274,10 @@ h1 span.space {
 
   :root {
     --tableWidthPercent: 100%;
+  }
+
+  /* New rule to hide assignment entry in mobile mode */
+  .form-wrap {
+    display: none;
   }
 }
