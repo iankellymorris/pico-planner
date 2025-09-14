@@ -45,7 +45,7 @@
   --toggleRightOffset: 30px; /* New variable for toggle right padding */
 
   /* new variable for banner height */
-  --bannerHeight: 100px;
+  --bannerHeight: 80px;
 }
 
 body {
