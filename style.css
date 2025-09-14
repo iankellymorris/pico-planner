@@ -65,9 +65,6 @@ body {
   position: relative;
   /* new line: set height */
   height: var(--bannerHeight);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .title-banner h1 {
@@ -85,13 +82,13 @@ h1 span.space {
 
 /* toggle switch */
 .switch {
-  /* position: absolute; */ /* removed */
-  /* top: 20px; */ /* removed */
-  /* right: var(--toggleRightOffset); */ /* removed */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: var(--toggleRightOffset);
   display: inline-block;
   width: 50px;
   height: 28px;
-  margin-right: var(--toggleRightOffset);
 }
 .switch input {
   display: none;
