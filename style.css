@@ -39,10 +39,13 @@
   --dataBtnBg: #f2f2f2; /* old: keep as comment */
   --dataBtnText: #888;
   /* --dataBtnBg: #f2f2f2;  old value */
-  /* --dataBtnText: #888;   old value */
+  /* --dataBtnText: #888;  old value */
 
   --tableWidthPercent: 80%;
   --toggleRightOffset: 30px; /* New variable for toggle right padding */
+
+  /* new variable for banner height */
+  --bannerHeight: 100px;
 }
 
 body {
@@ -60,6 +63,8 @@ body {
   padding-top: 20px;
   padding-bottom: var(--bannerPaddingBottom);
   position: relative;
+  /* new line: set height */
+  height: var(--bannerHeight);
 }
 
 .title-banner h1 {
