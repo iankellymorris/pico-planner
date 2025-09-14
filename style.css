@@ -3,6 +3,7 @@
   --titleLeftEdgePadding: 25px;
   --tableRightEdgePadding: 16px;
   --dropdownWidth: 180px;
+  --formScale: 0.85;
 
   /* fonts */
   --titleFont: 'Fraunces', serif;
@@ -11,8 +12,8 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  --desktopTitleFontSize: 3.2rem;
-  --mobileTitleFontSize: 2.4rem;
+  --desktopTitleFontSize: 3.2rem; /* Renamed for clarity */
+  --mobileTitleFontSize: 2.4rem; /* New variable for mobile font size */
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
@@ -22,8 +23,8 @@
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
 
-  --bannerHeight: 100px;
-  --bannerEntryGap: 15px;
+  --bannerPaddingBottom: 25px;
+  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
 
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 10px;
@@ -35,14 +36,16 @@
   --addBtnText: #fff;
 
   /* data button colors */
-  --dataBtnBg: #f2f2f2;
+  --dataBtnBg: #f2f2f2; /* old: keep as comment */
   --dataBtnText: #888;
+  /* --dataBtnBg: #f2f2f2;  old value */
+  /* --dataBtnText: #888;   old value */
 
   --tableWidthPercent: 80%;
-  --toggleRightOffset: 30px;
+  --toggleRightOffset: 30px; /* New variable for toggle right padding */
 }
 
-body, html {
+body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
   font-size: var(--bodyFontSize);
@@ -54,11 +57,9 @@ body, html {
 .title-banner {
   width: 100%;
   background: var(--bannerBg);
-  height: var(--bannerHeight);
-  padding: 0;
+  padding-top: 20px;
+  padding-bottom: var(--bannerPaddingBottom);
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .title-banner h1 {
@@ -66,9 +67,8 @@ body, html {
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
   font-weight: var(--titleWeight);
-  font-size: var(--desktopTitleFontSize);
+  font-size: var(--desktopTitleFontSize); /* Use the new variable */
   color: var(--titleColor);
-  transition: font-size 0.3s ease;
 }
 
 h1 span.space {
@@ -78,9 +78,8 @@ h1 span.space {
 /* toggle switch */
 .switch {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: var(--toggleRightOffset);
+  top: 20px;
+  right: var(--toggleRightOffset); /* Use the new variable */
   display: inline-block;
   width: 50px;
   height: 28px;
@@ -123,24 +122,25 @@ h1 span.space {
 }
 
 .form-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  display: inline-block;
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
   background: rgba(75, 46, 131, 0.16);
   border: 1px solid rgba(75, 46, 131, 0.22);
   border-radius: 40px;
+  transform: scale(var(--formScale));
+  transform-origin: center;
 }
 
 .form-container select,
 .form-container input,
 .form-container button {
+  margin-right: var(--entryGap);
+  margin-bottom: var(--entryGap);
   padding: 10px 16px;
   border-radius: 9999px;
   border: 1px solid #ccc;
-  font-size: 0.95rem;
+  font-size: var(--bodyFontSize);
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
 }
@@ -183,13 +183,10 @@ h1 span.space {
   width: 100%;
   padding: 0;
 }
-
 .table-container .tabulator {
   width: var(--tableWidthPercent);
-  margin: 0 !important;
+  margin: 0;
   box-sizing: border-box;
-  transition: width 0.3s ease;
-  padding: 0 !important;
 }
 
 .tabulator,
