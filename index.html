@@ -2,22 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton V10)</title>
+  <title>Assignment Tracker (Carlton Toggle)</title>
 
-  <!-- Tabulator CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Raleway:wght@300;400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-  <!-- Your CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="title-banner">
-    <h1>Assignment<span class="space"></span>Tracker</h1>
-    <label class="toggle-switch">
-      <input type="checkbox" id="width-toggle">
+    <h1>Assignment<span class="space">  </span>Tracker</h1>
+    <label class="switch">
+      <input type="checkbox" id="table-toggle">
       <span class="slider"></span>
     </label>
   </div>
@@ -29,6 +26,7 @@
         <option value="PHYS 2210">PHYS 2210</option>
         <option value="ECE 1400">ECE 1400</option>
       </select>
+
       <input type="text" id="assignment-input" placeholder="Assignment Name">
       <input type="date" id="due-input">
       <input type="url" id="link-input" placeholder="https://...">
@@ -46,10 +44,8 @@
     <input type="file" id="import-file" accept=".json" style="display:none;">
   </div>
 
-  <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 
-  <!-- Your script -->
   <script src="script.js"></script>
 </body>
 </html>
