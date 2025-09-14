@@ -1,247 +1,195 @@
-function escapeHtml(str) {
-  if (str == null) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('assignmentForm');
+    const assignmentsTableBody = document.querySelector('#assignmentsTable tbody');
+    const viewToggle = document.getElementById('viewToggle');
+    const exportBtn = document.getElementById('exportBtn');
+    const importBtn = document.getElementById('importBtn');
+    const importFile = document.getElementById('importFile');
+    const tableContainer = document.querySelector('.table-container');
+    const title = document.querySelector('.title');
 
-const COLORS = {
-  PHYS: {
-    even: "#dbe7f8",
-    odd: "#edf4fc",
-    header: "#5b78b0"
-  },
-  ECE: {
-    even: "#f8dbdb",
-    odd: "#fceeee",
-    header: "#b04b4b"
-  },
-  MATH: {
-    even: "#faf3d1",
-    odd: "#fffceb",
-    header: "#FFB400"
-  }
-};
+    let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
+    let isEditing = false;
+    let editIndex = -1;
+    let currentSortColumn = 'class';
+    let sortDirection = 'asc';
 
-function parseISODateSafe(str) {
-  if (!str) return null;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
-  if (!m) return null;
-  return new Date(+m[1], +m[2] - 1, +m[3]);
-}
+    const renderTable = (data) => {
+        assignmentsTableBody.innerHTML = '';
+        if (data.length === 0) {
+            assignmentsTableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No assignments added yet.</td></tr>';
+            return;
+        }
+        
+        // Group and sort data
+        const groupedData = data.reduce((acc, assignment) => {
+            (acc[assignment.class] = acc[assignment.class] || []).push(assignment);
+            return acc;
+        }, {});
 
-function formatDueDateISOToDDMONYYYY(iso) {
-  const d = parseISODateSafe(iso);
-  if (!d) return "";
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  return String(d.getDate()).padStart(2, "0") + " " + months[d.getMonth()] + " " + d.getFullYear();
-}
+        const sortedClasses = Object.keys(groupedData).sort();
+        let groupCounter = 0;
 
-let savedData = JSON.parse(localStorage.getItem("assignments")) || [
-  {
-    class: "MATH 1210",
-    assignment: "HW 1",
-    due: "2025-09-01",
-    link: ""
-  },
-  {
-    class: "PHYS 2210",
-    assignment: "Lab 1",
-    due: "2025-09-03",
-    link: ""
-  },
-  {
-    class: "ECE 1400",
-    assignment: "Project Proposal",
-    due: "2025-09-05",
-    link: ""
-  }
-];
+        sortedClasses.forEach(className => {
+            const classAssignments = groupedData[className].sort((a, b) => {
+                if (a.dueDate < b.dueDate) return -1;
+                if (a.dueDate > b.dueDate) return 1;
+                return 0;
+            });
+            const rowClass = groupCounter % 2 === 0 ? 'row-group-even' : 'row-group-odd';
+            groupCounter++;
+            
+            classAssignments.forEach(assignment => {
+                const row = document.createElement('tr');
+                row.className = rowClass;
+                
+                const linkHTML = assignment.link ? `<a href="${assignment.link}" target="_blank">${assignment.name}</a>` : assignment.name;
+                
+                row.innerHTML = `
+                    <td>${assignment.class}</td>
+                    <td>${linkHTML}</td>
+                    <td>${assignment.dueDate}</td>
+                    <td class="actions-cell">
+                        <button class="edit-btn">✏️</button>
+                        <button class="delete-btn">❌</button>
+                    </td>
+                `;
 
-function applyRowBackground(row) {
-  const cls = row.getData().class;
-  const rows = table.getRows().filter(r => r.getData().class === cls);
-  const idx = rows.indexOf(row);
-  const even = idx % 2 === 0;
-  let bg = "";
-  if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-  if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-  if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
-  row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
-}
+                assignmentsTableBody.appendChild(row);
 
-function assignmentFormatter(cell) {
-  const data = cell.getRow().getData();
-  return data.link ? `<a href="${escapeHtml(data.link)}" target="_blank">${escapeHtml(cell.getValue())}</a>` : escapeHtml(cell.getValue());
-}
+                row.querySelector('.edit-btn').addEventListener('click', () => editAssignment(assignment));
+                row.querySelector('.delete-btn').addEventListener('click', () => deleteAssignment(assignment));
+            });
+        });
+    };
 
-function dueFormatter(cell) {
-  return formatDueDateISOToDDMONYYYY(cell.getValue());
-}
+    const saveAssignments = () => {
+        localStorage.setItem('assignments', JSON.stringify(assignments));
+        renderTable(assignments);
+    };
 
-function deleteFormatter() {
-  return "<span class='delete-btn'>&times;</span>";
-}
+    const addOrUpdateAssignment = (e) => {
+        e.preventDefault();
+        const newAssignment = {
+            class: document.getElementById('class').value,
+            name: document.getElementById('name').value,
+            dueDate: document.getElementById('dueDate').value,
+            link: document.getElementById('link').value || null
+        };
 
-const table = new Tabulator("#assignment-table", {
-  data: savedData,
-  layout: "fitColumns",
-  reactiveData: true,
-  groupBy: "class",
-  groupStartOpen: true,
-  groupHeader: function(value) {
-    let bg = "#ddd",
-      fg = "#fff";
-    if (value === "PHYS 2210") {
-      bg = COLORS.PHYS.header;
-      fg = "#fff";
-    }
-    if (value === "ECE 1400") {
-      bg = COLORS.ECE.header;
-      fg = "#fff";
-    }
-    if (value === "MATH 1210") {
-      bg = COLORS.MATH.header;
-      fg = "#fff";
-    }
-    return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
-  },
-  columns: [
-    {
-      title: "Class",
-      field: "class",
-      visible: false
-    },
-    {
-      title: "Assignment",
-      field: "assignment",
-      editor: "input",
-      formatter: assignmentFormatter
-    },
-    {
-      title: "Due Date",
-      field: "due",
-      sorter: (a, b) => parseISODateSafe(a) - parseISODateSafe(b),
-      editor: "date",
-      formatter: dueFormatter
-    },
-    {
-      title: "Link",
-      field: "link",
-      visible: false
-    },
-    {
-      title: "",
-      field: "delete",
-      width: 40,
-      hozAlign: "center",
-      headerSort: false,
-      formatter: deleteFormatter,
-      cellClick: (e, cell) => {
-        cell.getRow().delete();
-        saveData();
-      }
-    }
-  ],
-  rowFormatter: applyRowBackground,
-  renderComplete: function() {
-    this.getRows().forEach(applyRowBackground);
-  },
-  cellEdited: function(cell) {
-    saveData();
-    applyRowBackground(cell.getRow());
-  }
-});
+        if (isEditing) {
+            assignments[editIndex] = newAssignment;
+            isEditing = false;
+            editIndex = -1;
+            document.getElementById('addBtn').textContent = 'Add Assignment';
+        } else {
+            assignments.push(newAssignment);
+        }
+        
+        form.reset();
+        saveAssignments();
+    };
 
-function saveData() {
-  localStorage.setItem("assignments", JSON.stringify(table.getData()));
-}
+    const editAssignment = (assignmentToEdit) => {
+        const index = assignments.indexOf(assignmentToEdit);
+        if (index > -1) {
+            document.getElementById('class').value = assignmentToEdit.class;
+            document.getElementById('name').value = assignmentToEdit.name;
+            document.getElementById('dueDate').value = assignmentToEdit.dueDate;
+            document.getElementById('link').value = assignmentToEdit.link || '';
+            document.getElementById('addBtn').textContent = 'Update Assignment';
+            isEditing = true;
+            editIndex = index;
+        }
+    };
 
-document.getElementById("add-btn").addEventListener("click", () => {
-  const newRow = {
-    class: document.getElementById("class-input").value,
-    assignment: document.getElementById("assignment-input").value,
-    due: document.getElementById("due-input").value,
-    link: document.getElementById("link-input").value
-  };
-  table.addRow(newRow).then(row => {
-    saveData();
-    applyRowBackground(row);
-  });
-  document.getElementById("assignment-input").value = "";
-  document.getElementById("due-input").value = "";
-  document.getElementById("link-input").value = "";
-});
+    const deleteAssignment = (assignmentToDelete) => {
+        if (confirm('Are you sure you want to delete this assignment?')) {
+            assignments = assignments.filter(a => a !== assignmentToDelete);
+            saveAssignments();
+        }
+    };
+    
+    // Initial render
+    renderTable(assignments);
+    
+    // Event Listeners
+    form.addEventListener('submit', addOrUpdateAssignment);
 
-document.getElementById("export-btn").addEventListener("click", () => {
-  const dataStr = JSON.stringify(table.getData(), null, 2);
-  const blob = new Blob([dataStr], {
-    type: "application/json"
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "assignments.json";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
+    viewToggle.addEventListener('change', () => {
+        if (viewToggle.checked) {
+            document.body.classList.add('mobile-view');
+        } else {
+            document.body.classList.remove('mobile-view');
+        }
+    });
 
-document.getElementById("import-btn").addEventListener("click", () => {
-  document.getElementById("import-file").click();
-});
+    exportBtn.addEventListener('click', () => {
+        const dataStr = JSON.stringify(assignments, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'assignments.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 
-document.getElementById("import-file").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      const imported = JSON.parse(ev.target.result);
-      table.replaceData(imported);
-      saveData();
-    } catch {
-      alert("Invalid file format. Please select a valid JSON export.");
-    }
-  };
-  reader.readAsText(file);
-});
+    importBtn.addEventListener('click', () => {
+        importFile.click();
+    });
 
-/* ------------------------
-   Table-width & Title-size toggle logic
-   ------------------------ */
-const toggleInput = document.getElementById("table-toggle");
-const root = document.documentElement;
-const titleElement = document.querySelector(".title-banner h1");
+    importFile.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (Array.isArray(importedData)) {
+                    assignments = importedData;
+                    saveAssignments();
+                    alert('Data imported successfully!');
+                } else {
+                    alert('Invalid JSON file format. Please import a JSON array.');
+                }
+            } catch (error) {
+                alert('Failed to parse JSON file.');
+            }
+        };
+        reader.readAsText(file);
+    });
 
-function setDisplayMode(mode) {
-  const tableWidth = (mode === "compact") ? "100%" : "80%";
-  const titleSize = (mode === "compact") ? "var(--mobileTitleFontSize)" : "var(--desktopTitleFontSize)";
-  root.style.setProperty("--tableWidthPercent", tableWidth);
-  titleElement.style.fontSize = titleSize;
-  try {
-    localStorage.setItem("displayMode", mode);
-  } catch (e) {
-    console.error("Failed to save to localStorage:", e);
-  }
-}
+    const sortTable = (column) => {
+        if (currentSortColumn === column) {
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortColumn = column;
+            sortDirection = 'asc';
+        }
 
-// Initial state setup
-const savedMode = localStorage.getItem("displayMode");
-if (savedMode) {
-  toggleInput.checked = (savedMode === "compact");
-  setDisplayMode(savedMode);
-} else {
-  // Default to full mode if no preference is saved
-  setDisplayMode("full");
-  toggleInput.checked = false;
-}
+        const sortedAssignments = [...assignments].sort((a, b) => {
+            const valA = a[column];
+            const valB = b[column];
+            if (valA < valB) {
+                return sortDirection === 'asc' ? -1 : 1;
+            }
+            if (valA > valB) {
+                return sortDirection === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+        
+        renderTable(sortedAssignments);
+    };
 
-toggleInput.addEventListener("change", () => {
-  const newMode = toggleInput.checked ? "compact" : "full";
-  setDisplayMode(newMode);
+    document.querySelectorAll('#assignmentsTable th[data-sort]').forEach(header => {
+        header.addEventListener('click', (e) => {
+            sortTable(e.target.dataset.sort);
+        });
+    });
 });
