@@ -1,173 +1,132 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- DOM Element and Variable Initialization ---
+    const tableContainer = document.getElementById('assignment-table');
     const assignmentForm = document.getElementById('assignment-form');
-    const classSelect = document.getElementById('class-select');
-    const assignmentNameInput = document.getElementById('assignment-name');
-    const assignmentLinkInput = document.getElementById('assignment-link');
-    const dueDateInput = document.getElementById('due-date');
-    const widthToggle = document.getElementById('width-toggle');
-    const titleElement = document.querySelector('.title');
+    const classInput = document.getElementById('class-input');
+    const assignmentInput = document.getElementById('assignment-input');
+    const dueDateInput = document.getElementById('due-date-input');
+    const linkInput = document.getElementById('link-input');
+    const modeToggle = document.getElementById('mode-toggle');
     const exportDataBtn = document.getElementById('export-data-btn');
     const importDataBtn = document.getElementById('import-data-btn');
-    const importFileInput = document.getElementById('import-file-input');
+    const importDataInput = document.getElementById('import-data-input');
+    
+    let table;
 
-    // --- Tabulator Table Setup ---
-    let table = new Tabulator("#assignment-table", {
-        layout: "fitColumns",
-        history: true,
-        data: [], // Initial empty data, will be loaded from localStorage
-        groupBy: "class",
-        groupHeader: function(value, count, data, group){
-            return value;
-        },
-        columns: [
-            {
-                title: "Class", 
-                field: "class", 
-                width: 150, 
-                sorter: "string", 
-                headerFilter: true, 
-                editor: "select", 
-                editorParams: {
-                    values: ["MATH 1210", "PHYS 2210", "ECE 1400"]
-                }
-            },
-            {
-                title: "Assignment", 
-                field: "assignment", 
-                sorter: "string", 
-                formatter: function(cell, formatterParams, onRendered) {
-                    const link = cell.getRow().getData().link;
-                    const value = cell.getValue();
-                    if (link) {
-                        return `<a href="${link}" target="_blank" style="color: blue; text-decoration: underline;">${value}</a>`;
-                    }
-                    return value;
-                },
-                editor: true
-            },
-            {
-                title: "Due Date", 
-                field: "dueDate", 
-                width: 120, 
-                sorter: "date", 
-                formatter: "datetime", 
-                formatterParams: {
-                    inputFormat: "YYYY-MM-DD",
-                    outputFormat: "MM/DD/YYYY"
-                },
-                editor: "date",
-                editorParams: {
-                    format: "YYYY-MM-DD"
-                }
-            },
-            {
-                title: "Link", 
-                field: "link", 
-                visible: false,
-                editor: true
-            },
-            {
-                formatter: "buttonCross",
-                width: 40,
-                align: "center",
-                cellClick: function(e, cell) {
-                    cell.getRow().delete();
-                },
-                cssClass: "delete-cell"
-            }
-        ],
-        rowDeleted: function(row) {
-            saveData();
-        },
-        cellEdited: function(cell) {
-            saveData();
-        }
-    });
-
-    // --- Local Storage Management ---
-    const saveData = () => {
-        localStorage.setItem('assignments', JSON.stringify(table.getData()));
-    };
-
+    // Load data from local storage
     const loadData = () => {
-        const storedData = localStorage.getItem('assignments');
-        if (storedData) {
-            table.setData(JSON.parse(storedData));
-        }
+        const data = localStorage.getItem('assignments');
+        return data ? JSON.parse(data) : [];
     };
 
-    // --- Event Listeners ---
+    // Save data to local storage
+    const saveData = (data) => {
+        localStorage.setItem('assignments', JSON.stringify(data));
+    };
+
+    // Initialize the Tabulator table
+    const initializeTable = () => {
+        const initialData = loadData();
+        
+        table = new Tabulator(tableContainer, {
+            data: initialData,
+            layout: "fitColumns",
+            groupHeader: (value, count, data) => `${value} <span style="color:#fff; margin-left:10px; font-weight:normal;">(${count} Assignments)</span>`,
+            group: "class",
+            groupToggleElement: "header",
+            columns: [
+                { title: "Class", field: "class", visible: false },
+                {
+                    title: "Assignment",
+                    field: "assignment",
+                    formatter: (cell, formatterParams, onRendered) => {
+                        const data = cell.getRow().getData();
+                        if (data.link) {
+                            return `<a href="${data.link}" target="_blank" style="color: #4b2e83; text-decoration: none;">${data.assignment}</a>`;
+                        }
+                        return data.assignment;
+                    }
+                },
+                {
+                    title: "Due Date",
+                    field: "dueDate",
+                    sorter: "date",
+                    formatter: (cell) => {
+                        const date = new Date(cell.getValue());
+                        return isNaN(date) ? "" : date.toLocaleDateString('en-US', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        }).toUpperCase().replace(/\./g, '');
+                    }
+                },
+                {
+                    title: "Delete",
+                    field: "delete",
+                    formatter: () => `<span class="delete-btn">❌</span>`,
+                    width: 50,
+                    hozAlign: "center",
+                    cellClick: (e, cell) => {
+                        cell.getRow().delete();
+                    }
+                },
+            ],
+            rowDeleted: (row) => {
+                saveData(table.getData());
+            },
+            dataLoaded: (data) => {
+                saveData(data);
+            }
+        });
+    };
+
+    // Handle form submission
     assignmentForm.addEventListener('submit', (e) => {
         e.preventDefault();
-
         const newAssignment = {
-            class: classSelect.value,
-            assignment: assignmentNameInput.value,
-            link: assignmentLinkInput.value,
+            class: classInput.value,
+            assignment: assignmentInput.value,
             dueDate: dueDateInput.value,
-            id: Date.now() // Unique ID for each row
+            link: linkInput.value || null,
         };
-
-        table.addData([newAssignment], false);
-        saveData();
-
-        // Clear the form fields
-        assignmentNameInput.value = '';
-        assignmentLinkInput.value = '';
-        dueDateInput.value = '';
+        table.addData([newAssignment], true);
+        saveData(table.getData());
+        assignmentForm.reset();
     });
 
-    widthToggle.addEventListener('change', (e) => {
-        const tableElement = document.getElementById('assignment-table');
-        const root = document.documentElement;
-
-        if (e.target.checked) {
-            // Full width mode
-            root.style.setProperty('--tableWidthPercent', '100%');
-            root.style.setProperty('--currentTitleFontSize', 'var(--mobileTitleFontSize)');
-            tableElement.style.removeProperty('margin-right');
-            document.querySelector('.data-buttons-container').style.alignSelf = 'center';
-            document.querySelector('.data-buttons-container').style.marginRight = '0';
-        } else {
-            // Compact mode
-            root.style.setProperty('--tableWidthPercent', '80%');
-            root.style.setProperty('--currentTitleFontSize', 'var(--desktopTitleFontSize)');
-            document.querySelector('.data-buttons-container').style.alignSelf = 'flex-end';
-            document.querySelector('.data-buttons-container').style.marginRight = 'calc(100% - var(--tableWidthPercent) - var(--tableRightEdgePadding))';
-        }
-
-        table.redraw(true); // Redraw the table to adjust to new width
+    // Handle toggle switch
+    modeToggle.addEventListener('change', () => {
+        document.body.classList.toggle('mobile-mode', modeToggle.checked);
     });
 
-    // --- Export/Import Functionality ---
+    // Handle export button
     exportDataBtn.addEventListener('click', () => {
         table.download("json", "assignments.json");
     });
 
+    // Handle import button
     importDataBtn.addEventListener('click', () => {
-        importFileInput.click();
+        importDataInput.click();
     });
 
-    importFileInput.addEventListener('change', (e) => {
+    importDataInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    const importedData = JSON.parse(event.target.result);
-                    table.setData(importedData);
-                    saveData();
-                } catch (error) {
-                    alert("Invalid JSON file. Please ensure the file is in the correct format.");
-                    console.error("Error importing file:", error);
-                }
-            };
-            reader.readAsText(file);
-        }
-    });
+        if (!file) return;
 
-    // Initial load of data when the page loads
-    loadData();
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                table.setData(importedData);
+                saveData(importedData);
+                alert("Data imported successfully!");
+            } catch (error) {
+                alert("Failed to import data. Please ensure the file is a valid JSON.");
+                console.error("Import error:", error);
+            }
+        };
+        reader.readAsText(file);
+    });
+    
+    // Initialize the table when the page loads
+    initializeTable();
 });
