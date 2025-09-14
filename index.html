@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton Toggle)</title>
+  <meta charset="utf-8" />
+  <title>Assignment Tracker (Carlton V9 - split)</title>
 
   <!-- Tabulator Modern CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-  <!-- local stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="title-banner">
     <h1>Assignment<span class="space">  </span>Tracker</h1>
-    <!-- toggle: actual switch -->
-    <label class="switch">
-      <input type="checkbox" id="table-toggle">
-      <span class="slider"></span>
-    </label>
+
+    <div class="toggle-wrapper" aria-hidden="false">
+      <div class="toggle-icons" title="Desktop (80%)">💻</div>
+      <label class="switch" aria-label="table width toggle">
+        <input id="table-toggle" type="checkbox">
+        <span class="slider"></span>
+      </label>
+      <div class="toggle-icons" title="Mobile (100%)">📱</div>
+    </div>
   </div>
 
   <div class="form-wrap">
-    <div class="form-container">
+    <div class="form-container" id="entry-container">
       <select id="class-input">
         <option value="MATH 1210">MATH 1210</option>
         <option value="PHYS 2210">PHYS 2210</option>
         <option value="ECE 1400">ECE 1400</option>
       </select>
 
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
+      <input type="text" id="assignment-input" placeholder="Assignment Name" />
+      <input type="date" id="due-input" />
+      <input type="url" id="link-input" placeholder="https://..." />
       <button id="add-btn">Add Assignment</button>
     </div>
   </div>
@@ -45,13 +49,13 @@
   <div class="data-buttons">
     <button id="export-btn">Export Data</button>
     <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
+    <input type="file" id="import-file" accept=".json" style="display:none" />
   </div>
 
   <!-- Tabulator JS -->
   <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
 
-  <!-- local script -->
+  <!-- Custom JS -->
   <script src="script.js"></script>
 </body>
 </html>
