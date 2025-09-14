@@ -10,37 +10,19 @@ function escapeHtml(str) {
 
 const COLORS = {
   PHYS: {
-    even: "#dbe7f8",
-    odd: "#edf4fc",
-    header: "#5b78b0"
+    even: getComputedStyle(document.documentElement).getPropertyValue('--PHYS-even-bg').trim(),
+    odd: getComputedStyle(document.documentElement).getPropertyValue('--PHYS-odd-bg').trim(),
+    header: getComputedStyle(document.documentElement).getPropertyValue('--PHYS-header-bg').trim()
   },
   ECE: {
-    even: "#f8dbdb",
-    odd: "#fceeee",
-    header: "#b04b4b"
+    even: getComputedStyle(document.documentElement).getPropertyValue('--ECE-even-bg').trim(),
+    odd: getComputedStyle(document.documentElement).getPropertyValue('--ECE-odd-bg').trim(),
+    header: getComputedStyle(document.documentElement).getPropertyValue('--ECE-header-bg').trim()
   },
   MATH: {
-    even: "#faf3d1",
-    odd: "#fffceb",
-    header: "#FFB400"
-  }
-};
-
-const DARK_COLORS = {
-  PHYS: {
-    even: "#303a4b",
-    odd: "#3b4a62",
-    header: "#6d86b9"
-  },
-  ECE: {
-    even: "#4b3030",
-    odd: "#623b3b",
-    header: "#b96d6d"
-  },
-  MATH: {
-    even: "#4b452f",
-    odd: "#625b3a",
-    header: "#E6B800"
+    even: getComputedStyle(document.documentElement).getPropertyValue('--MATH-even-bg').trim(),
+    odd: getComputedStyle(document.documentElement).getPropertyValue('--MATH-odd-bg').trim(),
+    header: getComputedStyle(document.documentElement).getPropertyValue('--MATH-header-bg').trim()
   }
 };
 
@@ -80,16 +62,17 @@ let savedData = JSON.parse(localStorage.getItem("assignments")) || [
 ];
 
 function applyRowBackground(row) {
-  const isDarkMode = document.body.classList.contains('dark-mode');
-  const colors = isDarkMode ? DARK_COLORS : COLORS;
   const cls = row.getData().class;
   const rows = table.getRows().filter(r => r.getData().class === cls);
   const idx = rows.indexOf(row);
   const even = idx % 2 === 0;
+
+  // Use the new CSS variables for colors
   let bg = "";
-  if (cls === "PHYS 2210") bg = even ? colors.PHYS.even : colors.PHYS.odd;
-  if (cls === "ECE 1400") bg = even ? colors.ECE.even : colors.ECE.odd;
-  if (cls === "MATH 1210") bg = even ? colors.MATH.even : colors.MATH.odd;
+  if (cls === "PHYS 2210") bg = even ? getComputedStyle(document.documentElement).getPropertyValue('--PHYS-even-bg').trim() : getComputedStyle(document.documentElement).getPropertyValue('--PHYS-odd-bg').trim();
+  if (cls === "ECE 1400") bg = even ? getComputedStyle(document.documentElement).getPropertyValue('--ECE-even-bg').trim() : getComputedStyle(document.documentElement).getPropertyValue('--ECE-odd-bg').trim();
+  if (cls === "MATH 1210") bg = even ? getComputedStyle(document.documentElement).getPropertyValue('--MATH-even-bg').trim() : getComputedStyle(document.documentElement).getPropertyValue('--MATH-odd-bg').trim();
+  
   row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
 }
 
@@ -113,19 +96,18 @@ const table = new Tabulator("#assignment-table", {
   groupBy: "class",
   groupStartOpen: true,
   groupHeader: function(value) {
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const colors = isDarkMode ? DARK_COLORS : COLORS;
-    let bg = "#ddd", fg = "#fff";
+    let bg = "#ddd",
+      fg = "#fff";
     if (value === "PHYS 2210") {
-      bg = colors.PHYS.header;
+      bg = getComputedStyle(document.documentElement).getPropertyValue('--PHYS-header-bg').trim();
       fg = "#fff";
     }
     if (value === "ECE 1400") {
-      bg = colors.ECE.header;
+      bg = getComputedStyle(document.documentElement).getPropertyValue('--ECE-header-bg').trim();
       fg = "#fff";
     }
     if (value === "MATH 1210") {
-      bg = colors.MATH.header;
+      bg = getComputedStyle(document.documentElement).getPropertyValue('--MATH-header-bg').trim();
       fg = "#fff";
     }
     return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
@@ -233,26 +215,39 @@ document.getElementById("import-file").addEventListener("change", (e) => {
 });
 
 /* ------------------------
-    Toggle logic
+    Theme and Table-width toggle logic
     ------------------------ */
 const toggleInput = document.getElementById("table-toggle");
+const html = document.documentElement;
 
-function setDarkMode(isDark) {
-  if (isDark) {
-    document.body.classList.add('dark-mode');
-  } else {
-    document.body.classList.remove('dark-mode');
+function setTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  try {
+    localStorage.setItem("theme", theme);
+  } catch (e) {
+    console.error("Failed to save to localStorage:", e);
   }
-  localStorage.setItem('darkMode', isDark);
-  table.getRows().forEach(applyRowBackground);
-  table.redraw(true); // Redraw the table to apply new group header colors
 }
 
 // Initial state setup
-const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-toggleInput.checked = savedDarkMode;
-setDarkMode(savedDarkMode);
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  toggleInput.checked = (savedTheme === 'dark');
+  setTheme(savedTheme);
+} else {
+  // Default to light mode if no preference is saved
+  setTheme('light');
+  toggleInput.checked = false;
+}
 
 toggleInput.addEventListener("change", () => {
-  setDarkMode(toggleInput.checked);
+  const newTheme = toggleInput.checked ? "dark" : "light";
+  setTheme(newTheme);
 });
+
+// Update table colors when the theme changes
+const observer = new MutationObserver(() => {
+  table.getRows().forEach(applyRowBackground);
+  table.redraw(true); // Redraw the table to update header colors
+});
+observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
