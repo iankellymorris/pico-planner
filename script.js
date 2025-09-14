@@ -216,13 +216,16 @@ document.getElementById("import-file").addEventListener("change", (e) => {
     ------------------------ */
 const toggleInput = document.getElementById("table-toggle");
 const root = document.documentElement;
-const titleElement = document.querySelector(".title-banner h1");
+
+// We no longer need to reference the titleElement in the JS
+// const titleElement = document.querySelector(".title-banner h1");
 
 function setDisplayMode(mode) {
-  const tableWidth = (mode === "compact") ? "100%" : "80%";
-  const titleSize = (mode === "compact") ? "var(--mobileTitleFontSize)" : "var(--desktopTitleFontSize)";
-  root.style.setProperty("--tableWidthPercent", tableWidth);
-  titleElement.style.fontSize = titleSize;
+  // We no longer need this logic in JS as it is now handled by CSS
+  // const tableWidth = (mode === "compact") ? "100%" : "80%";
+  // const titleSize = (mode === "compact") ? "var(--mobileTitleFontSize)" : "var(--desktopTitleFontSize)";
+  // root.style.setProperty("--tableWidthPercent", tableWidth);
+  // titleElement.style.fontSize = titleSize;
   try {
     localStorage.setItem("displayMode", mode);
   } catch (e) {
@@ -234,10 +237,12 @@ function setDisplayMode(mode) {
 const savedMode = localStorage.getItem("displayMode");
 if (savedMode) {
   toggleInput.checked = (savedMode === "compact");
-  setDisplayMode(savedMode);
+  // We no longer need to call setDisplayMode here
+  // setDisplayMode(savedMode);
 } else {
   // Default to full mode if no preference is saved
-  setDisplayMode("full");
+  // We no longer need to call setDisplayMode here
+  // setDisplayMode("full");
   toggleInput.checked = false;
 }
 
