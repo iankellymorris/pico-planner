@@ -268,7 +268,11 @@ h1 span.space {
 }
 
 @media (max-width: 768px) {
-  /* This rule now sets the font size directly for mobile */
+  /* New rule to hide assignment entry in mobile mode */
+  .form-wrap {
+    display: none;
+  }
+  
   .title-banner h1 {
     font-size: var(--mobileTitleFontSize);
   }
@@ -276,8 +280,14 @@ h1 span.space {
   :root {
     --tableWidthPercent: 100%;
   }
+}
 
-  .form-wrap {
-    display: none;
-  }
+/* This is the new rule for desktop sizing when the toggle is checked */
+.switch input:checked + .slider ~ .title-banner h1 {
+  font-size: var(--mobileTitleFontSize);
+}
+
+/* This is the new rule for desktop sizing when the toggle is checked */
+.switch input:checked + .slider ~ .table-container .tabulator {
+  width: 100%;
 }
