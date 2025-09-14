@@ -12,42 +12,129 @@
   --bodyWeight: 400;
   --bodyWeightBold: 700;
 
-  --desktopTitleFontSize: 3.2rem; /* Renamed for clarity */
-  --mobileTitleFontSize: 2.4rem; /* New variable for mobile font size */
+  --desktopTitleFontSize: 3.2rem;
+  --mobileTitleFontSize: 2.4rem;
   --bodyFontSize: 1rem;
   --buttonFontSize: 0.95rem;
   --tableFontSize: 1rem;
 
-  /* colors */
+  /* light mode colors */
   --titleColor: #4b2e83;
   --backgroundColor: #ede3fa;
   --bannerBg: #fdf6e3;
+  --addBtnColor: #C71585;
+  --addBtnText: #fff;
+  --dataBtnBg: #f2f2f2;
+  --dataBtnText: #888;
+  --formBg: rgba(75, 46, 131, 0.16);
+  --formBorder: rgba(75, 46, 131, 0.22);
+  --inputBorder: #ccc;
+  --inputBg: white;
+  --inputColor: #000;
+  --selectArrow: #555;
+  --deleteBtnColor: rgba(0, 0, 0, 0.32);
+  --deleteBtnHover: rgba(0, 0, 0, 0.6);
+  --tabulatorBorder: #ddd;
+
+  /* dark mode colors */
+  --darkTitleColor: #a983e8;
+  --darkBackgroundColor: #1e1e1e;
+  --darkBannerBg: #2b2b2b;
+  --darkAddBtnColor: #e57373;
+  --darkAddBtnText: #fff;
+  --darkDataBtnBg: #333;
+  --darkDataBtnText: #bbb;
+  --darkFormBg: rgba(169, 131, 232, 0.16);
+  --darkFormBorder: rgba(169, 131, 232, 0.22);
+  --darkInputBorder: #555;
+  --darkInputBg: #333;
+  --darkInputColor: #ddd;
+  --darkSelectArrow: #bbb;
+  --darkDeleteBtnColor: rgba(255, 255, 255, 0.32);
+  --darkDeleteBtnHover: rgba(255, 255, 255, 0.6);
+  --darkTabulatorBorder: #555;
 
   --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px; /* new variable: gap between banner and entry */
-
+  --bannerEntryGap: 15px;
   --entryPaddingTop: 18px;
   --entryPaddingBottom: 10px;
   --entryPaddingLeft: 22px;
   --entryPaddingRight: 14px;
   --entryGap: 10px;
-
-  --addBtnColor: #C71585;
-  --addBtnText: #fff;
-
-  /* data button colors */
-  --dataBtnBg: #f2f2f2; /* old: keep as comment */
-  --dataBtnText: #888;
-  /* --dataBtnBg: #f2f2f2;  old value */
-  /* --dataBtnText: #888;  old value */
-
   --tableWidthPercent: 80%;
-  --toggleRightOffset: 30px; /* New variable for toggle right padding */
-
-  /* new variable for banner height */
+  --toggleRightOffset: 30px;
   --bannerHeight: 100px;
 }
 
+/* Dark mode styles */
+body.dark-mode {
+  color: var(--darkDataBtnText);
+  background: var(--darkBackgroundColor);
+}
+
+body.dark-mode .title-banner {
+  background: var(--darkBannerBg);
+}
+
+body.dark-mode .title-banner h1 {
+  color: var(--darkTitleColor);
+}
+
+body.dark-mode .form-container {
+  background: var(--darkFormBg);
+  border: 1px solid var(--darkFormBorder);
+}
+
+body.dark-mode .form-container select,
+body.dark-mode .form-container input,
+body.dark-mode .form-container button {
+  border: 1px solid var(--darkInputBorder);
+  background: var(--darkInputBg);
+  color: var(--darkInputColor);
+}
+
+body.dark-mode .form-container select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--darkSelectArrow) 50%),
+    linear-gradient(135deg, var(--darkSelectArrow) 50%, transparent 50%);
+}
+
+body.dark-mode #add-btn {
+  background: var(--darkAddBtnColor);
+  color: var(--darkAddBtnText);
+}
+
+body.dark-mode #add-btn:hover {
+  opacity: 0.82;
+}
+
+body.dark-mode .data-buttons button {
+  background: var(--darkDataBtnBg);
+  color: var(--darkDataBtnText);
+  border: 1px solid var(--darkInputBorder);
+}
+
+body.dark-mode .data-buttons button:hover {
+  background: #444;
+}
+
+body.dark-mode .delete-btn {
+  color: var(--darkDeleteBtnColor);
+}
+
+body.dark-mode .delete-btn:hover {
+  color: var(--darkDeleteBtnHover);
+}
+
+body.dark-mode .tabulator-row.tabulator-group-header {
+  border-bottom: 1px solid var(--darkTabulatorBorder);
+  border-top: 1px solid var(--darkTabulatorBorder);
+}
+
+body.dark-mode .tabulator-group-header .tabulator-group-level-0 {
+  border-bottom: none;
+}
+
+/* Base styles */
 body {
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
@@ -55,6 +142,7 @@ body {
   margin: 0;
   padding: 0;
   background: var(--backgroundColor);
+  color: #000;
 }
 
 .title-banner {
@@ -63,7 +151,6 @@ body {
   padding-top: 20px;
   padding-bottom: var(--bannerPaddingBottom);
   position: relative;
-  /* new line: set height */
   height: var(--bannerHeight);
 }
 
@@ -72,9 +159,8 @@ body {
   padding-left: var(--titleLeftEdgePadding);
   font-family: var(--titleFont);
   font-weight: var(--titleWeight);
-  font-size: var(--desktopTitleFontSize); /* Use the new variable */
+  font-size: var(--desktopTitleFontSize);
   color: var(--titleColor);
-  /* new lines for vertical centering */
   display: flex;
   align-items: center;
   height: 100%;
@@ -84,7 +170,6 @@ h1 span.space {
   white-space: pre;
 }
 
-/* toggle switch */
 .switch {
   position: absolute;
   top: 50%;
@@ -126,7 +211,6 @@ h1 span.space {
   transform: translateX(22px);
 }
 
-/* form */
 .form-wrap {
   text-align: center;
 }
@@ -135,8 +219,8 @@ h1 span.space {
   display: inline-block;
   margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
   padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-  background: rgba(75, 46, 131, 0.16);
-  border: 1px solid rgba(75, 46, 131, 0.22);
+  background: var(--formBg);
+  border: 1px solid var(--formBorder);
   border-radius: 40px;
   transform: scale(var(--formScale));
   transform-origin: center;
@@ -149,10 +233,12 @@ h1 span.space {
   margin-bottom: var(--entryGap);
   padding: 10px 16px;
   border-radius: 9999px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--inputBorder);
+  background: var(--inputBg);
   font-size: var(--bodyFontSize);
   font-family: var(--bodyFont);
   font-weight: var(--bodyWeight);
+  color: var(--inputColor);
 }
 
 #assignment-input {
@@ -165,9 +251,8 @@ h1 span.space {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 32px;
-  background: white;
-  background-image: linear-gradient(45deg, transparent 50%, #555 50%),
-    linear-gradient(135deg, #555 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--selectArrow) 50%),
+    linear-gradient(135deg, var(--selectArrow) 50%, transparent 50%);
   background-position: calc(100% - 19px) calc(50% - 0px),
     calc(100% - 14px) calc(50% - 0px);
   background-size: 6px 6px, 6px 6px;
@@ -233,7 +318,7 @@ h1 span.space {
   cursor: pointer;
   font-size: 1.15rem;
   font-family: "Courier New", monospace;
-  color: rgba(0, 0, 0, 0.32);
+  color: var(--deleteBtnColor);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,7 +326,7 @@ h1 span.space {
   padding-right: 10px;
 }
 .delete-btn:hover {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--deleteBtnHover);
 }
 
 .data-buttons {
@@ -268,7 +353,6 @@ h1 span.space {
 }
 
 @media (max-width: 768px) {
-  /* New rule to hide assignment entry in mobile mode */
   .form-wrap {
     display: none;
   }
@@ -282,12 +366,12 @@ h1 span.space {
   }
 }
 
-/* This is the new rule for desktop sizing when the toggle is checked */
+/* These rules are no longer needed as the JS now handles the toggle logic */
+/*
 .switch input:checked + .slider ~ .title-banner h1 {
   font-size: var(--mobileTitleFontSize);
 }
-
-/* This is the new rule for desktop sizing when the toggle is checked */
 .switch input:checked + .slider ~ .table-container .tabulator {
   width: 100%;
 }
+*/
