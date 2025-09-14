@@ -26,6 +26,24 @@ const COLORS = {
   }
 };
 
+const DARK_COLORS = {
+  PHYS: {
+    even: "#303a4b",
+    odd: "#3b4a62",
+    header: "#6d86b9"
+  },
+  ECE: {
+    even: "#4b3030",
+    odd: "#623b3b",
+    header: "#b96d6d"
+  },
+  MATH: {
+    even: "#4b452f",
+    odd: "#625b3a",
+    header: "#E6B800"
+  }
+};
+
 function parseISODateSafe(str) {
   if (!str) return null;
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(str);
@@ -62,14 +80,16 @@ let savedData = JSON.parse(localStorage.getItem("assignments")) || [
 ];
 
 function applyRowBackground(row) {
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  const colors = isDarkMode ? DARK_COLORS : COLORS;
   const cls = row.getData().class;
   const rows = table.getRows().filter(r => r.getData().class === cls);
   const idx = rows.indexOf(row);
   const even = idx % 2 === 0;
   let bg = "";
-  if (cls === "PHYS 2210") bg = even ? COLORS.PHYS.even : COLORS.PHYS.odd;
-  if (cls === "ECE 1400") bg = even ? COLORS.ECE.even : COLORS.ECE.odd;
-  if (cls === "MATH 1210") bg = even ? COLORS.MATH.even : COLORS.MATH.odd;
+  if (cls === "PHYS 2210") bg = even ? colors.PHYS.even : colors.PHYS.odd;
+  if (cls === "ECE 1400") bg = even ? colors.ECE.even : colors.ECE.odd;
+  if (cls === "MATH 1210") bg = even ? colors.MATH.even : colors.MATH.odd;
   row.getElement().querySelectorAll(".tabulator-cell").forEach(c => c.style.background = bg);
 }
 
@@ -93,18 +113,19 @@ const table = new Tabulator("#assignment-table", {
   groupBy: "class",
   groupStartOpen: true,
   groupHeader: function(value) {
-    let bg = "#ddd",
-      fg = "#fff";
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const colors = isDarkMode ? DARK_COLORS : COLORS;
+    let bg = "#ddd", fg = "#fff";
     if (value === "PHYS 2210") {
-      bg = COLORS.PHYS.header;
+      bg = colors.PHYS.header;
       fg = "#fff";
     }
     if (value === "ECE 1400") {
-      bg = COLORS.ECE.header;
+      bg = colors.ECE.header;
       fg = "#fff";
     }
     if (value === "MATH 1210") {
-      bg = COLORS.MATH.header;
+      bg = colors.MATH.header;
       fg = "#fff";
     }
     return `<div style="background:${bg};color:${fg};padding:6px 10px;border-radius:6px;font-weight:bold;">${value}</div>`;
@@ -212,41 +233,26 @@ document.getElementById("import-file").addEventListener("change", (e) => {
 });
 
 /* ------------------------
-    Table-width & Title-size toggle logic
+    Toggle logic
     ------------------------ */
 const toggleInput = document.getElementById("table-toggle");
-const root = document.documentElement;
 
-// We no longer need to reference the titleElement in the JS
-// const titleElement = document.querySelector(".title-banner h1");
-
-function setDisplayMode(mode) {
-  // We no longer need this logic in JS as it is now handled by CSS
-  // const tableWidth = (mode === "compact") ? "100%" : "80%";
-  // const titleSize = (mode === "compact") ? "var(--mobileTitleFontSize)" : "var(--desktopTitleFontSize)";
-  // root.style.setProperty("--tableWidthPercent", tableWidth);
-  // titleElement.style.fontSize = titleSize;
-  try {
-    localStorage.setItem("displayMode", mode);
-  } catch (e) {
-    console.error("Failed to save to localStorage:", e);
+function setDarkMode(isDark) {
+  if (isDark) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
   }
+  localStorage.setItem('darkMode', isDark);
+  table.getRows().forEach(applyRowBackground);
+  table.redraw(true); // Redraw the table to apply new group header colors
 }
 
 // Initial state setup
-const savedMode = localStorage.getItem("displayMode");
-if (savedMode) {
-  toggleInput.checked = (savedMode === "compact");
-  // We no longer need to call setDisplayMode here
-  // setDisplayMode(savedMode);
-} else {
-  // Default to full mode if no preference is saved
-  // We no longer need to call setDisplayMode here
-  // setDisplayMode("full");
-  toggleInput.checked = false;
-}
+const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+toggleInput.checked = savedDarkMode;
+setDarkMode(savedDarkMode);
 
 toggleInput.addEventListener("change", () => {
-  const newMode = toggleInput.checked ? "compact" : "full";
-  setDisplayMode(newMode);
+  setDarkMode(toggleInput.checked);
 });
