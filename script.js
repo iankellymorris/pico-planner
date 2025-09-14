@@ -212,8 +212,8 @@ document.getElementById("import-file").addEventListener("change", (e) => {
 });
 
 /* ------------------------
-   Table-width & Title-size toggle logic
-   ------------------------ */
+    Table-width & Title-size toggle logic
+    ------------------------ */
 const toggleInput = document.getElementById("table-toggle");
 const root = document.documentElement;
 const titleElement = document.querySelector(".title-banner h1");
