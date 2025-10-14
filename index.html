@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Assignment Tracker (Carlton Toggle)</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/css/tabulator_modern.min.css" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="title-banner">
-    <h1>Assignment<span class="space">  </span>Tracker</h1>
-    <label class="switch">
-      <input type="checkbox" id="table-toggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-
-  <div class="form-wrap">
-    <div class="form-container">
-      <select id="class-input">
-        <option value="MATH 1210">MATH 1210</option>
-        <option value="PHYS 2210">PHYS 2210</option>
-        <option value="ECE 1400">ECE 1400</option>
-      </select>
-
-      <input type="text" id="assignment-input" placeholder="Assignment Name">
-      <input type="date" id="due-input">
-      <input type="url" id="link-input" placeholder="https://...">
-      <button id="add-btn">Add Assignment</button>
+<body data-theme="dark">
+    <div class="header-banner">
+        <h1 id="page-title">Assignment Tracker</h1>
+        <div class="controls">
+            <label class="toggle-container">
+                <input type="checkbox" id="darkModeToggle" checked>
+                <span class="slider round" title="Toggle Dark/Light Mode"></span>
+            </label>
+            <label class="toggle-container">
+                <input type="checkbox" id="groupByClassToggle">
+                <span class="slider round" title="Group Assignments by Class"></span>
+            </label>
+        </div>
     </div>
-  </div>
 
-  <div class="table-container">
-    <div id="assignment-table"></div>
-  </div>
+    <div class="container">
+        <div class="assignment-entry">
+            <h2>Add New Assignment</h2>
+            <div class="form-row">
+                <select id="classDropdown">
+                    <option value="MATH 1210">MATH 1210</option>
+                    <option value="PHYS 2210">PHYS 2210</option>
+                    <option value="ECE 1400">ECE 1400</option>
+                </select>
+                <input type="text" id="assignmentName" placeholder="Assignment Name" required>
+                <input type="url" id="assignmentLink" placeholder="Link (Optional)">
+                <input type="date" id="dueDate" required>
+                <button id="addAssignmentBtn">Add Assignment</button>
+            </div>
+        </div>
 
-  <div class="data-buttons">
-    <button id="export-btn">Export Data</button>
-    <button id="import-btn">Import Data</button>
-    <input type="file" id="import-file" accept=".json" style="display:none;">
-  </div>
+        <div class="assignments-table-container">
+            <h3>Assignments Due</h3>
+            <table id="assignmentsTable">
+                <thead>
+                    <tr>
+                        <th>Assignment</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+        <div class="data-controls">
+            <button id="exportDataBtn">Export Data</button>
+            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            <button id="importDataBtn">Import Data</button>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
