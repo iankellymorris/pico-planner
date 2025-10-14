@@ -1,376 +1,279 @@
+/* Color Variables */
 :root {
-  --entryTableDelta: 20px;
-  --titleLeftEdgePadding: 25px;
-  --tableRightEdgePadding: 16px;
-  --dropdownWidth: 180px;
-  --formScale: 0.85;
+    /* Title */
+    --title-color-light: #FF4500; /* Red Orange */
+    --title-color-dark: #FFA07A; /* Lighter Orange for visibility */
 
-  /* fonts */
-  --titleFont: 'Fraunces', serif;
-  --bodyFont: 'Lato', sans-serif;
-  --titleWeight: 900;
-  --bodyWeight: 400;
-  --bodyWeightBold: 700;
+    /* Banner */
+    --banner-bg-color-light: #f0f0f0;
+    --banner-bg-color-dark: #2F4F4F; /* Dark bluish grey */
 
-  --desktopTitleFontSize: 3.2rem; /* Renamed for clarity */
-  --mobileTitleFontSize: 2.4rem; /* New variable for mobile font size */
-  --bodyFontSize: 1rem;
-  --buttonFontSize: 0.95rem;
-  --tableFontSize: 1rem;
+    /* Background */
+    --main-bg-color-light: #ffffff;
+    --main-bg-color-dark: #000000; /* Black */
 
-  /* light mode colors */
-  --titleColor: #4b2e83;
-  --backgroundColor: #ede3fa;
-  --bannerBg: #fdf6e3;
-  --formBg: rgba(75, 46, 131, 0.16);
-  --formBorder: rgba(75, 46, 131, 0.22);
-  --addBtnColor: #C71585;
-  --addBtnText: #fff;
-  --dataBtnBg: #f2f2f2;
-  --dataBtnText: #888;
-  --deleteBtn: rgba(0, 0, 0, 0.32);
-  --deleteBtnHover: rgba(0, 0, 0, 0.6);
-  --inputBorder: #ccc;
-  --inputPlaceholder: #999;
-  --dropdownArrow: #555;
-  --dropdownArrowHover: #333;
+    /* Assignment Entry */
+    --entry-bg-color-light: #f9f9f9;
+    --entry-bg-color-dark: #1a1a1a;
 
-  /* dark mode colors */
-  --darkTitleColor: #a98fe3;
-  --darkBackgroundColor: #1c1c1c;
-  --darkBannerBg: #2b2b2b;
-  --darkFormBg: rgba(169, 143, 227, 0.16);
-  --darkFormBorder: rgba(169, 143, 227, 0.22);
-  --darkAddBtnColor: #C71585;
-  --darkAddBtnText: #fff;
-  --darkDataBtnBg: #444;
-  --darkDataBtnText: #bbb;
-  --darkDeleteBtn: rgba(255, 255, 255, 0.32);
-  --darkDeleteBtnHover: rgba(255, 255, 255, 0.6);
-  --darkInputBorder: #555;
-  --darkInputPlaceholder: #777;
-  --darkDropdownArrow: #bbb;
-  --darkDropdownArrowHover: #ddd;
+    /* Button: Add Assignment */
+    --add-btn-bg-light: #8A2BE2; /* Bluish Purple */
+    --add-btn-bg-dark: #800080; /* Halloweenish purple */
+    --add-btn-text-color-light: white;
+    --add-btn-text-color-dark: white;
 
-  /* theme-specific variables */
-  --currentTitleColor: var(--titleColor);
-  --currentBackgroundColor: var(--backgroundColor);
-  --currentBannerBg: var(--bannerBg);
-  --currentFormBg: var(--formBg);
-  --currentFormBorder: var(--formBorder);
-  --currentAddBtnColor: var(--addBtnColor);
-  --currentAddBtnText: var(--addBtnText);
-  --currentDataBtnBg: var(--dataBtnBg);
-  --currentDataBtnText: var(--dataBtnText);
-  --currentDeleteBtn: var(--deleteBtn);
-  --currentDeleteBtnHover: var(--deleteBtnHover);
-  --currentInputBorder: var(--inputBorder);
-  --currentInputPlaceholder: var(--inputPlaceholder);
-  --currentDropdownArrow: var(--dropdownArrow);
-  --currentDropdownArrowHover: var(--dropdownArrowHover);
+    /* Table */
+    --table-bg-color-light: #ffffff;
+    --table-bg-color-dark: #303030; /* Grey */
+    --table-text-color-light: #333;
+    --table-text-color-dark: #eee;
 
-  /* Tabulator colors for dark mode, using COLORS object */
-  --PHYS-even-bg: #dbe7f8;
-  --PHYS-odd-bg: #edf4fc;
-  --PHYS-header-bg: #5b78b0;
-  --ECE-even-bg: #f8dbdb;
-  --ECE-odd-bg: #fceeee;
-  --ECE-header-bg: #b04b4b;
-  --MATH-even-bg: #faf3d1;
-  --MATH-odd-bg: #fffceb;
-  --MATH-header-bg: #FFB400;
+    /* Export/Import Buttons */
+    --data-btn-bg-light: #cccccc;
+    --data-btn-bg-dark: #1b1b1b; /* Blends with black background */
+    --data-btn-text-color-light: #333;
+    --data-btn-text-color-dark: #aaa;
 
-  --bannerPaddingBottom: 25px;
-  --bannerEntryGap: 15px;
-  --entryPaddingTop: 18px;
-  --entryPaddingBottom: 10px;
-  --entryPaddingLeft: 22px;
-  --entryPaddingRight: 14px;
-  --entryGap: 10px;
-  --tableWidthPercent: 80%;
-  --toggleRightOffset: 30px;
-  --bannerHeight: 100px;
+    /* Padding/Spacing Variables */
+    --main-padding: 20px;
+    --item-spacing: 10px;
+
+    /* Class Colors */
+    --color-math: #FFFF00; /* Yellow */
+    --color-phys: #0000FF; /* Blue */
+    --color-ece: #FF0000; /* Red */
+    --color-text-on-light: #000;
+    --color-text-on-dark: #fff;
 }
 
-/* Dark mode theme */
-html[data-theme='dark'] {
-  --currentTitleColor: var(--darkTitleColor);
-  --currentBackgroundColor: var(--darkBackgroundColor);
-  --currentBannerBg: var(--darkBannerBg);
-  --currentFormBg: var(--darkFormBg);
-  --currentFormBorder: var(--darkFormBorder);
-  --currentAddBtnColor: var(--darkAddBtnColor);
-  --currentAddBtnText: var(--darkAddBtnText);
-  --currentDataBtnBg: var(--darkDataBtnBg);
-  --currentDataBtnText: var(--darkDataBtnText);
-  --currentDeleteBtn: var(--darkDeleteBtn);
-  --currentDeleteBtnHover: var(--darkDeleteBtnHover);
-  --currentInputBorder: var(--darkInputBorder);
-  --currentInputPlaceholder: var(--darkInputPlaceholder);
-  --currentDropdownArrow: var(--darkDropdownArrow);
-  --currentDropdownArrowHover: var(--darkDropdownArrowHover);
-
-  --PHYS-even-bg: #2d3b51;
-  --PHYS-odd-bg: #202b3c;
-  --PHYS-header-bg: #4b5e82;
-  --ECE-even-bg: #512d2d;
-  --ECE-odd-bg: #3c2020;
-  --ECE-header-bg: #7a4b4b;
-  --MATH-even-bg: #514a2d;
-  --MATH-odd-bg: #3c3520;
-  --MATH-header-bg: #826e4b;
+/* Light Mode Variables - Overrides for data-theme="light" */
+body[data-theme="light"] {
+    --title-color: var(--title-color-light);
+    --banner-bg-color: var(--banner-bg-color-light);
+    --main-bg-color: var(--main-bg-color-light);
+    --entry-bg-color: var(--entry-bg-color-light);
+    --add-btn-bg: var(--add-btn-bg-light);
+    --add-btn-text-color: var(--add-btn-text-color-light);
+    --table-bg-color: var(--table-bg-color-light);
+    --table-text-color: var(--table-text-color-light);
+    --data-btn-bg: var(--data-btn-bg-light);
+    --data-btn-text-color: var(--data-btn-text-color-light);
 }
 
+/* Dark Mode Variables - Defaults to data-theme="dark" in HTML */
+body[data-theme="dark"] {
+    --title-color: var(--title-color-dark);
+    --banner-bg-color: var(--banner-bg-color-dark);
+    --main-bg-color: var(--main-bg-color-dark);
+    --entry-bg-color: var(--entry-bg-color-dark);
+    --add-btn-bg: var(--add-btn-bg-dark);
+    --add-btn-text-color: var(--add-btn-text-color-dark);
+    --table-bg-color: var(--table-bg-color-dark);
+    --table-text-color: var(--table-text-color-dark);
+    --data-btn-bg: var(--data-btn-bg-dark);
+    --data-btn-text-color: var(--data-btn-text-color-dark);
+}
+
+/* Base Styles */
 body {
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
-  font-size: var(--bodyFontSize);
-  margin: 0;
-  padding: 0;
-  background: var(--currentBackgroundColor);
-  color: var(--currentTitleColor); /* Apply a default text color for the body */
-  transition: background-color 0.3s ease;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-bg-color);
+    color: var(--table-text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.title-banner {
-  width: 100%;
-  background: var(--currentBannerBg);
-  position: relative;
-  height: var(--bannerHeight);
-  transition: background-color 0.3s ease;
+.header-banner {
+    background-color: var(--banner-bg-color);
+    padding: var(--main-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.title-banner h1 {
-  margin: 0;
-  padding-left: var(--titleLeftEdgePadding);
-  font-family: var(--titleFont);
-  font-weight: var(--titleWeight);
-  font-size: var(--desktopTitleFontSize);
-  color: var(--currentTitleColor);
-  display: flex;
-  align-items: center;
-  height: 100%;
+#page-title {
+    font-family: 'Jolly Lodger', cursive;
+    color: var(--title-color);
+    margin: 0;
+    font-size: 2.5em;
+    text-align: left;
+    flex-grow: 1; /* Pushes controls to the right */
 }
 
-h1 span.space {
-  white-space: pre;
+.controls {
+    display: flex;
+    gap: var(--item-spacing);
 }
 
-/* toggle switch */
-.switch {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: var(--toggleRightOffset);
-  display: inline-block;
-  width: 50px;
-  height: 28px;
+.container {
+    padding: var(--main-padding);
+    max-width: 900px;
+    margin: 0 auto;
 }
-.switch input {
-  display: none;
+
+/* Assignment Entry */
+.assignment-entry {
+    background-color: var(--entry-bg-color);
+    padding: var(--main-padding);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: var(--main-padding) 0;
+    text-align: center;
 }
+
+.assignment-entry h2 {
+    margin-top: 0;
+    color: var(--table-text-color);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--item-spacing);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.form-row input, .form-row select, .form-row button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: var(--main-bg-color);
+    color: var(--table-text-color);
+}
+
+#addAssignmentBtn {
+    background-color: var(--add-btn-bg);
+    color: var(--add-btn-text-color);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#addAssignmentBtn:hover {
+    opacity: 0.9;
+}
+
+/* Table Styles */
+.assignments-table-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.assignments-table-container h3 {
+    color: var(--table-text-color);
+}
+
+#assignmentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px auto 0;
+    background-color: var(--table-bg-color);
+    color: var(--table-text-color);
+}
+
+#assignmentsTable th, #assignmentsTable td {
+    padding: 12px 15px;
+    border: 1px solid var(--banner-bg-color);
+    text-align: left;
+}
+
+#assignmentsTable th {
+    background-color: var(--banner-bg-color);
+    color: white; /* Contrast with banner color */
+}
+
+/* Class Color Coding */
+.row-MATH {
+    /* Use a semi-transparent color for the row background for better dark/light mode contrast */
+    background-color: var(--color-math);
+    color: var(--color-text-on-light);
+}
+.row-PHYS {
+    background-color: var(--color-phys);
+    color: var(--color-text-on-dark);
+}
+.row-ECE {
+    background-color: var(--color-ece);
+    color: var(--color-text-on-dark);
+}
+
+/* Make links stand out */
+#assignmentsTable a {
+    color: inherit; /* Inherit color from the row */
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Data Controls */
+.data-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--item-spacing);
+    margin-top: var(--main-padding);
+}
+
+.data-controls button {
+    padding: 10px 20px;
+    border: 1px solid var(--data-btn-bg-dark); /* Subtle border for definition */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--data-btn-bg);
+    color: var(--data-btn-text-color);
+}
+
+.data-controls button:hover {
+    filter: brightness(1.2);
+}
+
+/* Toggle Switch Styles */
+.toggle-container {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .3s;
-  border-radius: 34px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
 }
+
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .3s;
-  border-radius: 50%;
-}
-.switch input:checked + .slider {
-  background-color: #4b2e83;
-}
-.switch input:checked + .slider:before {
-  transform: translateX(22px);
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
 }
 
-/* form */
-.form-wrap {
-  text-align: center;
+input:checked + .slider {
+    background-color: #2196F3;
 }
 
-.form-container {
-  display: inline-block;
-  margin: var(--bannerEntryGap) auto var(--entryTableDelta) auto;
-  padding: var(--entryPaddingTop) var(--entryPaddingRight) var(--entryPaddingBottom) var(--entryPaddingLeft);
-  background: var(--currentFormBg);
-  border: 1px solid var(--currentFormBorder);
-  border-radius: 40px;
-  transform: scale(var(--formScale));
-  transform-origin: center;
-  transition: background 0.3s ease, border-color 0.3s ease;
+input:checked + .slider:before {
+    transform: translateX(26px);
 }
 
-.form-container select,
-.form-container input,
-.form-container button {
-  margin-right: var(--entryGap);
-  margin-bottom: var(--entryGap);
-  padding: 10px 16px;
-  border-radius: 9999px;
-  border: 1px solid var(--currentInputBorder);
-  font-size: var(--bodyFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
-  background: white; /* Keep inputs white for readability */
-}
-html[data-theme='dark'] .form-container select,
-html[data-theme='dark'] .form-container input {
-  background: #333;
-  color: #fff;
-  border-color: var(--currentInputBorder);
-}
-.form-container input::placeholder {
-  color: var(--currentInputPlaceholder);
-}
-.form-container select {
-  width: var(--dropdownWidth);
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 32px;
-  background-image: linear-gradient(45deg, transparent 50%, var(--currentDropdownArrow) 50%),
-    linear-gradient(135deg, var(--currentDropdownArrow) 50%, transparent 50%);
-  background-position: calc(100% - 19px) calc(50% - 0px),
-    calc(100% - 14px) calc(50% - 0px);
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  transition: background-image 0.3s ease;
-}
-.form-container select:hover {
-  background-image: linear-gradient(45deg, transparent 50%, var(--currentDropdownArrowHover) 50%),
-    linear-gradient(135deg, var(--currentDropdownArrowHover) 50%, transparent 50%);
+.slider.round {
+    border-radius: 34px;
 }
 
-#add-btn {
-  background: var(--currentAddBtnColor);
-  color: var(--currentAddBtnText);
-  border: none;
-  cursor: pointer;
-  font-size: var(--buttonFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeightBold);
-}
-#add-btn:hover {
-  opacity: 0.92;
-}
-
-.table-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 0;
-}
-.table-container .tabulator {
-  width: var(--tableWidthPercent);
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.tabulator,
-.tabulator .tabulator-header,
-.tabulator .tabulator-cell {
-  font-family: var(--bodyFont) !important;
-  font-size: var(--tableFontSize) !important;
-  color: var(--currentTitleColor) !important; /* Set text color for table */
-  transition: color 0.3s ease;
-}
-
-.tabulator .tabulator-cell {
-  padding-left: 15px !important;
-}
-
-.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
-  font-weight: var(--bodyWeightBold);
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-
-.tabulator,
-.tabulator .tabulator-tableholder,
-.tabulator-row {
-  background: none !important;
-}
-
-.tabulator .tabulator-group .tabulator-arrow {
-  display: none !important;
-}
-.tabulator .tabulator-group-header {
-  padding-left: 0 !important;
-}
-
-.delete-btn {
-  cursor: pointer;
-  font-size: 1.15rem;
-  font-family: "Courier New", monospace;
-  color: var(--currentDeleteBtn);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding-right: 10px;
-  transition: color 0.3s ease;
-}
-.delete-btn:hover {
-  color: var(--currentDeleteBtnHover);
-}
-
-.data-buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-  margin-right: 16px;
-  padding-bottom: var(--pageBottomPadding, 20px);
-}
-.data-buttons button {
-  margin-left: 10px;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  border: 1px solid var(--currentInputBorder);
-  background: var(--currentDataBtnBg);
-  color: var(--currentDataBtnText);
-  font-size: var(--buttonFontSize);
-  font-family: var(--bodyFont);
-  font-weight: var(--bodyWeight);
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-.data-buttons button:hover {
-  background: #e0e0e0; /* This is a hardcoded hover state, could be a variable */
-}
-html[data-theme='dark'] .data-buttons button:hover {
-  background: #555;
-}
-
-@media (max-width: 768px) {
-  .form-wrap {
-    display: none;
-  }
-  .title-banner h1 {
-    font-size: var(--mobileTitleFontSize);
-  }
-  :root {
-    --tableWidthPercent: 100%;
-  }
-}
-
-.switch input:checked + .slider ~ .title-banner h1 {
-  font-size: var(--mobileTitleFontSize);
-}
-.switch input:checked + .slider ~ .table-container .tabulator {
-  width: 100%;
+.slider.round:before {
+    border-radius: 50%;
 }
