@@ -1,8 +1,9 @@
 /* Color Variables */
 :root {
     /* Title */
-    --title-color-light: #FF4500; /* Red Orange */
-    --title-color-dark: #FFA07A; /* Lighter Orange for visibility */
+    /* SWITCHED: Dark mode now uses the brighter orange, Light mode uses the red orange */
+    --title-color-light: #FFA07A; /* Lighter Orange for visibility in Light Mode */
+    --title-color-dark: #FF4500; /* Red Orange for striking contrast in Dark Mode */
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
@@ -36,7 +37,10 @@
 
     /* Padding/Spacing Variables */
     --main-padding: 20px;
-    --item-spacing: 10px;
+    --item-spacing: 15px; /* Increased spacing for vertical toggles */
+
+    /* Border Radius for "infinity rounded corners" */
+    --infinity-radius: 9999px; 
 
     /* Class Colors */
     --color-math: #FFFF00; /* Yellow */
@@ -96,13 +100,15 @@ body {
     font-family: 'Jolly Lodger', cursive;
     color: var(--title-color);
     margin: 0;
-    font-size: 2.5em;
+    font-size: 4em; /* Increased title size (from 2.5em to 4em) */
     text-align: left;
-    flex-grow: 1; /* Pushes controls to the right */
+    flex-grow: 1;
 }
 
+/* Vertically stacked toggles */
 .controls {
     display: flex;
+    flex-direction: column; /* Stack vertically */
     gap: var(--item-spacing);
 }
 
@@ -116,15 +122,10 @@ body {
 .assignment-entry {
     background-color: var(--entry-bg-color);
     padding: var(--main-padding);
-    border-radius: 8px;
+    border-radius: var(--infinity-radius); /* Infinity rounded corners on container */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
     text-align: center;
-}
-
-.assignment-entry h2 {
-    margin-top: 0;
-    color: var(--table-text-color);
 }
 
 .form-row {
@@ -134,9 +135,10 @@ body {
     flex-wrap: wrap;
 }
 
+/* Infinity rounded corners on individual form elements */
 .form-row input, .form-row select, .form-row button {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: var(--infinity-radius); 
     border: 1px solid #ccc;
     background-color: var(--main-bg-color);
     color: var(--table-text-color);
@@ -180,12 +182,11 @@ body {
 
 #assignmentsTable th {
     background-color: var(--banner-bg-color);
-    color: white; /* Contrast with banner color */
+    color: white; 
 }
 
-/* Class Color Coding */
+/* Class Color Coding - applies to table rows */
 .row-MATH {
-    /* Use a semi-transparent color for the row background for better dark/light mode contrast */
     background-color: var(--color-math);
     color: var(--color-text-on-light);
 }
@@ -200,7 +201,7 @@ body {
 
 /* Make links stand out */
 #assignmentsTable a {
-    color: inherit; /* Inherit color from the row */
+    color: inherit; 
     text-decoration: underline;
     font-weight: bold;
 }
@@ -213,10 +214,11 @@ body {
     margin-top: var(--main-padding);
 }
 
+/* Infinity rounded corners on export/import buttons */
 .data-controls button {
     padding: 10px 20px;
-    border: 1px solid var(--data-btn-bg-dark); /* Subtle border for definition */
-    border-radius: 5px;
+    border: 1px solid var(--data-btn-bg-dark); 
+    border-radius: var(--infinity-radius); /* Infinity rounded corners */
     cursor: pointer;
     background-color: var(--data-btn-bg);
     color: var(--data-btn-text-color);
@@ -226,7 +228,7 @@ body {
     filter: brightness(1.2);
 }
 
-/* Toggle Switch Styles */
+/* Toggle Switch Styles (No major changes here, but kept for completeness) */
 .toggle-container {
     position: relative;
     display: inline-block;
