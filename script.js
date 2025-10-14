@@ -12,17 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const importFileInput = document.getElementById('importFileInput');
     const body = document.body;
 
-    let assignments = loadAssignments();
-    let deletedAssignment = null; // Cache for the last deleted assignment
+    // Undo Constants
+    const UNDO_HISTORY_LIMIT = 10;
+    // History will store snapshots of the assignments array.
+    let undoHistory = []; 
 
-    // --- Core Functions ---
+    let assignments = loadAssignments();
+    
+    // --- State Management Functions ---
 
     /**
      * Loads assignments from Local Storage and initializes settings.
      */
     function loadAssignments() {
         const storedAssignments = localStorage.getItem('assignments');
-        // Initial state is dark mode, so we check if the stored value is explicitly 'false'
         const isDarkMode = localStorage.getItem('darkMode') !== 'false';
 
         darkModeToggle.checked = isDarkMode;
@@ -40,6 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('assignments', JSON.stringify(assignments));
     }
 
+    /**
+     * Takes a snapshot of the current assignments array for the undo history.
+     */
+    function recordState() {
+        // Only push if the current state is different from the last recorded state
+        if (undoHistory.length > 0 && JSON.stringify(undoHistory[undoHistory.length - 1]) === JSON.stringify(assignments)) {
+            return;
+        }
+
+        undoHistory.push(JSON.stringify(assignments)); // Store a string snapshot
+        if (undoHistory.length > UNDO_HISTORY_LIMIT) {
+            undoHistory.shift(); // Remove the oldest state
+        }
+    }
+    
+    /**
+     * Reverts the assignments array to the last recorded state.
+     */
+    function undoState() {
+        if (undoHistory.length > 1) {
+            // Remove the *current* state (the one we want to revert from)
+            undoHistory.pop(); 
+            
+            // Load the *previous* state
+            const previousState = undoHistory[undoHistory.length - 1];
+            assignments = JSON.parse(previousState);
+            saveAssignments();
+            renderAssignments();
+        }
+    }
+
+    // --- Core Rendering Functions ---
+    
     /**
      * Renders the assignments into the table, applying sorting and grouping.
      */
@@ -70,14 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-
         // 3. Render Rows
-        displayList.forEach((assignment, index) => {
+        displayList.forEach((assignment) => {
             const row = tableBody.insertRow();
             const classKey = assignment.class.split(' ')[0];
 
             row.classList.add(`row-${classKey}`);
-            row.dataset.index = index; 
 
             // Assignment Cell (Clickable link, no class title)
             const assignmentCell = row.insertCell(0);
@@ -107,14 +141,18 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.addEventListener('click', () => deleteAssignment(assignment));
             deleteCell.appendChild(deleteBtn);
         });
+        
+        recordState(); // Record state after every successful render
     }
 
     /**
      * Finds and removes an assignment from the array.
-     * Caches the deleted item for undo functionality.
      * @param {object} assignmentToDelete - The assignment object to remove.
      */
     function deleteAssignment(assignmentToDelete) {
+        // Record state BEFORE deletion for the first undo step
+        recordState(); 
+        
         const index = assignments.findIndex(a => 
             a.class === assignmentToDelete.class && 
             a.name === assignmentToDelete.name && 
@@ -122,25 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (index > -1) {
-            // Remove the assignment and cache it
-            deletedAssignment = assignments.splice(index, 1)[0];
+            assignments.splice(index, 1);
             saveAssignments();
             renderAssignments();
+            // renderAssignments calls recordState() again, recording the deleted state.
         }
     }
-
-    /**
-     * Restores the last deleted assignment if it exists.
-     */
-    function undoDelete() {
-        if (deletedAssignment) {
-            assignments.push(deletedAssignment);
-            deletedAssignment = null; // Clear the cache
-            saveAssignments();
-            renderAssignments();
-        }
-    }
-
 
     // --- Event Listeners ---
 
@@ -217,6 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (Array.isArray(importedData)) {
                     assignments = importedData;
                     saveAssignments();
+                    // Clear history on major state change (import)
+                    undoHistory = []; 
                     renderAssignments();
                     alert('Data imported successfully!');
                 } else {
@@ -235,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check for Ctrl (or Cmd on Mac) and 'Z' key
         if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
             e.preventDefault(); // Prevent browser default undo
-            undoDelete();
+            undoState();
         }
     });
 
