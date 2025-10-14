@@ -1,7 +1,8 @@
 /* Color Variables */
 :root {
     /* Title */
-    --title-color-dark-grey: #404040; 
+    /* Making title darker than banner. Banner is #2F4F4F (dark mode) / #f0f0f0 (light mode) */
+    --title-color-dark-grey: #333333; 
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
@@ -40,28 +41,30 @@
     /* Padding/Spacing Variables */
     --main-padding: 20px;
     --item-spacing: 15px;
-    --form-element-min-width: 150px; /* New variable for input/select width */
+    --form-element-min-width: 150px; 
     
     /* Padding Variables for Assignment Entry */
-    --entry-padding-y: 20px; /* Top/Bottom Padding */
-    --entry-padding-x: 60px; /* Left/Right Padding */
+    --entry-padding-y: 20px; 
+    --entry-padding-x: 60px; 
     
     /* Margin Adjustment Variable */
-    --container-max-width: 1100px; /* Increased maximum width to reduce left/right margin */
+    --container-max-width: 1100px; 
 
     /* Border Radius */
     --infinity-radius: 9999px; 
-    --table-corner-radius: 12px; 
+    --table-corner-radius: 20px; /* Increased rounded corner for table */
 
-    /* Class Colors - Light Mode */
-    --color-math-light: #dbe7f8;
-    --color-phys-light: #f8dbdb;
-    --color-ece-light: #faf3d1;
+    /* --- CORRECTED CLASS COLORS --- */
+
+    /* Class Colors - Light Mode (Math: Yellow, Phys: Blue, ECE: Red) */
+    --color-math-light: #faf3d1; /* Light Yellow/Cream */
+    --color-phys-light: #dbe7f8; /* Light Blue/Grey */
+    --color-ece-light: #f8dbdb; /* Light Red/Pink */
     
-    /* Class Colors - Dark Mode */
-    --color-math-dark: #5b78b0;
-    --color-phys-dark: #b04b4b;
-    --color-ece-dark: #ffb400;
+    /* Class Colors - Dark Mode (Math: Yellow, Phys: Blue, ECE: Red) */
+    --color-math-dark: #ffb400; /* Dark Yellow/Gold */
+    --color-phys-dark: #5b78b0; /* Dark Blue */
+    --color-ece-dark: #b04b4b; /* Dark Red */
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -168,13 +171,12 @@ body {
     border: 1px solid #ccc;
     background-color: var(--main-bg-color);
     color: var(--table-text-color);
-    min-width: var(--form-element-min-width); /* Applies width variable */
+    min-width: var(--form-element-min-width); 
 }
 
 /* Dropdown Custom Arrow Wrapper */
 .dropdown-wrapper {
     position: relative;
-    /* Ensure wrapper has the same width as other elements */
     min-width: var(--form-element-min-width); 
 }
 
@@ -198,7 +200,6 @@ body {
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    /* Triangle color matches table text color */
     border-top: 6px solid var(--table-text-color); 
     pointer-events: none;
 }
@@ -227,7 +228,7 @@ body {
     margin: 15px auto 0;
     background-color: var(--table-bg-color);
     color: var(--table-text-color);
-    border-radius: var(--table-corner-radius); 
+    border-radius: var(--table-corner-radius); /* Increased roundness */
     overflow: hidden; 
 }
 
