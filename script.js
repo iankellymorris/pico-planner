@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function loadAssignments() {
         const storedAssignments = localStorage.getItem('assignments');
-        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        // Initial state is dark mode, so we check if the stored value is explicitly 'false'
+        const isDarkMode = localStorage.getItem('darkMode') !== 'false';
 
         // Set initial dark mode state from storage or default to dark (checked=true)
         darkModeToggle.checked = isDarkMode;
