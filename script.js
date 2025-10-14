@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function loadAssignments() {
         const storedAssignments = localStorage.getItem('assignments');
+        // Initial state is dark mode, so we check if the stored value is explicitly 'false'
         const isDarkMode = localStorage.getItem('darkMode') !== 'false';
 
         darkModeToggle.checked = isDarkMode;
@@ -76,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const classKey = assignment.class.split(' ')[0];
 
             row.classList.add(`row-${classKey}`);
-            // Store the original index for identification during deletion
             row.dataset.index = index; 
 
             // Assignment Cell (Clickable link, no class title)
@@ -86,10 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const linkElement = document.createElement('a');
                 linkElement.href = assignment.link;
                 linkElement.target = '_blank';
-                linkElement.textContent = assignment.name; // No class title
+                linkElement.textContent = assignment.name; 
                 assignmentCell.appendChild(linkElement);
             } else {
-                assignmentCell.textContent = assignment.name; // No class title
+                assignmentCell.textContent = assignment.name; 
             }
             
             // Due Date Cell
@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
             deletedAssignment = null; // Clear the cache
             saveAssignments();
             renderAssignments();
-            // A visual confirmation (like a temporary notification) could be added here
         }
     }
 
