@@ -1,16 +1,18 @@
 /* Color Variables */
 :root {
     /* Title */
-    --title-color-light: #FFA07A;
-    --title-color-dark: #FF4500;
+    /* Switched original oranges back to their variable names, but the final title color will be grey */
+    --title-color-bright-orange: #FFA07A; 
+    --title-color-red-orange: #FF4500;
+    --title-color-grey: #696969; /* New grey title color */
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
-    --banner-bg-color-dark: #2F4F4F;
+    --banner-bg-color-dark: #2F4F4F; /* Dark bluish grey */
 
     /* Background */
     --main-bg-color-light: #ffffff;
-    --main-bg-color-dark: #000000;
+    --main-bg-color-dark: #000000; /* Black */
 
     /* Assignment Entry */
     --entry-bg-color-light: #f9f9f9;
@@ -29,8 +31,8 @@
     --table-text-color-dark: #eee;
     
     /* Delete Button */
-    --delete-btn-color: #ff0000;
-    --delete-btn-hover-color: #8b0000;
+    --delete-btn-color: rgba(0, 0, 0, 0.5); /* Assignable opacity black (50%) */
+    --delete-btn-hover-color: rgba(0, 0, 0, 0.8);
 
     /* Export/Import Buttons */
     --data-btn-bg-light: #cccccc;
@@ -45,17 +47,24 @@
     /* Border Radius for "infinity rounded corners" */
     --infinity-radius: 9999px; 
 
-    /* Class Colors */
-    --color-math: #FFFF00; /* Yellow */
-    --color-phys: #0000FF; /* Blue */
-    --color-ece: #FF0000; /* Red */
+    /* Class Colors - Light Mode */
+    --color-math-light: #dbe7f8; /* Light Blue/Grey */
+    --color-phys-light: #f8dbdb; /* Light Red/Pink */
+    --color-ece-light: #faf3d1; /* Light Yellow/Cream */
+    
+    /* Class Colors - Dark Mode */
+    --color-math-dark: #5b78b0; /* Dark Blue */
+    --color-phys-dark: #b04b4b; /* Dark Red */
+    --color-ece-dark: #ffb400; /* Dark Yellow/Gold */
+    
+    /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
     --color-text-on-dark: #fff;
 }
 
 /* Light Mode Variables - Overrides for data-theme="light" */
 body[data-theme="light"] {
-    --title-color: var(--title-color-light);
+    --title-color: var(--title-color-grey); /* Grey title in light mode */
     --banner-bg-color: var(--banner-bg-color-light);
     --main-bg-color: var(--main-bg-color-light);
     --entry-bg-color: var(--entry-bg-color-light);
@@ -65,11 +74,15 @@ body[data-theme="light"] {
     --table-text-color: var(--table-text-color-light);
     --data-btn-bg: var(--data-btn-bg-light);
     --data-btn-text-color: var(--data-btn-text-color-light);
+
+    --color-math: var(--color-math-light);
+    --color-phys: var(--color-phys-light);
+    --color-ece: var(--color-ece-light);
 }
 
 /* Dark Mode Variables - Defaults to data-theme="dark" in HTML */
 body[data-theme="dark"] {
-    --title-color: var(--title-color-dark);
+    --title-color: var(--title-color-grey); /* Grey title in dark mode */
     --banner-bg-color: var(--banner-bg-color-dark);
     --main-bg-color: var(--main-bg-color-dark);
     --entry-bg-color: var(--entry-bg-color-dark);
@@ -79,6 +92,10 @@ body[data-theme="dark"] {
     --table-text-color: var(--table-text-color-dark);
     --data-btn-bg: var(--data-btn-bg-dark);
     --data-btn-text-color: var(--data-btn-text-color-dark);
+    
+    --color-math: var(--color-math-dark);
+    --color-phys: var(--color-phys-dark);
+    --color-ece: var(--color-ece-dark);
 }
 
 /* Base Styles */
@@ -165,9 +182,7 @@ body {
     margin-top: 30px;
 }
 
-.assignments-table-container h3 {
-    color: var(--table-text-color);
-}
+/* Removed h3 styling since h3 is removed from HTML */
 
 #assignmentsTable {
     width: 100%;
@@ -190,11 +205,11 @@ body {
 
 /* Specific styling for the delete column */
 .delete-column {
-    width: 10px; /* Small width */
+    width: 10px; 
     text-align: center !important;
 }
 
-/* Delete Button Styling */
+/* Delete Button Styling - uses black with 50% opacity */
 .delete-btn {
     background: none;
     border: none;
@@ -212,18 +227,31 @@ body {
 }
 
 /* Class Color Coding - applies to table rows */
+/* Note: The JS handles setting the correct row-CLASS class for color application */
 .row-MATH {
     background-color: var(--color-math);
-    color: var(--color-text-on-light);
+    /* Dynamic text color based on which class color is used */
+    color: var(--table-text-color); 
 }
 .row-PHYS {
     background-color: var(--color-phys);
-    color: var(--color-text-on-dark);
+    color: var(--table-text-color);
 }
 .row-ECE {
     background-color: var(--color-ece);
-    color: var(--color-text-on-dark);
+    color: var(--table-text-color);
 }
+/* Ensure row text color has good contrast by overriding the generic table text color for light backgrounds */
+body[data-theme="light"] .row-MATH,
+body[data-theme="light"] .row-ECE {
+    color: var(--color-text-on-light); /* Black text on light backgrounds */
+}
+body[data-theme="dark"] .row-MATH,
+body[data-theme="dark"] .row-PHYS,
+body[data-theme="dark"] .row-ECE {
+    color: var(--color-text-on-dark); /* White text on dark backgrounds */
+}
+
 
 /* Make links stand out */
 #assignmentsTable a {
