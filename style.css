@@ -1,7 +1,6 @@
 /* Color Variables */
 :root {
     /* Title */
-    /* Darker grey title for both modes */
     --title-color-dark-grey: #404040; 
 
     /* Banner */
@@ -25,8 +24,8 @@
     /* Table */
     --table-bg-color-light: #ffffff;
     --table-bg-color-dark: #303030;
-    --table-text-color-light: #333; /* Dark text for light mode */
-    --table-text-color-dark: #eee;  /* Light text for dark mode */
+    --table-text-color-light: #333;
+    --table-text-color-dark: #eee;
     
     /* Delete Button */
     --delete-btn-opacity: 0.5; /* 50% opacity for base state */
@@ -44,7 +43,7 @@
 
     /* Border Radius */
     --infinity-radius: 9999px; 
-    --table-corner-radius: 12px; /* New rounded corner for table */
+    --table-corner-radius: 12px; 
 
     /* Class Colors - Light Mode */
     --color-math-light: #dbe7f8;
@@ -56,14 +55,14 @@
     --color-phys-dark: #b04b4b;
     --color-ece-dark: #ffb400;
     
-    /* Dynamic Text Colors for contrast */
+    /* Dynamic Text Colors for contrast (used within the class rows) */
     --color-text-on-light: #000;
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables - Overrides for data-theme="light" */
+/* Light Mode Variables - Defines the active class colors in light mode */
 body[data-theme="light"] {
-    --title-color: var(--title-color-dark-grey); /* Darker than banner */
+    --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
     --main-bg-color: var(--main-bg-color-light);
     --entry-bg-color: var(--entry-bg-color-light);
@@ -79,9 +78,9 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables - Defaults to data-theme="dark" in HTML */
+/* Dark Mode Variables - Defines the active class colors in dark mode */
 body[data-theme="dark"] {
-    --title-color: var(--title-color-dark-grey); /* Darker than banner */
+    --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
     --main-bg-color: var(--main-bg-color-dark);
     --entry-bg-color: var(--entry-bg-color-dark);
@@ -97,8 +96,89 @@ body[data-theme="dark"] {
     --color-ece: var(--color-ece-dark);
 }
 
-/* Base Styles (only showing parts with changes) */
-/* ... */
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-bg-color);
+    color: var(--table-text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header-banner {
+    background-color: var(--banner-bg-color);
+    padding: var(--main-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#page-title {
+    font-family: 'Jolly Lodger', cursive;
+    color: var(--title-color);
+    margin: 0;
+    font-size: 4em;
+    text-align: left;
+    flex-grow: 1;
+}
+
+/* Vertically stacked toggles */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--item-spacing);
+}
+
+.container {
+    padding: var(--main-padding);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Assignment Entry */
+.assignment-entry {
+    background-color: var(--entry-bg-color);
+    padding: var(--main-padding);
+    border-radius: var(--infinity-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: var(--main-padding) 0;
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    gap: var(--item-spacing);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Infinity rounded corners on individual form elements */
+.form-row input, .form-row select, .form-row button {
+    padding: 10px;
+    border-radius: var(--infinity-radius); 
+    border: 1px solid #ccc;
+    background-color: var(--main-bg-color);
+    color: var(--table-text-color);
+}
+
+#addAssignmentBtn {
+    background-color: var(--add-btn-bg);
+    color: var(--add-btn-text-color);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#addAssignmentBtn:hover {
+    opacity: 0.9;
+}
+
+/* Table Styles */
+.assignments-table-container {
+    text-align: center;
+    margin-top: 30px;
+}
 
 #assignmentsTable {
     width: 100%;
@@ -106,12 +186,26 @@ body[data-theme="dark"] {
     margin: 15px auto 0;
     background-color: var(--table-bg-color);
     color: var(--table-text-color);
-    /* Rounded corners for the table */
     border-radius: var(--table-corner-radius); 
-    overflow: hidden; /* Ensures corners clip children */
+    overflow: hidden; 
 }
 
-/* ... */
+#assignmentsTable th, #assignmentsTable td {
+    padding: 12px 15px;
+    border: 1px solid var(--banner-bg-color);
+    text-align: left;
+}
+
+#assignmentsTable th {
+    background-color: var(--banner-bg-color);
+    color: white; 
+}
+
+/* Specific styling for the delete column */
+.delete-column {
+    width: 10px; 
+    text-align: center !important;
+}
 
 /* Delete Button Styling - dependent on table-text-color, with opacity */
 .delete-btn {
@@ -132,4 +226,118 @@ body[data-theme="dark"] {
     opacity: var(--delete-btn-hover-opacity);
 }
 
-/* ... */
+/* --- CLASS COLOR CODING FIX --- */
+
+/* Base class row styles use the active class color variable */
+.row-MATH, .row-PHYS, .row-ECE {
+    background-color: var(--color-math); /* These will be overwritten below */
+    transition: background-color 0.3s;
+}
+
+.row-MATH {
+    background-color: var(--color-math);
+}
+.row-PHYS {
+    background-color: var(--color-phys);
+}
+.row-ECE {
+    background-color: var(--color-ece);
+}
+
+/* Text color contrast control for all modes */
+/* Generally, dark class colors need white text, and light class colors need black text. */
+/* Dark Mode: Text should be white on the darker class backgrounds (MATH, PHYS, ECE darks) */
+body[data-theme="dark"] .row-MATH,
+body[data-theme="dark"] .row-PHYS,
+body[data-theme="dark"] .row-ECE {
+    color: var(--color-text-on-dark); /* White text */
+}
+
+/* Light Mode: Text should be black on the lighter class backgrounds (MATH, PHYS, ECE lights) */
+body[data-theme="light"] .row-MATH,
+body[data-theme="light"] .row-PHYS,
+body[data-theme="light"] .row-ECE {
+    color: var(--color-text-on-light); /* Black text */
+}
+
+
+/* Make links stand out */
+#assignmentsTable a {
+    color: inherit; 
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Data Controls */
+.data-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--item-spacing);
+    margin-top: var(--main-padding);
+}
+
+/* Infinity rounded corners on export/import buttons */
+.data-controls button {
+    padding: 10px 20px;
+    border: 1px solid var(--data-btn-bg-dark); 
+    border-radius: var(--infinity-radius);
+    cursor: pointer;
+    background-color: var(--data-btn-bg);
+    color: var(--data-btn-text-color);
+}
+
+.data-controls button:hover {
+    filter: brightness(1.2);
+}
+
+/* Toggle Switch Styles (omitted for brevity, assume unchanged) */
+.toggle-container {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
