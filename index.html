@@ -25,11 +25,13 @@
     <div class="container">
         <div class="assignment-entry">
             <div class="form-row">
-                <select id="classDropdown">
-                    <option value="MATH 1210">MATH 1210</option>
-                    <option value="PHYS 2210">PHYS 2210</option>
-                    <option value="ECE 1400">ECE 1400</option>
-                </select>
+                <div class="dropdown-wrapper">
+                    <select id="classDropdown">
+                        <option value="MATH 1210">MATH 1210</option>
+                        <option value="PHYS 2210">PHYS 2210</option>
+                        <option value="ECE 1400">ECE 1400</option>
+                    </select>
+                </div>
                 <input type="text" id="assignmentName" placeholder="Assignment Name" required>
                 <input type="url" id="assignmentLink" placeholder="Link (Optional)">
                 <input type="date" id="dueDate" required>
@@ -43,8 +45,7 @@
                     <tr>
                         <th>Assignment</th>
                         <th>Due Date</th>
-                        <th class="delete-column"></th>
-                    </tr>
+                        <th class="delete-column"></th> </tr>
                 </thead>
                 <tbody>
                     </tbody>
