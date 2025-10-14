@@ -13,23 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
 
     let assignments = loadAssignments();
+    let deletedAssignment = null; // Cache for the last deleted assignment
 
     // --- Core Functions ---
 
     /**
-     * Loads assignments from Local Storage or returns an empty array.
-     * Initializes dark mode setting.
+     * Loads assignments from Local Storage and initializes settings.
      */
     function loadAssignments() {
         const storedAssignments = localStorage.getItem('assignments');
-        // Initial state is dark mode, so we check if the stored value is explicitly 'false'
         const isDarkMode = localStorage.getItem('darkMode') !== 'false';
 
-        // Set initial dark mode state from storage or default to dark (checked=true)
         darkModeToggle.checked = isDarkMode;
         body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
 
-        // Initial check for grouping mode (default to off)
         groupByClassToggle.checked = localStorage.getItem('groupByClass') === 'true';
 
         return storedAssignments ? JSON.parse(storedAssignments) : [];
@@ -47,25 +44,24 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function renderAssignments() {
         tableBody.innerHTML = '';
-        let displayList = [...assignments]; // Create a copy for manipulation
+        let displayList = [...assignments];
 
-        // 1. Sorting by Date (Primary requirement)
+        // 1. Sorting by Date
         displayList.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
-        // 2. Grouping Logic (If toggle is on)
+        // 2. Grouping Logic
         if (groupByClassToggle.checked) {
             const grouped = {};
             displayList.forEach(a => {
-                const className = a.class.replace(' ', ''); // e.g., MATH1210
+                const className = a.class.replace(' ', '');
                 if (!grouped[className]) {
                     grouped[className] = [];
                 }
                 grouped[className].push(a);
             });
 
-            // Re-order by Class Group (MATH, PHYS, ECE)
             const classOrder = ['MATH 1210', 'PHYS 2210', 'ECE 1400'].map(c => c.replace(' ', ''));
-            displayList = []; // Clear and rebuild
+            displayList = [];
             classOrder.forEach(classNameKey => {
                 if (grouped[classNameKey]) {
                     displayList.push(...grouped[classNameKey]);
@@ -75,33 +71,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // 3. Render Rows
-        displayList.forEach(assignment => {
+        displayList.forEach((assignment, index) => {
             const row = tableBody.insertRow();
-            const classKey = assignment.class.split(' ')[0]; // MATH, PHYS, ECE
+            const classKey = assignment.class.split(' ')[0];
 
-            // Apply color coding class
             row.classList.add(`row-${classKey}`);
+            // Store the original index for identification during deletion
+            row.dataset.index = index; 
 
-            // Assignment Cell (Clickable link)
+            // Assignment Cell (Clickable link, no class title)
             const assignmentCell = row.insertCell(0);
-            const assignmentElement = document.createElement('span');
-
+            
             if (assignment.link) {
                 const linkElement = document.createElement('a');
                 linkElement.href = assignment.link;
-                linkElement.target = '_blank'; // Open in new tab
-                linkElement.textContent = `${assignment.class}: ${assignment.name}`;
-                assignmentElement.appendChild(linkElement);
+                linkElement.target = '_blank';
+                linkElement.textContent = assignment.name; // No class title
+                assignmentCell.appendChild(linkElement);
             } else {
-                assignmentElement.textContent = `${assignment.class}: ${assignment.name}`;
+                assignmentCell.textContent = assignment.name; // No class title
             }
-            assignmentCell.appendChild(assignmentElement);
-
+            
             // Due Date Cell
             const dateCell = row.insertCell(1);
             dateCell.textContent = assignment.dueDate;
+            
+            // Delete Button Cell
+            const deleteCell = row.insertCell(2);
+            deleteCell.classList.add('delete-column');
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '×';
+            deleteBtn.classList.add('delete-btn');
+            
+            // Attach delete handler
+            deleteBtn.addEventListener('click', () => deleteAssignment(assignment));
+            deleteCell.appendChild(deleteBtn);
         });
     }
+
+    /**
+     * Finds and removes an assignment from the array.
+     * Caches the deleted item for undo functionality.
+     * @param {object} assignmentToDelete - The assignment object to remove.
+     */
+    function deleteAssignment(assignmentToDelete) {
+        const index = assignments.findIndex(a => 
+            a.class === assignmentToDelete.class && 
+            a.name === assignmentToDelete.name && 
+            a.dueDate === assignmentToDelete.dueDate
+        );
+
+        if (index > -1) {
+            // Remove the assignment and cache it
+            deletedAssignment = assignments.splice(index, 1)[0];
+            saveAssignments();
+            renderAssignments();
+        }
+    }
+
+    /**
+     * Restores the last deleted assignment if it exists.
+     */
+    function undoDelete() {
+        if (deletedAssignment) {
+            assignments.push(deletedAssignment);
+            deletedAssignment = null; // Clear the cache
+            saveAssignments();
+            renderAssignments();
+            // A visual confirmation (like a temporary notification) could be added here
+        }
+    }
+
 
     // --- Event Listeners ---
 
@@ -132,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         assignmentNameInput.value = '';
         assignmentLinkInput.value = '';
         dueDateInput.value = '';
-        classDropdown.value = 'MATH 1210'; // Reset to first option
+        classDropdown.value = 'MATH 1210';
     });
 
     // Dark/Light Mode Toggle
@@ -145,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Group by Class Toggle
     groupByClassToggle.addEventListener('change', () => {
         localStorage.setItem('groupByClass', groupByClassToggle.checked);
-        renderAssignments(); // Re-render to apply grouping
+        renderAssignments();
     });
 
     // Export Data Button
@@ -158,12 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', exportFileDefaultName);
-        linkElement.click(); // Programmatically click the link to trigger download
+        linkElement.click();
     });
 
     // Import Data Button
     importDataBtn.addEventListener('click', () => {
-        // Programmatically click the hidden file input
         importFileInput.click();
     });
 
@@ -177,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const importedData = JSON.parse(e.target.result);
                 if (Array.isArray(importedData)) {
-                    // Overwrite current data with imported data
                     assignments = importedData;
                     saveAssignments();
                     renderAssignments();
@@ -191,6 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         reader.readAsText(file);
+    });
+
+    // Global Keyboard Listener for Ctrl+Z (Undo)
+    document.addEventListener('keydown', (e) => {
+        // Check for Ctrl (or Cmd on Mac) and 'Z' key
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+            e.preventDefault(); // Prevent browser default undo
+            undoDelete();
+        }
     });
 
     // Initial render
