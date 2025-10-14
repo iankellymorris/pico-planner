@@ -1,43 +1,46 @@
 /* Color Variables */
 :root {
     /* Title */
-    /* SWITCHED: Dark mode now uses the brighter orange, Light mode uses the red orange */
-    --title-color-light: #FFA07A; /* Lighter Orange for visibility in Light Mode */
-    --title-color-dark: #FF4500; /* Red Orange for striking contrast in Dark Mode */
+    --title-color-light: #FFA07A;
+    --title-color-dark: #FF4500;
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
-    --banner-bg-color-dark: #2F4F4F; /* Dark bluish grey */
+    --banner-bg-color-dark: #2F4F4F;
 
     /* Background */
     --main-bg-color-light: #ffffff;
-    --main-bg-color-dark: #000000; /* Black */
+    --main-bg-color-dark: #000000;
 
     /* Assignment Entry */
     --entry-bg-color-light: #f9f9f9;
     --entry-bg-color-dark: #1a1a1a;
 
     /* Button: Add Assignment */
-    --add-btn-bg-light: #8A2BE2; /* Bluish Purple */
-    --add-btn-bg-dark: #800080; /* Halloweenish purple */
+    --add-btn-bg-light: #8A2BE2;
+    --add-btn-bg-dark: #800080;
     --add-btn-text-color-light: white;
     --add-btn-text-color-dark: white;
 
     /* Table */
     --table-bg-color-light: #ffffff;
-    --table-bg-color-dark: #303030; /* Grey */
+    --table-bg-color-dark: #303030;
     --table-text-color-light: #333;
     --table-text-color-dark: #eee;
+    
+    /* Delete Button */
+    --delete-btn-color: #ff0000;
+    --delete-btn-hover-color: #8b0000;
 
     /* Export/Import Buttons */
     --data-btn-bg-light: #cccccc;
-    --data-btn-bg-dark: #1b1b1b; /* Blends with black background */
+    --data-btn-bg-dark: #1b1b1b;
     --data-btn-text-color-light: #333;
     --data-btn-text-color-dark: #aaa;
 
     /* Padding/Spacing Variables */
     --main-padding: 20px;
-    --item-spacing: 15px; /* Increased spacing for vertical toggles */
+    --item-spacing: 15px;
 
     /* Border Radius for "infinity rounded corners" */
     --infinity-radius: 9999px; 
@@ -100,7 +103,7 @@ body {
     font-family: 'Jolly Lodger', cursive;
     color: var(--title-color);
     margin: 0;
-    font-size: 4em; /* Increased title size (from 2.5em to 4em) */
+    font-size: 4em;
     text-align: left;
     flex-grow: 1;
 }
@@ -108,7 +111,7 @@ body {
 /* Vertically stacked toggles */
 .controls {
     display: flex;
-    flex-direction: column; /* Stack vertically */
+    flex-direction: column;
     gap: var(--item-spacing);
 }
 
@@ -122,7 +125,7 @@ body {
 .assignment-entry {
     background-color: var(--entry-bg-color);
     padding: var(--main-padding);
-    border-radius: var(--infinity-radius); /* Infinity rounded corners on container */
+    border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
     text-align: center;
@@ -185,6 +188,29 @@ body {
     color: white; 
 }
 
+/* Specific styling for the delete column */
+.delete-column {
+    width: 10px; /* Small width */
+    text-align: center !important;
+}
+
+/* Delete Button Styling */
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--delete-btn-color);
+    font-weight: bold;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: var(--delete-btn-hover-color);
+}
+
 /* Class Color Coding - applies to table rows */
 .row-MATH {
     background-color: var(--color-math);
@@ -218,7 +244,7 @@ body {
 .data-controls button {
     padding: 10px 20px;
     border: 1px solid var(--data-btn-bg-dark); 
-    border-radius: var(--infinity-radius); /* Infinity rounded corners */
+    border-radius: var(--infinity-radius);
     cursor: pointer;
     background-color: var(--data-btn-bg);
     color: var(--data-btn-text-color);
@@ -228,7 +254,7 @@ body {
     filter: brightness(1.2);
 }
 
-/* Toggle Switch Styles (No major changes here, but kept for completeness) */
+/* Toggle Switch Styles (omitted for brevity, assume unchanged) */
 .toggle-container {
     position: relative;
     display: inline-block;
