@@ -1,10 +1,8 @@
 /* Color Variables */
 :root {
     /* Title */
-    /* Switched original oranges back to their variable names, but the final title color will be grey */
-    --title-color-bright-orange: #FFA07A; 
-    --title-color-red-orange: #FF4500;
-    --title-color-grey: #696969; /* New grey title color */
+    /* Darker grey title for both modes */
+    --title-color-dark-grey: #404040; 
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
@@ -27,12 +25,12 @@
     /* Table */
     --table-bg-color-light: #ffffff;
     --table-bg-color-dark: #303030;
-    --table-text-color-light: #333;
-    --table-text-color-dark: #eee;
+    --table-text-color-light: #333; /* Dark text for light mode */
+    --table-text-color-dark: #eee;  /* Light text for dark mode */
     
     /* Delete Button */
-    --delete-btn-color: rgba(0, 0, 0, 0.5); /* Assignable opacity black (50%) */
-    --delete-btn-hover-color: rgba(0, 0, 0, 0.8);
+    --delete-btn-opacity: 0.5; /* 50% opacity for base state */
+    --delete-btn-hover-opacity: 0.8;
 
     /* Export/Import Buttons */
     --data-btn-bg-light: #cccccc;
@@ -44,18 +42,19 @@
     --main-padding: 20px;
     --item-spacing: 15px;
 
-    /* Border Radius for "infinity rounded corners" */
+    /* Border Radius */
     --infinity-radius: 9999px; 
+    --table-corner-radius: 12px; /* New rounded corner for table */
 
     /* Class Colors - Light Mode */
-    --color-math-light: #dbe7f8; /* Light Blue/Grey */
-    --color-phys-light: #f8dbdb; /* Light Red/Pink */
-    --color-ece-light: #faf3d1; /* Light Yellow/Cream */
+    --color-math-light: #dbe7f8;
+    --color-phys-light: #f8dbdb;
+    --color-ece-light: #faf3d1;
     
     /* Class Colors - Dark Mode */
-    --color-math-dark: #5b78b0; /* Dark Blue */
-    --color-phys-dark: #b04b4b; /* Dark Red */
-    --color-ece-dark: #ffb400; /* Dark Yellow/Gold */
+    --color-math-dark: #5b78b0;
+    --color-phys-dark: #b04b4b;
+    --color-ece-dark: #ffb400;
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -64,7 +63,7 @@
 
 /* Light Mode Variables - Overrides for data-theme="light" */
 body[data-theme="light"] {
-    --title-color: var(--title-color-grey); /* Grey title in light mode */
+    --title-color: var(--title-color-dark-grey); /* Darker than banner */
     --banner-bg-color: var(--banner-bg-color-light);
     --main-bg-color: var(--main-bg-color-light);
     --entry-bg-color: var(--entry-bg-color-light);
@@ -82,7 +81,7 @@ body[data-theme="light"] {
 
 /* Dark Mode Variables - Defaults to data-theme="dark" in HTML */
 body[data-theme="dark"] {
-    --title-color: var(--title-color-grey); /* Grey title in dark mode */
+    --title-color: var(--title-color-dark-grey); /* Darker than banner */
     --banner-bg-color: var(--banner-bg-color-dark);
     --main-bg-color: var(--main-bg-color-dark);
     --entry-bg-color: var(--entry-bg-color-dark);
@@ -98,91 +97,8 @@ body[data-theme="dark"] {
     --color-ece: var(--color-ece-dark);
 }
 
-/* Base Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--main-bg-color);
-    color: var(--table-text-color);
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.header-banner {
-    background-color: var(--banner-bg-color);
-    padding: var(--main-padding);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#page-title {
-    font-family: 'Jolly Lodger', cursive;
-    color: var(--title-color);
-    margin: 0;
-    font-size: 4em;
-    text-align: left;
-    flex-grow: 1;
-}
-
-/* Vertically stacked toggles */
-.controls {
-    display: flex;
-    flex-direction: column;
-    gap: var(--item-spacing);
-}
-
-.container {
-    padding: var(--main-padding);
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-/* Assignment Entry */
-.assignment-entry {
-    background-color: var(--entry-bg-color);
-    padding: var(--main-padding);
-    border-radius: var(--infinity-radius);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0;
-    text-align: center;
-}
-
-.form-row {
-    display: flex;
-    gap: var(--item-spacing);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Infinity rounded corners on individual form elements */
-.form-row input, .form-row select, .form-row button {
-    padding: 10px;
-    border-radius: var(--infinity-radius); 
-    border: 1px solid #ccc;
-    background-color: var(--main-bg-color);
-    color: var(--table-text-color);
-}
-
-#addAssignmentBtn {
-    background-color: var(--add-btn-bg);
-    color: var(--add-btn-text-color);
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#addAssignmentBtn:hover {
-    opacity: 0.9;
-}
-
-/* Table Styles */
-.assignments-table-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
-/* Removed h3 styling since h3 is removed from HTML */
+/* Base Styles (only showing parts with changes) */
+/* ... */
 
 #assignmentsTable {
     width: 100%;
@@ -190,146 +106,30 @@ body {
     margin: 15px auto 0;
     background-color: var(--table-bg-color);
     color: var(--table-text-color);
+    /* Rounded corners for the table */
+    border-radius: var(--table-corner-radius); 
+    overflow: hidden; /* Ensures corners clip children */
 }
 
-#assignmentsTable th, #assignmentsTable td {
-    padding: 12px 15px;
-    border: 1px solid var(--banner-bg-color);
-    text-align: left;
-}
+/* ... */
 
-#assignmentsTable th {
-    background-color: var(--banner-bg-color);
-    color: white; 
-}
-
-/* Specific styling for the delete column */
-.delete-column {
-    width: 10px; 
-    text-align: center !important;
-}
-
-/* Delete Button Styling - uses black with 50% opacity */
+/* Delete Button Styling - dependent on table-text-color, with opacity */
 .delete-btn {
     background: none;
     border: none;
-    color: var(--delete-btn-color);
+    /* Uses the table's text color and applies opacity to it */
+    color: var(--table-text-color); 
+    opacity: var(--delete-btn-opacity);
     font-weight: bold;
     font-size: 1.2em;
     cursor: pointer;
     padding: 0;
     line-height: 1;
-    transition: color 0.2s;
+    transition: opacity 0.2s;
 }
 
 .delete-btn:hover {
-    color: var(--delete-btn-hover-color);
+    opacity: var(--delete-btn-hover-opacity);
 }
 
-/* Class Color Coding - applies to table rows */
-/* Note: The JS handles setting the correct row-CLASS class for color application */
-.row-MATH {
-    background-color: var(--color-math);
-    /* Dynamic text color based on which class color is used */
-    color: var(--table-text-color); 
-}
-.row-PHYS {
-    background-color: var(--color-phys);
-    color: var(--table-text-color);
-}
-.row-ECE {
-    background-color: var(--color-ece);
-    color: var(--table-text-color);
-}
-/* Ensure row text color has good contrast by overriding the generic table text color for light backgrounds */
-body[data-theme="light"] .row-MATH,
-body[data-theme="light"] .row-ECE {
-    color: var(--color-text-on-light); /* Black text on light backgrounds */
-}
-body[data-theme="dark"] .row-MATH,
-body[data-theme="dark"] .row-PHYS,
-body[data-theme="dark"] .row-ECE {
-    color: var(--color-text-on-dark); /* White text on dark backgrounds */
-}
-
-
-/* Make links stand out */
-#assignmentsTable a {
-    color: inherit; 
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/* Data Controls */
-.data-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--item-spacing);
-    margin-top: var(--main-padding);
-}
-
-/* Infinity rounded corners on export/import buttons */
-.data-controls button {
-    padding: 10px 20px;
-    border: 1px solid var(--data-btn-bg-dark); 
-    border-radius: var(--infinity-radius);
-    cursor: pointer;
-    background-color: var(--data-btn-bg);
-    color: var(--data-btn-text-color);
-}
-
-.data-controls button:hover {
-    filter: brightness(1.2);
-}
-
-/* Toggle Switch Styles (omitted for brevity, assume unchanged) */
-.toggle-container {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-.toggle-container input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-}
-
-input:checked + .slider {
-    background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
+/* ... */
