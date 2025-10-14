@@ -1,97 +1,189 @@
 /* Color Variables */
 :root {
-    /* ... existing color variables ... */
+    /* Title */
+    --title-color-dark-grey: #404040; 
+
+    /* Banner */
+    --banner-bg-color-light: #f0f0f0;
+    --banner-bg-color-dark: #2F4F4F; /* Dark bluish grey */
+
+    /* Background */
+    --main-bg-color-light: #ffffff;
+    --main-bg-color-dark: #000000; /* Black */
+
+    /* Assignment Entry */
+    --entry-bg-color-light: #f9f9f9;
+    --entry-bg-color-dark: #1a1a1a;
+
+    /* Button: Add Assignment */
+    --add-btn-bg-light: #8A2BE2;
+    --add-btn-bg-dark: #800080;
+    --add-btn-text-color-light: white;
+    --add-btn-text-color-dark: white;
+
+    /* Table */
+    --table-bg-color-light: #ffffff;
+    --table-bg-color-dark: #303030;
+    --table-text-color-light: #333;
+    --table-text-color-dark: #eee;
+    
+    /* Delete Button */
+    --delete-btn-opacity: 0.5; /* 50% opacity for base state */
+    --delete-btn-hover-opacity: 1.0; /* Fully opaque on hover */
+
+    /* Export/Import Buttons */
+    --data-btn-bg-light: #cccccc;
+    --data-btn-bg-dark: #1b1b1b;
+    --data-btn-text-color-light: #333;
+    --data-btn-text-color-dark: #aaa;
 
     /* Padding/Spacing Variables */
     --main-padding: 20px;
     --item-spacing: 15px;
     --form-element-min-width: 150px; /* New variable for input/select width */
     
-    /* NEW Padding Variables for Assignment Entry */
+    /* Padding Variables for Assignment Entry */
     --entry-padding-y: 20px; /* Top/Bottom Padding */
     --entry-padding-x: 60px; /* Left/Right Padding */
     
-    /* NEW Margin Adjustment Variable */
+    /* Margin Adjustment Variable */
     --container-max-width: 1100px; /* Increased maximum width to reduce left/right margin */
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 12px; 
-    
-    /* Delete Button */
-    --delete-btn-opacity: 0.5; 
-    --delete-btn-hover-opacity: 1.0; /* Increased hover opacity to max for clarity */
 
-    /* ... existing color variables ... */
+    /* Class Colors - Light Mode */
+    --color-math-light: #dbe7f8;
+    --color-phys-light: #f8dbdb;
+    --color-ece-light: #faf3d1;
+    
+    /* Class Colors - Dark Mode */
+    --color-math-dark: #5b78b0;
+    --color-phys-dark: #b04b4b;
+    --color-ece-dark: #ffb400;
+    
+    /* Dynamic Text Colors for contrast */
+    --color-text-on-light: #000;
+    --color-text-on-dark: #fff;
 }
 
-/* Updated container max-width */
+/* Light Mode Variables - Defines the active class colors in light mode */
+body[data-theme="light"] {
+    --title-color: var(--title-color-dark-grey);
+    --banner-bg-color: var(--banner-bg-color-light);
+    --main-bg-color: var(--main-bg-color-light);
+    --entry-bg-color: var(--entry-bg-color-light);
+    --add-btn-bg: var(--add-btn-bg-light);
+    --add-btn-text-color: var(--add-btn-text-color-light);
+    --table-bg-color: var(--table-bg-color-light);
+    --table-text-color: var(--table-text-color-light);
+    --data-btn-bg: var(--data-btn-bg-light);
+    --data-btn-text-color: var(--data-btn-text-color-light);
+
+    --color-math: var(--color-math-light);
+    --color-phys: var(--color-phys-light);
+    --color-ece: var(--color-ece-light);
+}
+
+/* Dark Mode Variables - Defines the active class colors in dark mode */
+body[data-theme="dark"] {
+    --title-color: var(--title-color-dark-grey);
+    --banner-bg-color: var(--banner-bg-color-dark);
+    --main-bg-color: var(--main-bg-color-dark);
+    --entry-bg-color: var(--entry-bg-color-dark);
+    --add-btn-bg: var(--add-btn-bg-dark);
+    --add-btn-text-color: var(--add-btn-text-color-dark);
+    --table-bg-color: var(--table-bg-color-dark);
+    --table-text-color: var(--table-text-color-dark);
+    --data-btn-bg: var(--data-btn-bg-dark);
+    --data-btn-text-color: var(--data-btn-text-color-dark);
+    
+    --color-math: var(--color-math-dark);
+    --color-phys: var(--color-phys-dark);
+    --color-ece: var(--color-ece-dark);
+}
+
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-bg-color);
+    color: var(--table-text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header-banner {
+    background-color: var(--banner-bg-color);
+    padding: var(--main-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#page-title {
+    font-family: 'Jolly Lodger', cursive;
+    color: var(--title-color);
+    margin: 0;
+    font-size: 4em;
+    text-align: left;
+    flex-grow: 1;
+}
+
+/* Vertically stacked toggles */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--item-spacing);
+}
+
 .container {
     padding: var(--main-padding);
-    max-width: var(--container-max-width); /* Applies new, wider max-width */
+    max-width: var(--container-max-width);
     margin: 0 auto;
 }
 
-/* Updated Assignment Entry Padding */
+/* Assignment Entry */
 .assignment-entry {
     background-color: var(--entry-bg-color);
-    padding: var(--entry-padding-y) var(--entry-padding-x); /* Applies new padding variables */
+    padding: var(--entry-padding-y) var(--entry-padding-x);
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
     text-align: center;
 }
 
-/* Updated form element width */
+.form-row {
+    display: flex;
+    gap: var(--item-spacing);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Infinity rounded corners and width on individual form elements */
 .form-row input, .form-row select, .form-row button {
     padding: 10px;
     border-radius: var(--infinity-radius); 
     border: 1px solid #ccc;
     background-color: var(--main-bg-color);
     color: var(--table-text-color);
-    min-width: var(--form-element-min-width); /* Applies new width variable */
+    min-width: var(--form-element-min-width); /* Applies width variable */
 }
 
-/* Remove border from Export/Import buttons */
-.data-controls button {
-    padding: 10px 20px;
-    border: none; /* Removed border */
-    border-radius: var(--infinity-radius);
-    cursor: pointer;
-    background-color: var(--data-btn-bg);
-    color: var(--data-btn-text-color);
-}
-
-/* Delete Button Opacity (corrected for dependency on text color) */
-.delete-btn {
-    background: none;
-    border: none;
-    color: var(--table-text-color); 
-    opacity: var(--delete-btn-opacity);
-    font-weight: bold;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    transition: opacity 0.2s;
-}
-
-.delete-btn:hover {
-    opacity: var(--delete-btn-hover-opacity); /* Will be fully opaque (1.0) on hover */
-}
-
-/* --- Dropdown Arrow Cover (Inverted Triangle) --- */
-
+/* Dropdown Custom Arrow Wrapper */
 .dropdown-wrapper {
     position: relative;
+    /* Ensure wrapper has the same width as other elements */
+    min-width: var(--form-element-min-width); 
 }
 
 #classDropdown {
-    /* Required to hide the native arrow */
+    /* Hide native arrow and add padding for custom one */
     -webkit-appearance: none; 
     -moz-appearance: none;
     appearance: none;
-    padding-right: 35px; /* Add space for the custom triangle */
+    padding-right: 35px;
 }
 
 .dropdown-wrapper::after {
@@ -106,6 +198,178 @@
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid var(--table-text-color); /* Color matches text */
-    pointer-events: none; /* Allows clicks to pass through to the dropdown */
+    /* Triangle color matches table text color */
+    border-top: 6px solid var(--table-text-color); 
+    pointer-events: none;
+}
+
+#addAssignmentBtn {
+    background-color: var(--add-btn-bg);
+    color: var(--add-btn-text-color);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#addAssignmentBtn:hover {
+    opacity: 0.9;
+}
+
+/* Table Styles */
+.assignments-table-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#assignmentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px auto 0;
+    background-color: var(--table-bg-color);
+    color: var(--table-text-color);
+    border-radius: var(--table-corner-radius); 
+    overflow: hidden; 
+}
+
+#assignmentsTable th, #assignmentsTable td {
+    padding: 12px 15px;
+    border: 1px solid var(--banner-bg-color);
+    text-align: left;
+}
+
+#assignmentsTable th {
+    background-color: var(--banner-bg-color);
+    color: white; 
+}
+
+/* Specific styling for the delete column */
+.delete-column {
+    width: 10px; 
+    text-align: center !important;
+}
+
+/* Delete Button Styling - dependent on table-text-color, with opacity */
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--table-text-color); 
+    opacity: var(--delete-btn-opacity);
+    font-weight: bold;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+    opacity: var(--delete-btn-hover-opacity);
+}
+
+/* Class Color Coding */
+
+.row-MATH {
+    background-color: var(--color-math);
+}
+.row-PHYS {
+    background-color: var(--color-phys);
+}
+.row-ECE {
+    background-color: var(--color-ece);
+}
+
+/* Text color contrast control: Dark Mode (White Text) */
+body[data-theme="dark"] .row-MATH,
+body[data-theme="dark"] .row-PHYS,
+body[data-theme="dark"] .row-ECE {
+    color: var(--color-text-on-dark);
+}
+
+/* Text color contrast control: Light Mode (Black Text) */
+body[data-theme="light"] .row-MATH,
+body[data-theme="light"] .row-PHYS,
+body[data-theme="light"] .row-ECE {
+    color: var(--color-text-on-light);
+}
+
+
+/* Make links stand out */
+#assignmentsTable a {
+    color: inherit; 
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Data Controls */
+.data-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--item-spacing);
+    margin-top: var(--main-padding);
+}
+
+/* Export/Import buttons: Removed border and added infinity rounded corners */
+.data-controls button {
+    padding: 10px 20px;
+    border: none; 
+    border-radius: var(--infinity-radius);
+    cursor: pointer;
+    background-color: var(--data-btn-bg);
+    color: var(--data-btn-text-color);
+}
+
+.data-controls button:hover {
+    filter: brightness(1.2);
+}
+
+/* Toggle Switch Styles */
+.toggle-container {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
