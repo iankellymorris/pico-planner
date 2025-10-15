@@ -199,6 +199,10 @@ body {
     font-weight: bold;
 }
 
+#addAssignmentBtn:hover {
+    opacity: 0.9;
+}
+
 /* Table Styles (unchanged) */
 .assignments-table-container { text-align: center; margin-top: 30px; }
 #assignmentsTable {
@@ -244,7 +248,6 @@ input:checked + .slider:before { transform: translateX(26px); }
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
 /* The media query will trigger when the screen is narrow, forcing full width */
-/* We choose a breakpoint (e.g., 900px) that's safely below the wide screen setup */
 @media (max-width: 900px) {
     /* 1. Remove padding from the container so it spans edge-to-edge */
     .container {
