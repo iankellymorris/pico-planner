@@ -1,7 +1,6 @@
 /* Color Variables */
 :root {
     /* Title */
-    /* Making title darker than banner. Banner is #2F4F4F (dark mode) / #f0f0f0 (light mode) */
     --title-color-dark-grey: #333333; 
 
     /* Banner */
@@ -52,19 +51,19 @@
 
     /* Border Radius */
     --infinity-radius: 9999px; 
-    --table-corner-radius: 20px; /* Increased rounded corner for table */
+    --table-corner-radius: 20px; 
 
     /* --- CORRECTED CLASS COLORS --- */
 
-    /* Class Colors - Light Mode (Math: Yellow, Phys: Blue, ECE: Red) */
-    --color-math-light: #faf3d1; /* Light Yellow/Cream */
-    --color-phys-light: #dbe7f8; /* Light Blue/Grey */
-    --color-ece-light: #f8dbdb; /* Light Red/Pink */
+    /* Class Colors - Light Mode (MATH: Yellow, PHYS: Blue, ECE: Red) */
+    --color-math-light: #faf3d1; 
+    --color-phys-light: #dbe7f8; 
+    --color-ece-light: #f8dbdb; 
     
-    /* Class Colors - Dark Mode (Math: Yellow, Phys: Blue, ECE: Red) */
-    --color-math-dark: #ffb400; /* Dark Yellow/Gold */
-    --color-phys-dark: #5b78b0; /* Dark Blue */
-    --color-ece-dark: #b04b4b; /* Dark Red */
+    /* Class Colors - Dark Mode (MATH: Yellow, PHYS: Blue, ECE: Red) */
+    --color-math-dark: #ffb400; 
+    --color-phys-dark: #5b78b0; 
+    --color-ece-dark: #b04b4b; 
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -145,6 +144,7 @@ body {
     padding: var(--main-padding);
     max-width: var(--container-max-width);
     margin: 0 auto;
+    transition: max-width 0.3s; /* Transition for responsiveness */
 }
 
 /* Assignment Entry */
@@ -155,6 +155,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
     text-align: center;
+    transition: padding 0.3s, border-radius 0.3s; /* Transition for responsiveness */
 }
 
 .form-row {
@@ -228,7 +229,7 @@ body {
     margin: 15px auto 0;
     background-color: var(--table-bg-color);
     color: var(--table-text-color);
-    border-radius: var(--table-corner-radius); /* Increased roundness */
+    border-radius: var(--table-corner-radius); 
     overflow: hidden; 
 }
 
@@ -373,4 +374,41 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+
+/* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
+
+@media (max-width: 1000px) {
+    /* 1. Make the main container full width */
+    .container {
+        max-width: 100%; /* Go full width */
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* 2. Make the assignment entry form cover full width and remove corners/padding */
+    .assignment-entry {
+        border-radius: 0; 
+        padding: var(--entry-padding-y) 15px; 
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* 3. Ensure form row elements stack nicely */
+    .form-row {
+        flex-direction: column; 
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    /* Override min-width to allow elements to fill the stacked column */
+    .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
+        min-width: 100%;
+    }
+
+    /* 4. Remove table corners when full width */
+    #assignmentsTable {
+        border-radius: 0; 
+    }
 }
