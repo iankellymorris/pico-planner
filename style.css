@@ -44,23 +44,21 @@
     
     /* Padding Variables for Assignment Entry */
     --entry-padding-y: 20px; 
-    --entry-padding-x: 60px; 
     
-    /* Margin Adjustment Variable */
-    --container-max-width: 1100px; 
+    /* The assignment entry container will use this value for fixed side margins */
+    --entry-fixed-side-margin: 20px; 
+    
+    /* Max width of the content area (Page Width - 2 * side margin) */
+    --content-max-width: 1100px; 
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
     /* --- CORRECTED CLASS COLORS --- */
-
-    /* Class Colors - Light Mode (MATH: Yellow, PHYS: Blue, ECE: Red) */
     --color-math-light: #faf3d1; 
     --color-phys-light: #dbe7f8; 
     --color-ece-light: #f8dbdb; 
-    
-    /* Class Colors - Dark Mode (MATH: Yellow, PHYS: Blue, ECE: Red) */
     --color-math-dark: #ffb400; 
     --color-phys-dark: #5b78b0; 
     --color-ece-dark: #b04b4b; 
@@ -70,7 +68,7 @@
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables - Defines the active class colors in light mode */
+/* Light Mode Variables (omitted for brevity) */
 body[data-theme="light"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
@@ -88,7 +86,7 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables - Defines the active class colors in dark mode */
+/* Dark Mode Variables (omitted for brevity) */
 body[data-theme="dark"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
@@ -140,69 +138,57 @@ body {
     gap: var(--item-spacing);
 }
 
+/* Main content wrapper */
 .container {
-    padding: var(--main-padding);
-    max-width: var(--container-max-width);
+    padding: var(--main-padding) var(--entry-fixed-side-margin); /* Use fixed padding */
+    max-width: var(--content-max-width);
     margin: 0 auto;
-    transition: max-width 0.3s; /* Transition for responsiveness */
+    transition: max-width 0.3s;
 }
 
 /* Assignment Entry */
 .assignment-entry {
     background-color: var(--entry-bg-color);
-    padding: var(--entry-padding-y) var(--entry-padding-x);
+    /* Use padding-y for top/bottom, and 0 for sides since the container handles margins */
+    padding: var(--entry-padding-y) 0; 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
     text-align: center;
-    transition: padding 0.3s, border-radius 0.3s; /* Transition for responsiveness */
+    transition: padding 0.3s, border-radius 0.3s;
 }
 
 .form-row {
     display: flex;
     gap: var(--item-spacing);
     justify-content: center;
-    flex-wrap: wrap;
+    /* Allow elements to wrap */
+    flex-wrap: wrap; 
 }
 
-/* Infinity rounded corners and width on individual form elements */
+/* Set all form elements to the minimum width for consistency */
+.form-row input, .form-row select, .form-row button, .dropdown-wrapper {
+    min-width: var(--form-element-min-width); 
+    max-width: var(--form-element-min-width); /* Prevents expansion on wide screens */
+    flex-grow: 0;
+}
+
+/* Form element base styling */
 .form-row input, .form-row select, .form-row button {
     padding: 10px;
     border-radius: var(--infinity-radius); 
     border: 1px solid #ccc;
     background-color: var(--main-bg-color);
     color: var(--table-text-color);
-    min-width: var(--form-element-min-width); 
 }
 
-/* Dropdown Custom Arrow Wrapper */
-.dropdown-wrapper {
-    position: relative;
-    min-width: var(--form-element-min-width); 
-}
-
-#classDropdown {
-    /* Hide native arrow and add padding for custom one */
-    -webkit-appearance: none; 
-    -moz-appearance: none;
-    appearance: none;
-    padding-right: 35px;
-}
-
+/* Dropdown Custom Arrow Wrapper (unchanged) */
+.dropdown-wrapper { position: relative; }
+#classDropdown { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 35px; }
 .dropdown-wrapper::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    
-    /* Inverted Triangle Shape */
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid var(--table-text-color); 
-    pointer-events: none;
+    content: ""; position: absolute; top: 50%; right: 15px; transform: translateY(-50%);
+    width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent;
+    border-top: 6px solid var(--table-text-color); pointer-events: none;
 }
 
 #addAssignmentBtn {
@@ -213,198 +199,82 @@ body {
     font-weight: bold;
 }
 
-#addAssignmentBtn:hover {
-    opacity: 0.9;
-}
-
-/* Table Styles */
-.assignments-table-container {
-    text-align: center;
-    margin-top: 30px;
-}
-
+/* Table Styles (unchanged) */
+.assignments-table-container { text-align: center; margin-top: 30px; }
 #assignmentsTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px auto 0;
-    background-color: var(--table-bg-color);
-    color: var(--table-text-color);
-    border-radius: var(--table-corner-radius); 
-    overflow: hidden; 
+    width: 100%; border-collapse: collapse; margin: 15px auto 0;
+    background-color: var(--table-bg-color); color: var(--table-text-color);
+    border-radius: var(--table-corner-radius); overflow: hidden; 
 }
-
-#assignmentsTable th, #assignmentsTable td {
-    padding: 12px 15px;
-    border: 1px solid var(--banner-bg-color);
-    text-align: left;
-}
-
-#assignmentsTable th {
-    background-color: var(--banner-bg-color);
-    color: white; 
-}
-
-/* Specific styling for the delete column */
-.delete-column {
-    width: 10px; 
-    text-align: center !important;
-}
-
-/* Delete Button Styling - dependent on table-text-color, with opacity */
+#assignmentsTable th, #assignmentsTable td { padding: 12px 15px; border: 1px solid var(--banner-bg-color); text-align: left; }
+#assignmentsTable th { background-color: var(--banner-bg-color); color: white; }
+.delete-column { width: 10px; text-align: center !important; }
 .delete-btn {
-    background: none;
-    border: none;
-    color: var(--table-text-color); 
-    opacity: var(--delete-btn-opacity);
-    font-weight: bold;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    transition: opacity 0.2s;
+    background: none; border: none; color: var(--table-text-color); opacity: var(--delete-btn-opacity);
+    font-weight: bold; font-size: 1.2em; cursor: pointer; padding: 0; line-height: 1; transition: opacity 0.2s;
 }
+.delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-.delete-btn:hover {
-    opacity: var(--delete-btn-hover-opacity);
-}
+/* Class Color Coding (unchanged) */
+.row-MATH { background-color: var(--color-math); }
+.row-PHYS { background-color: var(--color-phys); }
+.row-ECE { background-color: var(--color-ece); }
+body[data-theme="dark"] .row-MATH, body[data-theme="dark"] .row-PHYS, body[data-theme="dark"] .row-ECE { color: var(--color-text-on-dark); }
+body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[data-theme="light"] .row-ECE { color: var(--color-text-on-light); }
+#assignmentsTable a { color: inherit; text-decoration: underline; font-weight: bold; }
 
-/* Class Color Coding */
-
-.row-MATH {
-    background-color: var(--color-math);
-}
-.row-PHYS {
-    background-color: var(--color-phys);
-}
-.row-ECE {
-    background-color: var(--color-ece);
-}
-
-/* Text color contrast control: Dark Mode (White Text) */
-body[data-theme="dark"] .row-MATH,
-body[data-theme="dark"] .row-PHYS,
-body[data-theme="dark"] .row-ECE {
-    color: var(--color-text-on-dark);
-}
-
-/* Text color contrast control: Light Mode (Black Text) */
-body[data-theme="light"] .row-MATH,
-body[data-theme="light"] .row-PHYS,
-body[data-theme="light"] .row-ECE {
-    color: var(--color-text-on-light);
-}
-
-
-/* Make links stand out */
-#assignmentsTable a {
-    color: inherit; 
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/* Data Controls */
-.data-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--item-spacing);
-    margin-top: var(--main-padding);
-}
-
-/* Export/Import buttons: Removed border and added infinity rounded corners */
+/* Data Controls (unchanged) */
+.data-controls { display: flex; justify-content: flex-end; gap: var(--item-spacing); margin-top: var(--main-padding); }
 .data-controls button {
-    padding: 10px 20px;
-    border: none; 
-    border-radius: var(--infinity-radius);
-    cursor: pointer;
-    background-color: var(--data-btn-bg);
-    color: var(--data-btn-text-color);
+    padding: 10px 20px; border: none; border-radius: var(--infinity-radius);
+    cursor: pointer; background-color: var(--data-btn-bg); color: var(--data-btn-text-color);
 }
+.data-controls button:hover { filter: brightness(1.2); }
 
-.data-controls button:hover {
-    filter: brightness(1.2);
-}
-
-/* Toggle Switch Styles */
-.toggle-container {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-.toggle-container input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-}
-
-input:checked + .slider {
-    background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
+/* Toggle Switch Styles (omitted for brevity) */
+.toggle-container { position: relative; display: inline-block; width: 60px; height: 34px; }
+.toggle-container input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
+input:checked + .slider { background-color: #2196F3; }
+input:checked + .slider:before { transform: translateX(26px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
 
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
-@media (max-width: 1000px) {
-    /* 1. Make the main container full width */
+/* The media query will trigger when the screen is narrow, forcing full width */
+/* We choose a breakpoint (e.g., 900px) that's safely below the wide screen setup */
+@media (max-width: 900px) {
+    /* 1. Remove padding from the container so it spans edge-to-edge */
     .container {
-        max-width: 100%; /* Go full width */
-        padding-left: 10px;
-        padding-right: 10px;
+        max-width: 100%; 
+        padding-left: 0; 
+        padding-right: 0;
+        margin-left: 0;
+        margin-right: 0;
     }
 
-    /* 2. Make the assignment entry form cover full width and remove corners/padding */
+    /* 2. Make the assignment entry go full-width and use small internal padding */
     .assignment-entry {
-        border-radius: 0; 
-        padding: var(--entry-padding-y) 15px; 
+        border-radius: 0; /* Go full edge-to-edge */
+        padding: var(--entry-padding-y) 15px; /* Add small internal padding */
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
     }
 
-    /* 3. Ensure form row elements stack nicely */
+    /* 3. Ensure form row elements stack vertically for phone views */
     .form-row {
         flex-direction: column; 
         align-items: stretch;
         gap: 10px;
     }
     
-    /* Override min-width to allow elements to fill the stacked column */
+    /* Elements fill the full width of the form row when stacked */
     .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
         min-width: 100%;
+        max-width: 100%; /* Override max-width for full fill */
     }
 
     /* 4. Remove table corners when full width */
