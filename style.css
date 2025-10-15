@@ -15,9 +15,9 @@
     --entry-bg-color-light: #f9f9f9;
     --entry-bg-color-dark: #1a1a1a;
 
-    /* Button: Add Assignment */
-    --add-btn-bg-light: #8A2BE2;
-    --add-btn-bg-dark: #800080;
+    /* Button: Add Assignment - NEW ORANGE COLOR */
+    --add-btn-bg-light: #FF8C00; /* DarkOrange */
+    --add-btn-bg-dark: #FF4500; /* Red Orange */
     --add-btn-text-color-light: white;
     --add-btn-text-color-dark: white;
 
@@ -40,22 +40,21 @@
     /* Padding/Spacing Variables */
     --main-padding: 20px;
     --item-spacing: 15px;
-    --form-element-min-width: 150px; 
+    --form-element-width: 150px; /* Use a single variable for consistent element width */
     
     /* Padding Variables for Assignment Entry */
     --entry-padding-y: 20px; 
+    --entry-padding-x: 20px; /* Fixed side padding for entry container (was fixed side margin) */
     
-    /* The assignment entry container will use this value for fixed side margins */
-    --entry-fixed-side-margin: 20px; 
-    
-    /* Max width of the content area (Page Width - 2 * side margin) */
+    /* Page Widths */
+    --page-side-padding: 20px; /* Padding for the body/container on wide screens */
     --content-max-width: 1100px; 
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CORRECTED CLASS COLORS --- */
+    /* --- CORRECTED CLASS COLORS (omitted for brevity) --- */
     --color-math-light: #faf3d1; 
     --color-phys-light: #dbe7f8; 
     --color-ece-light: #f8dbdb; 
@@ -138,19 +137,19 @@ body {
     gap: var(--item-spacing);
 }
 
-/* Main content wrapper */
+/* Main content wrapper: controls the overall layout and margin */
 .container {
-    padding: var(--main-padding) var(--entry-fixed-side-margin); /* Use fixed padding */
+    padding: var(--main-padding) var(--page-side-padding); /* Uses page side padding */
     max-width: var(--content-max-width);
     margin: 0 auto;
     transition: max-width 0.3s;
 }
 
-/* Assignment Entry */
+/* Assignment Entry: Now uses its own fixed padding */
 .assignment-entry {
     background-color: var(--entry-bg-color);
-    /* Use padding-y for top/bottom, and 0 for sides since the container handles margins */
-    padding: var(--entry-padding-y) 0; 
+    /* NEW: Uses entry-padding-x for fixed side padding */
+    padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
@@ -162,18 +161,19 @@ body {
     display: flex;
     gap: var(--item-spacing);
     justify-content: center;
-    /* Allow elements to wrap */
+    /* Allows elements to wrap naturally onto multiple lines */
     flex-wrap: wrap; 
 }
 
-/* Set all form elements to the minimum width for consistency */
+/* Fixed, consistent width for all form elements */
 .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
-    min-width: var(--form-element-min-width); 
-    max-width: var(--form-element-min-width); /* Prevents expansion on wide screens */
+    width: var(--form-element-width); 
+    min-width: var(--form-element-width); 
+    max-width: var(--form-element-width); 
     flex-grow: 0;
 }
 
-/* Form element base styling */
+/* Form element base styling (omitted for brevity) */
 .form-row input, .form-row select, .form-row button {
     padding: 10px;
     border-radius: var(--infinity-radius); 
@@ -182,7 +182,7 @@ body {
     color: var(--table-text-color);
 }
 
-/* Dropdown Custom Arrow Wrapper (unchanged) */
+/* Dropdown Custom Arrow Wrapper (omitted for brevity) */
 .dropdown-wrapper { position: relative; }
 #classDropdown { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 35px; }
 .dropdown-wrapper::after {
@@ -203,7 +203,7 @@ body {
     opacity: 0.9;
 }
 
-/* Table Styles (unchanged) */
+/* Table Styles (omitted for brevity) */
 .assignments-table-container { text-align: center; margin-top: 30px; }
 #assignmentsTable {
     width: 100%; border-collapse: collapse; margin: 15px auto 0;
@@ -219,7 +219,7 @@ body {
 }
 .delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding (unchanged) */
+/* Class Color Coding (omitted for brevity) */
 .row-MATH { background-color: var(--color-math); }
 .row-PHYS { background-color: var(--color-phys); }
 .row-ECE { background-color: var(--color-ece); }
@@ -227,7 +227,7 @@ body[data-theme="dark"] .row-MATH, body[data-theme="dark"] .row-PHYS, body[data-
 body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[data-theme="light"] .row-ECE { color: var(--color-text-on-light); }
 #assignmentsTable a { color: inherit; text-decoration: underline; font-weight: bold; }
 
-/* Data Controls (unchanged) */
+/* Data Controls (omitted for brevity) */
 .data-controls { display: flex; justify-content: flex-end; gap: var(--item-spacing); margin-top: var(--main-padding); }
 .data-controls button {
     padding: 10px 20px; border: none; border-radius: var(--infinity-radius);
@@ -247,8 +247,9 @@ input:checked + .slider:before { transform: translateX(26px); }
 
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
-/* The media query will trigger when the screen is narrow, forcing full width */
-@media (max-width: 900px) {
+/* The media query now ONLY handles the transition to full-bleed, vertical stack */
+/* The break point is set low enough to allow natural wrapping first. */
+@media (max-width: 750px) {
     /* 1. Remove padding from the container so it spans edge-to-edge */
     .container {
         max-width: 100%; 
@@ -258,16 +259,16 @@ input:checked + .slider:before { transform: translateX(26px); }
         margin-right: 0;
     }
 
-    /* 2. Make the assignment entry go full-width and use small internal padding */
+    /* 2. Make the assignment entry go full-width and use minimal internal padding */
     .assignment-entry {
         border-radius: 0; /* Go full edge-to-edge */
-        padding: var(--entry-padding-y) 15px; /* Add small internal padding */
+        padding: var(--entry-padding-y) 15px; /* Use smaller internal padding when full width */
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
     }
 
-    /* 3. Ensure form row elements stack vertically for phone views */
+    /* 3. Force vertical stack for mobile view, elements fill the entire width */
     .form-row {
         flex-direction: column; 
         align-items: stretch;
@@ -277,7 +278,8 @@ input:checked + .slider:before { transform: translateX(26px); }
     /* Elements fill the full width of the form row when stacked */
     .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
         min-width: 100%;
-        max-width: 100%; /* Override max-width for full fill */
+        width: 100%; /* Ensure elements take full width in stacked mode */
+        max-width: 100%; 
     }
 
     /* 4. Remove table corners when full width */
