@@ -14,59 +14,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Undo Constants
     const UNDO_HISTORY_LIMIT = 10;
-    // History will store snapshots of the assignments array.
     let undoHistory = []; 
 
     let assignments = loadAssignments();
     
-    // --- State Management Functions ---
+    // --- Utility Functions ---
 
     /**
-     * Loads assignments from Local Storage and initializes settings.
+     * Formats a date string (YYYY-MM-DD) into DD MON YYYY format.
+     * @param {string} dateString - The date in YYYY-MM-DD format.
+     * @returns {string} The date in DD MON YYYY format (e.g., 05 OCT 2025).
      */
+    function formatDueDate(dateString) {
+        if (!dateString) return '';
+        // Use T00:00:00 to treat the date as midnight UTC, avoiding timezone shifts
+        const date = new Date(dateString + 'T00:00:00'); 
+        
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        });
+        
+        let formattedDate = formatter.format(date).replace(',', '');
+        // Example output of formatter is usually "10/05/2025" or similar based on locale.
+        const [month, day, year] = formattedDate.split('/');
+        
+        const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        const shortMonth = monthNames[parseInt(month, 10) - 1];
+
+        // Ensure leading zero on the day if the browser didn't provide it (though '2-digit' should handle this)
+        const paddedDay = day.length === 1 ? '0' + day : day;
+
+        return `${paddedDay} ${shortMonth} ${year}`;
+    }
+
+    // --- State Management Functions ---
     function loadAssignments() {
         const storedAssignments = localStorage.getItem('assignments');
         const isDarkMode = localStorage.getItem('darkMode') !== 'false';
-
         darkModeToggle.checked = isDarkMode;
         body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-
         groupByClassToggle.checked = localStorage.getItem('groupByClass') === 'true';
-
         return storedAssignments ? JSON.parse(storedAssignments) : [];
     }
 
-    /**
-     * Saves the current assignments array to Local Storage.
-     */
     function saveAssignments() {
         localStorage.setItem('assignments', JSON.stringify(assignments));
     }
 
-    /**
-     * Takes a snapshot of the current assignments array for the undo history.
-     */
     function recordState() {
         // Only push if the current state is different from the last recorded state
         if (undoHistory.length > 0 && JSON.stringify(undoHistory[undoHistory.length - 1]) === JSON.stringify(assignments)) {
             return;
         }
 
-        undoHistory.push(JSON.stringify(assignments)); // Store a string snapshot
+        undoHistory.push(JSON.stringify(assignments)); 
         if (undoHistory.length > UNDO_HISTORY_LIMIT) {
-            undoHistory.shift(); // Remove the oldest state
+            undoHistory.shift(); 
         }
     }
     
-    /**
-     * Reverts the assignments array to the last recorded state.
-     */
     function undoState() {
         if (undoHistory.length > 1) {
             // Remove the *current* state (the one we want to revert from)
             undoHistory.pop(); 
             
-            // Load the *previous* state
+            // Load the * previous* state
             const previousState = undoHistory[undoHistory.length - 1];
             assignments = JSON.parse(previousState);
             saveAssignments();
@@ -76,46 +90,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Core Rendering Functions ---
     
-    /**
-     * Renders the assignments into the table, applying sorting and grouping.
-     */
     function renderAssignments() {
         tableBody.innerHTML = '';
         let displayList = [...assignments];
-
-        // 1. Sorting by Date
         displayList.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
-        // 2. Grouping Logic
+        // Grouping Logic (functional)
         if (groupByClassToggle.checked) {
             const grouped = {};
             displayList.forEach(a => {
                 const className = a.class.replace(' ', '');
-                if (!grouped[className]) {
-                    grouped[className] = [];
-                }
+                if (!grouped[className]) { grouped[className] = []; }
                 grouped[className].push(a);
             });
-
             const classOrder = ['MATH 1210', 'PHYS 2210', 'ECE 1400'].map(c => c.replace(' ', ''));
             displayList = [];
             classOrder.forEach(classNameKey => {
-                if (grouped[classNameKey]) {
-                    displayList.push(...grouped[classNameKey]);
-                }
+                if (grouped[classNameKey]) { displayList.push(...grouped[classNameKey]); }
             });
         }
 
-        // 3. Render Rows
         displayList.forEach((assignment) => {
             const row = tableBody.insertRow();
             const classKey = assignment.class.split(' ')[0];
-
             row.classList.add(`row-${classKey}`);
 
-            // Assignment Cell (Clickable link, no class title)
+            // Assignment Cell 
             const assignmentCell = row.insertCell(0);
-            
             if (assignment.link) {
                 const linkElement = document.createElement('a');
                 linkElement.href = assignment.link;
@@ -126,9 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 assignmentCell.textContent = assignment.name; 
             }
             
-            // Due Date Cell
+            // Due Date Cell - Applying DD MON YYYY format
             const dateCell = row.insertCell(1);
-            dateCell.textContent = assignment.dueDate;
+            dateCell.textContent = formatDueDate(assignment.dueDate);
             
             // Delete Button Cell
             const deleteCell = row.insertCell(2);
@@ -136,21 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = '×';
             deleteBtn.classList.add('delete-btn');
-            
-            // Attach delete handler
             deleteBtn.addEventListener('click', () => deleteAssignment(assignment));
             deleteCell.appendChild(deleteBtn);
         });
         
-        recordState(); // Record state after every successful render
+        recordState();
     }
 
-    /**
-     * Finds and removes an assignment from the array.
-     * @param {object} assignmentToDelete - The assignment object to remove.
-     */
     function deleteAssignment(assignmentToDelete) {
-        // Record state BEFORE deletion for the first undo step
+        // Record state BEFORE deletion
         recordState(); 
         
         const index = assignments.findIndex(a => 
@@ -158,23 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
             a.name === assignmentToDelete.name && 
             a.dueDate === assignmentToDelete.dueDate
         );
-
         if (index > -1) {
             assignments.splice(index, 1);
             saveAssignments();
             renderAssignments();
-            // renderAssignments calls recordState() again, recording the deleted state.
         }
     }
 
     // --- Event Listeners ---
 
-    // Add Assignment Button
     addAssignmentBtn.addEventListener('click', () => {
         const className = classDropdown.value;
         const name = assignmentNameInput.value.trim();
         const link = assignmentLinkInput.value.trim();
-        const dueDate = dueDateInput.value;
+        const dueDate = dueDateInput.value; // Store as YYYY-MM-DD
 
         if (!name || !dueDate) {
             alert('Please enter an assignment name and a due date.');
@@ -199,42 +191,31 @@ document.addEventListener('DOMContentLoaded', () => {
         classDropdown.value = 'MATH 1210';
     });
 
-    // Dark/Light Mode Toggle
     darkModeToggle.addEventListener('change', () => {
         const isDark = darkModeToggle.checked;
         body.setAttribute('data-theme', isDark ? 'dark' : 'light');
         localStorage.setItem('darkMode', isDark);
     });
 
-    // Group by Class Toggle
     groupByClassToggle.addEventListener('change', () => {
         localStorage.setItem('groupByClass', groupByClassToggle.checked);
         renderAssignments();
     });
 
-    // Export Data Button
     exportDataBtn.addEventListener('click', () => {
         const dataStr = JSON.stringify(assignments, null, 2);
         const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-        const exportFileDefaultName = 'assignment_tracker_data.json';
-
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.setAttribute('download', 'assignment_tracker_data.json');
         linkElement.click();
     });
 
-    // Import Data Button
-    importDataBtn.addEventListener('click', () => {
-        importFileInput.click();
-    });
-
-    // Import File Handler
+    importDataBtn.addEventListener('click', () => { importFileInput.click(); });
+    
     importFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
@@ -242,8 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (Array.isArray(importedData)) {
                     assignments = importedData;
                     saveAssignments();
-                    // Clear history on major state change (import)
-                    undoHistory = []; 
+                    undoHistory = []; // Clear history on major state change
                     renderAssignments();
                     alert('Data imported successfully!');
                 } else {
@@ -259,9 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Global Keyboard Listener for Ctrl+Z (Undo)
     document.addEventListener('keydown', (e) => {
-        // Check for Ctrl (or Cmd on Mac) and 'Z' key
         if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-            e.preventDefault(); // Prevent browser default undo
+            e.preventDefault();
             undoState();
         }
     });
