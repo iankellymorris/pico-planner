@@ -40,7 +40,7 @@
     /* Padding/Spacing Variables */
     --main-padding: 20px;
     --item-spacing: 15px;
-    --form-element-width: 150px; 
+    --form-element-width: 120px; /* NEW FIX: Reduced width for consistent sizing and to force an easier wrap/stack */
     
     /* Padding Variables for Assignment Entry */
     --entry-padding-y: 20px; 
@@ -54,17 +54,13 @@
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- ADJUSTED CLASS COLORS FOR SATURATION/LUMINOSITY --- */
-
-    /* Class Colors - Light Mode (Math: Yellow, Phys: Blue, ECE: Red) - Darker and slightly more saturated */
-    --color-math-light: #F0E68C; /* Khaki - Darker Yellow */
-    --color-phys-light: #A8C2E7; /* Light Steel Blue - Darker Blue */
-    --color-ece-light: #F0A0A0; /* Light Coral - Darker Red */
-    
-    /* Class Colors - Dark Mode (Math: Yellow, Phys: Blue, ECE: Red) - Lighter and less saturated */
-    --color-math-dark: #FFE082; /* Amber 200 - Lighter Yellow */
-    --color-phys-dark: #81A1C1; /* Medium Blue - Lighter Blue */
-    --color-ece-dark: #D36C6C; /* Desaturated Red - Lighter Red */
+    /* --- CLASS COLORS (omitted for brevity) --- */
+    --color-math-light: #F0E68C; 
+    --color-phys-light: #A8C2E7; 
+    --color-ece-light: #F0A0A0; 
+    --color-math-dark: #FFE082; 
+    --color-phys-dark: #81A1C1; 
+    --color-ece-dark: #D36C6C; 
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -107,7 +103,7 @@ body[data-theme="dark"] {
     --color-ece: var(--color-ece-dark);
 }
 
-/* Base Styles (omitted for brevity) */
+/* Base Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -134,7 +130,7 @@ body {
     flex-grow: 1;
 }
 
-/* Vertically stacked toggles (omitted for brevity) */
+/* Vertically stacked toggles */
 .controls {
     display: flex;
     flex-direction: column;
@@ -152,7 +148,7 @@ body {
 /* Assignment Entry: Uses its own fixed padding */
 .assignment-entry {
     background-color: var(--entry-bg-color);
-    padding: var(--entry-padding-y) var(--entry-padding-x); 
+    padding: var(--entry-padding-y) var(--entry-padding-x); /* Uses fixed side padding as requested */
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: var(--main-padding) 0;
@@ -167,13 +163,13 @@ body {
     flex-wrap: wrap; /* Allows natural overflow to multiple lines */
 }
 
-/* FIX: Ensure consistent, fixed width and prevent elements from expanding */
+/* FIX: Consistent, fixed width for all form elements and prevent any expansion/shrinkage */
 .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
     width: var(--form-element-width); 
     min-width: var(--form-element-width); 
     max-width: var(--form-element-width); 
-    flex-grow: 0; /* Important: Prevents stretching beyond fixed width */
-    flex-shrink: 0; /* Important: Prevents shrinking below fixed width */
+    flex-grow: 0; 
+    flex-shrink: 0; /* Ensures consistent size */
 }
 
 /* Form element base styling (omitted for brevity) */
@@ -222,7 +218,7 @@ body {
 }
 .delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding - Now uses the adjusted saturation/luminosity variables */
+/* Class Color Coding (omitted for brevity) */
 .row-MATH { background-color: var(--color-math); }
 .row-PHYS { background-color: var(--color-phys); }
 .row-ECE { background-color: var(--color-ece); }
@@ -243,7 +239,9 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
-@media (max-width: 750px) {
+/* NEW FIX: Trigger the full-width (stacked) layout earlier (850px) 
+to prevent crowding on the second line and meet the 'overflows to two lines' condition */
+@media (max-width: 850px) { 
     /* 1. Remove padding from the container so it spans edge-to-edge */
     .container {
         max-width: 100%; 
@@ -255,8 +253,8 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 
     /* 2. Make the assignment entry go full-width and use minimal internal padding */
     .assignment-entry {
-        border-radius: 0; 
-        padding: var(--entry-padding-y) 15px; 
+        border-radius: 0; /* Go full edge-to-edge */
+        padding: var(--entry-padding-y) 15px; /* Use smaller internal padding when full width */
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
