@@ -15,7 +15,7 @@
     --entry-bg-color-light: #f9f9f9;
     --entry-bg-color-dark: #1a1a1a;
 
-    /* Button: Add Assignment - NEW ORANGE COLOR */
+    /* Button: Add Assignment */
     --add-btn-bg-light: #FF8C00; /* DarkOrange */
     --add-btn-bg-dark: #FF4500; /* Red Orange */
     --add-btn-text-color-light: white;
@@ -40,27 +40,31 @@
     /* Padding/Spacing Variables */
     --main-padding: 20px;
     --item-spacing: 15px;
-    --form-element-width: 150px; /* Use a single variable for consistent element width */
+    --form-element-width: 150px; 
     
     /* Padding Variables for Assignment Entry */
     --entry-padding-y: 20px; 
-    --entry-padding-x: 20px; /* Fixed side padding for entry container (was fixed side margin) */
+    --entry-padding-x: 20px; 
     
     /* Page Widths */
-    --page-side-padding: 20px; /* Padding for the body/container on wide screens */
+    --page-side-padding: 20px; 
     --content-max-width: 1100px; 
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CORRECTED CLASS COLORS (omitted for brevity) --- */
-    --color-math-light: #faf3d1; 
-    --color-phys-light: #dbe7f8; 
-    --color-ece-light: #f8dbdb; 
-    --color-math-dark: #ffb400; 
-    --color-phys-dark: #5b78b0; 
-    --color-ece-dark: #b04b4b; 
+    /* --- ADJUSTED CLASS COLORS FOR SATURATION/LUMINOSITY --- */
+
+    /* Class Colors - Light Mode (Math: Yellow, Phys: Blue, ECE: Red) - Darker and slightly more saturated */
+    --color-math-light: #F0E68C; /* Khaki - Darker Yellow */
+    --color-phys-light: #A8C2E7; /* Light Steel Blue - Darker Blue */
+    --color-ece-light: #F0A0A0; /* Light Coral - Darker Red */
+    
+    /* Class Colors - Dark Mode (Math: Yellow, Phys: Blue, ECE: Red) - Lighter and less saturated */
+    --color-math-dark: #FFE082; /* Amber 200 - Lighter Yellow */
+    --color-phys-dark: #81A1C1; /* Medium Blue - Lighter Blue */
+    --color-ece-dark: #D36C6C; /* Desaturated Red - Lighter Red */
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -103,7 +107,7 @@ body[data-theme="dark"] {
     --color-ece: var(--color-ece-dark);
 }
 
-/* Base Styles */
+/* Base Styles (omitted for brevity) */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -130,7 +134,7 @@ body {
     flex-grow: 1;
 }
 
-/* Vertically stacked toggles */
+/* Vertically stacked toggles (omitted for brevity) */
 .controls {
     display: flex;
     flex-direction: column;
@@ -145,10 +149,9 @@ body {
     transition: max-width 0.3s;
 }
 
-/* Assignment Entry: Now uses its own fixed padding */
+/* Assignment Entry: Uses its own fixed padding */
 .assignment-entry {
     background-color: var(--entry-bg-color);
-    /* NEW: Uses entry-padding-x for fixed side padding */
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -161,16 +164,16 @@ body {
     display: flex;
     gap: var(--item-spacing);
     justify-content: center;
-    /* Allows elements to wrap naturally onto multiple lines */
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* Allows natural overflow to multiple lines */
 }
 
-/* Fixed, consistent width for all form elements */
+/* FIX: Ensure consistent, fixed width and prevent elements from expanding */
 .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
     width: var(--form-element-width); 
     min-width: var(--form-element-width); 
     max-width: var(--form-element-width); 
-    flex-grow: 0;
+    flex-grow: 0; /* Important: Prevents stretching beyond fixed width */
+    flex-shrink: 0; /* Important: Prevents shrinking below fixed width */
 }
 
 /* Form element base styling (omitted for brevity) */
@@ -219,7 +222,7 @@ body {
 }
 .delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding (omitted for brevity) */
+/* Class Color Coding - Now uses the adjusted saturation/luminosity variables */
 .row-MATH { background-color: var(--color-math); }
 .row-PHYS { background-color: var(--color-phys); }
 .row-ECE { background-color: var(--color-ece); }
@@ -236,19 +239,10 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 .data-controls button:hover { filter: brightness(1.2); }
 
 /* Toggle Switch Styles (omitted for brevity) */
-.toggle-container { position: relative; display: inline-block; width: 60px; height: 34px; }
-.toggle-container input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
-.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
-input:checked + .slider { background-color: #2196F3; }
-input:checked + .slider:before { transform: translateX(26px); }
-.slider.round { border-radius: 34px; }
-.slider.round:before { border-radius: 50%; }
+/* ... */
 
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
-/* The media query now ONLY handles the transition to full-bleed, vertical stack */
-/* The break point is set low enough to allow natural wrapping first. */
 @media (max-width: 750px) {
     /* 1. Remove padding from the container so it spans edge-to-edge */
     .container {
@@ -261,8 +255,8 @@ input:checked + .slider:before { transform: translateX(26px); }
 
     /* 2. Make the assignment entry go full-width and use minimal internal padding */
     .assignment-entry {
-        border-radius: 0; /* Go full edge-to-edge */
-        padding: var(--entry-padding-y) 15px; /* Use smaller internal padding when full width */
+        border-radius: 0; 
+        padding: var(--entry-padding-y) 15px; 
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
@@ -278,7 +272,7 @@ input:checked + .slider:before { transform: translateX(26px); }
     /* Elements fill the full width of the form row when stacked */
     .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
         min-width: 100%;
-        width: 100%; /* Ensure elements take full width in stacked mode */
+        width: 100%; 
         max-width: 100%; 
     }
 
