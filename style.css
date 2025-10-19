@@ -67,7 +67,7 @@
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables */
+/* Light Mode Variables (omitted for brevity) */
 body[data-theme="light"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
@@ -85,7 +85,7 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables */
+/* Dark Mode Variables (omitted for brevity) */
 body[data-theme="dark"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
@@ -119,6 +119,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    align-items: center; 
+    height: auto; 
 }
 
 #page-title {
@@ -135,8 +137,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--item-spacing);
-    flex-shrink: 0; /* Ensures this container does not stretch horizontally */
-    width: fit-content; /* Ensures it only occupies the space of its children */
+    flex-shrink: 0; 
+    width: fit-content; 
+    align-self: center; 
 }
 
 /* Main content wrapper: controls the overall layout and margin */
@@ -153,7 +156,7 @@ body {
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0; /* Ensures it stretches to full width of the constrained container */
+    margin: var(--main-padding) 0; 
     text-align: center;
     transition: padding 0.3s, border-radius 0.3s;
 }
@@ -246,9 +249,29 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 }
 .data-controls button:hover { filter: brightness(1.2); }
 
-/* Toggle Switch Styles (restored) */
+/* Toggle Switch Styles */
+.toggle-container {
+    position: relative;
+    display: inline-block;
+    width: 60px; 
+    height: 34px; 
+    flex-shrink: 0; 
+    /* NEW FIX: Ensure internal line-height is constrained */
+    line-height: 34px; 
+}
 .toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
+.slider { 
+    position: absolute; 
+    cursor: pointer; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-color: #ccc; 
+    transition: 0.4s; 
+    /* NEW FIX: Ensure slider background also honors the constrained height */
+    height: 34px; 
+}
 .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
 input:checked + .slider { background-color: #2196F3; }
 input:checked + .slider:before { transform: translateX(26px); }
