@@ -130,18 +130,21 @@ body {
     flex-grow: 1;
 }
 
-/* Vertically stacked toggles */
+/* Vertically stacked controls container */
 .controls {
     display: flex;
     flex-direction: column;
     gap: var(--item-spacing);
+    /* NEW FIX: Constrain the width to prevent it from forcing the header wider */
+    width: 60px; 
+    flex-shrink: 0;
 }
 
 /* Main content wrapper: controls the overall layout and margin */
 .container {
     padding: var(--main-padding) var(--page-side-padding); 
     max-width: var(--content-max-width); 
-    margin: 0 auto; /* NEW FIX: Ensure container is centered and constrained */
+    margin: 0 auto; 
     transition: max-width 0.3s;
 }
 
@@ -151,10 +154,9 @@ body {
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0; /* REMOVED auto margins and using 0 for full width inside container */
+    margin: var(--main-padding) 0; 
     text-align: center;
     transition: padding 0.3s, border-radius 0.3s;
-    /* REMOVED: max-width: fit-content; */
 }
 
 .form-row {
@@ -245,7 +247,7 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 }
 .data-controls button:hover { filter: brightness(1.2); }
 
-/* Toggle Switch Styles */
+/* Toggle Switch Styles (Correct) */
 .toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
 .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
