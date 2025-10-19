@@ -1,15 +1,15 @@
 /* Color Variables */
 :root {
     /* Title */
-    --title-color-dark-grey: #222222; /* NEW: Darker title */
+    --title-color-dark-grey: #222222; 
 
     /* Banner */
     --banner-bg-color-light: #f0f0f0;
-    --banner-bg-color-dark: #3F5F5F; /* NEW: Slightly lighter banner (#2F4F4F -> #3F5F5F) */
+    --banner-bg-color-dark: #3F5F5F; 
 
     /* Background */
     --main-bg-color-light: #ffffff;
-    --main-bg-color-dark: #000000; /* Black */
+    --main-bg-color-dark: #000000; 
 
     /* Assignment Entry */
     --entry-bg-color-light: #f9f9f9;
@@ -48,23 +48,19 @@
     
     /* Page Widths */
     --page-side-padding: 20px; 
-    --content-max-width: 1100px; 
+    --content-max-width: 1300px; /* NEW FIX: Increased max width to give form breathing room */
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CLASS COLORS FIX: Dark Mode (Halloweeny/Earthy) --- */
-
-    /* Class Colors - Light Mode (Unchanged) */
-    --color-math-light: #F0E68C; /* Yellow */
-    --color-phys-light: #A8C2E7; /* Blue */
-    --color-ece-light: #F0A0A0; /* Red */
-    
-    /* Class Colors - Dark Mode (Earthy/Muted) */
-    --color-math-dark: #CC8400; /* Deep Ochre/Gold */
-    --color-phys-dark: #36454F; /* Dark Charcoal/Slate Blue */
-    --color-ece-dark: #8B0000; /* Dark Blood Red */
+    /* --- CLASS COLORS FIX (omitted for brevity) --- */
+    --color-math-light: #F0E68C; 
+    --color-phys-light: #A8C2E7; 
+    --color-ece-light: #F0A0A0; 
+    --color-math-dark: #CC8400; 
+    --color-phys-dark: #36454F; 
+    --color-ece-dark: #8B0000; 
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -144,7 +140,7 @@ body {
 /* Main content wrapper: controls the overall layout and margin */
 .container {
     padding: var(--main-padding) var(--page-side-padding); 
-    max-width: var(--content-max-width);
+    max-width: var(--content-max-width); /* Uses new, larger max width */
     margin: 0 auto;
     transition: max-width 0.3s;
 }
@@ -174,14 +170,14 @@ body {
     max-width: var(--form-element-width); 
     flex-grow: 0; 
     flex-shrink: 0; 
-    height: 40px; /* FIX: Consistent height for all elements */
-    box-sizing: border-box; /* Include padding/border in height calculation */
+    height: 40px; /* Consistent height for all elements */
+    box-sizing: border-box; 
 }
 
 /* Form element base styling */
 .form-row input, .form-row select, .form-row button {
     padding: 10px;
-    line-height: 20px; /* Center text vertically */
+    line-height: 20px; 
     border-radius: var(--infinity-radius); 
     border: 1px solid #ccc;
     background-color: var(--main-bg-color);
@@ -195,7 +191,7 @@ body {
     -moz-appearance: none; 
     appearance: none; 
     padding-right: 35px;
-    height: 40px; /* Match height of other elements */
+    height: 40px; 
 }
 .dropdown-wrapper::after {
     content: ""; position: absolute; top: 50%; right: 15px; transform: translateY(-50%);
@@ -248,52 +244,14 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 }
 .data-controls button:hover { filter: brightness(1.2); }
 
-/* --- FIX: Toggle Switch CSS (restores switch appearance) --- */
-
-/* Ensures the checkbox input is hidden and not visible as a plain box */
-.toggle-container input[type="checkbox"] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-}
-
-input:checked + .slider {
-    background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
+/* Toggle Switch Styles (omitted for brevity) */
+.toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
+input:checked + .slider { background-color: #2196F3; }
+input:checked + .slider:before { transform: translateX(26px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
 
 /* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
 
@@ -328,7 +286,7 @@ input:checked + .slider:before {
         min-width: 100%;
         width: 100%; 
         max-width: 100%; 
-        height: 40px; /* Maintain consistent height when stacked */
+        height: 40px; 
     }
 
     /* 4. Remove table corners when full width */
