@@ -54,13 +54,17 @@
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CLASS COLORS --- */
-    --color-math-light: #F0E68C; 
-    --color-phys-light: #A8C2E7; 
-    --color-ece-light: #F0A0A0; 
-    --color-math-dark: #CC8400; 
-    --color-phys-dark: #36454F; 
-    --color-ece-dark: #8B0000; 
+    /* --- COLOR FIX: Highly visible, saturated 'primary' colors for Dark Mode --- */
+
+    /* Class Colors - Light Mode (No change, retained from previous step) */
+    --color-math-light: #F0E68C; /* Yellow */
+    --color-phys-light: #A8C2E7; /* Blue */
+    --color-ece-light: #F0A0A0; /* Red */
+    
+    /* Class Colors - Dark Mode (More saturated/Brighter for readability) */
+    --color-math-dark: #FFC300; /* Vibrant Gold/Yellow */
+    --color-phys-dark: #4A90E2; /* Moderate Blue */
+    --color-ece-dark: #D0021B; /* Bright Crimson Red */
     
     /* Dynamic Text Colors for contrast */
     --color-text-on-light: #000;
@@ -119,7 +123,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    align-items: center; 
     height: auto; 
 }
 
@@ -168,20 +171,20 @@ body {
     flex-wrap: wrap; 
 }
 
-/* Consistent height and fixed width for all form elements */
+/* FIX: Consistent sizing using padding/box-sizing instead of fixed height */
 .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
     width: var(--form-element-width); 
     min-width: var(--form-element-width); 
     max-width: var(--form-element-width); 
     flex-grow: 0; 
     flex-shrink: 0; 
-    height: 40px; 
+    /* REMOVED: height: 40px; */ 
     box-sizing: border-box; 
 }
 
 /* Form element base styling */
 .form-row input, .form-row select, .form-row button {
-    padding: 10px;
+    padding: 10px; /* Padding dictates the vertical size */
     line-height: 20px; 
     border-radius: var(--infinity-radius); 
     border: 1px solid #ccc;
@@ -196,7 +199,7 @@ body {
     -moz-appearance: none; 
     appearance: none; 
     padding-right: 35px;
-    height: 40px; 
+    /* Removed height: 40px; here as well */
 }
 .dropdown-wrapper::after {
     content: ""; position: absolute; top: 50%; right: 15px; transform: translateY(-50%);
@@ -217,7 +220,7 @@ body {
     opacity: 0.9;
 }
 
-/* Table Styles */
+/* Table Styles (omitted for brevity) */
 .assignments-table-container { text-align: center; margin-top: 30px; }
 #assignmentsTable {
     width: 100%; border-collapse: collapse; margin: 15px auto 0;
@@ -233,7 +236,7 @@ body {
 }
 .delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding */
+/* Class Color Coding (omitted for brevity) */
 .row-MATH { background-color: var(--color-math); }
 .row-PHYS { background-color: var(--color-phys); }
 .row-ECE { background-color: var(--color-ece); }
@@ -241,7 +244,7 @@ body[data-theme="dark"] .row-MATH, body[data-theme="dark"] .row-PHYS, body[data-
 body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[data-theme="light"] .row-ECE { color: var(--color-text-on-light); }
 #assignmentsTable a { color: inherit; text-decoration: underline; font-weight: bold; }
 
-/* Data Controls */
+/* Data Controls (omitted for brevity) */
 .data-controls { display: flex; justify-content: flex-end; gap: var(--item-spacing); margin-top: var(--main-padding); }
 .data-controls button {
     padding: 10px 20px; border: none; border-radius: var(--infinity-radius);
@@ -256,7 +259,6 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
     width: 60px; 
     height: 34px; 
     flex-shrink: 0; 
-    /* NEW FIX: Ensure internal line-height is constrained */
     line-height: 34px; 
 }
 .toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
@@ -269,7 +271,6 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
     bottom: 0; 
     background-color: #ccc; 
     transition: 0.4s; 
-    /* NEW FIX: Ensure slider background also honors the constrained height */
     height: 34px; 
 }
 .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
@@ -310,7 +311,6 @@ input:checked + .slider:before { transform: translateX(26px); }
         min-width: 100%;
         width: 100%; 
         max-width: 100%; 
-        height: 40px; 
     }
 
     /* 4. Remove table corners when full width */
