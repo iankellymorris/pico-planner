@@ -48,13 +48,13 @@
     
     /* Page Widths */
     --page-side-padding: 20px; 
-    --content-max-width: 1300px; /* NEW FIX: Increased max width to give form breathing room */
+    --content-max-width: 1400px; /* Increased max width */
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CLASS COLORS FIX (omitted for brevity) --- */
+    /* --- CLASS COLORS --- */
     --color-math-light: #F0E68C; 
     --color-phys-light: #A8C2E7; 
     --color-ece-light: #F0A0A0; 
@@ -67,7 +67,7 @@
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables (omitted for brevity) */
+/* Light Mode Variables */
 body[data-theme="light"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
@@ -85,7 +85,7 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables (omitted for brevity) */
+/* Dark Mode Variables */
 body[data-theme="dark"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
@@ -140,7 +140,7 @@ body {
 /* Main content wrapper: controls the overall layout and margin */
 .container {
     padding: var(--main-padding) var(--page-side-padding); 
-    max-width: var(--content-max-width); /* Uses new, larger max width */
+    max-width: var(--content-max-width); 
     margin: 0 auto;
     transition: max-width 0.3s;
 }
@@ -151,26 +151,27 @@ body {
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0;
+    margin: var(--main-padding) auto; /* FIX: Use auto margins here to ensure centering */
     text-align: center;
     transition: padding 0.3s, border-radius 0.3s;
+    max-width: fit-content; /* FIX: Constrains the container's max width to its content's width */
 }
 
 .form-row {
     display: flex;
     gap: var(--item-spacing);
     justify-content: center;
-    flex-wrap: wrap; /* Allows natural overflow to multiple lines */
+    flex-wrap: wrap; 
 }
 
-/* FIX: Consistent height and fixed width for all form elements */
+/* Consistent height and fixed width for all form elements */
 .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
     width: var(--form-element-width); 
     min-width: var(--form-element-width); 
     max-width: var(--form-element-width); 
     flex-grow: 0; 
     flex-shrink: 0; 
-    height: 40px; /* Consistent height for all elements */
+    height: 40px; 
     box-sizing: border-box; 
 }
 
@@ -184,7 +185,7 @@ body {
     color: var(--table-text-color);
 }
 
-/* Dropdown Custom Arrow Wrapper (omitted for brevity) */
+/* Dropdown Custom Arrow Wrapper */
 .dropdown-wrapper { position: relative; }
 #classDropdown { 
     -webkit-appearance: none; 
@@ -205,14 +206,14 @@ body {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    white-space: nowrap; /* Prevent "Add Assignment" from wrapping */
+    white-space: nowrap; 
 }
 
 #addAssignmentBtn:hover {
     opacity: 0.9;
 }
 
-/* Table Styles (omitted for brevity) */
+/* Table Styles */
 .assignments-table-container { text-align: center; margin-top: 30px; }
 #assignmentsTable {
     width: 100%; border-collapse: collapse; margin: 15px auto 0;
@@ -228,7 +229,7 @@ body {
 }
 .delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding (omitted for brevity) */
+/* Class Color Coding */
 .row-MATH { background-color: var(--color-math); }
 .row-PHYS { background-color: var(--color-phys); }
 .row-ECE { background-color: var(--color-ece); }
@@ -236,7 +237,7 @@ body[data-theme="dark"] .row-MATH, body[data-theme="dark"] .row-PHYS, body[data-
 body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[data-theme="light"] .row-ECE { color: var(--color-text-on-light); }
 #assignmentsTable a { color: inherit; text-decoration: underline; font-weight: bold; }
 
-/* Data Controls (omitted for brevity) */
+/* Data Controls */
 .data-controls { display: flex; justify-content: flex-end; gap: var(--item-spacing); margin-top: var(--main-padding); }
 .data-controls button {
     padding: 10px 20px; border: none; border-radius: var(--infinity-radius);
@@ -244,7 +245,7 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 }
 .data-controls button:hover { filter: brightness(1.2); }
 
-/* Toggle Switch Styles (omitted for brevity) */
+/* Toggle Switch Styles */
 .toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
 .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
@@ -270,8 +271,7 @@ input:checked + .slider:before { transform: translateX(26px); }
         border-radius: 0; 
         padding: var(--entry-padding-y) 15px; 
         max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
+        margin: var(--main-padding) 0; /* Remove auto margins to go edge-to-edge */
     }
 
     /* 3. Force vertical stack for mobile view, elements fill the entire width */
