@@ -48,13 +48,13 @@
     
     /* Page Widths */
     --page-side-padding: 20px; 
-    --content-max-width: 1400px; /* Increased max width */
+    --content-max-width: 1400px; 
 
     /* Border Radius */
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CLASS COLORS --- */
+    /* --- CLASS COLORS (omitted for brevity) --- */
     --color-math-light: #F0E68C; 
     --color-phys-light: #A8C2E7; 
     --color-ece-light: #F0A0A0; 
@@ -67,7 +67,7 @@
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables */
+/* Light Mode Variables (omitted for brevity) */
 body[data-theme="light"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
@@ -85,7 +85,7 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables */
+/* Dark Mode Variables (omitted for brevity) */
 body[data-theme="dark"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
@@ -141,7 +141,7 @@ body {
 .container {
     padding: var(--main-padding) var(--page-side-padding); 
     max-width: var(--content-max-width); 
-    margin: 0 auto;
+    margin: 0 auto; /* NEW FIX: Ensure container is centered and constrained */
     transition: max-width 0.3s;
 }
 
@@ -151,10 +151,10 @@ body {
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) auto; /* FIX: Use auto margins here to ensure centering */
+    margin: var(--main-padding) 0; /* REMOVED auto margins and using 0 for full width inside container */
     text-align: center;
     transition: padding 0.3s, border-radius 0.3s;
-    max-width: fit-content; /* FIX: Constrains the container's max width to its content's width */
+    /* REMOVED: max-width: fit-content; */
 }
 
 .form-row {
@@ -271,7 +271,7 @@ input:checked + .slider:before { transform: translateX(26px); }
         border-radius: 0; 
         padding: var(--entry-padding-y) 15px; 
         max-width: 100%;
-        margin: var(--main-padding) 0; /* Remove auto margins to go edge-to-edge */
+        margin: var(--main-padding) 0;
     }
 
     /* 3. Force vertical stack for mobile view, elements fill the entire width */
