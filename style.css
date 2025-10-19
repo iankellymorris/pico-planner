@@ -54,7 +54,7 @@
     --infinity-radius: 9999px; 
     --table-corner-radius: 20px; 
 
-    /* --- CLASS COLORS (omitted for brevity) --- */
+    /* --- CLASS COLORS --- */
     --color-math-light: #F0E68C; 
     --color-phys-light: #A8C2E7; 
     --color-ece-light: #F0A0A0; 
@@ -67,7 +67,7 @@
     --color-text-on-dark: #fff;
 }
 
-/* Light Mode Variables (omitted for brevity) */
+/* Light Mode Variables */
 body[data-theme="light"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-light);
@@ -85,7 +85,7 @@ body[data-theme="light"] {
     --color-ece: var(--color-ece-light);
 }
 
-/* Dark Mode Variables (omitted for brevity) */
+/* Dark Mode Variables */
 body[data-theme="dark"] {
     --title-color: var(--title-color-dark-grey);
     --banner-bg-color: var(--banner-bg-color-dark);
@@ -135,9 +135,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--item-spacing);
-    /* NEW FIX: Constrain the width to prevent it from forcing the header wider */
-    width: 60px; 
-    flex-shrink: 0;
+    flex-shrink: 0; /* Ensures this container does not stretch horizontally */
+    width: fit-content; /* Ensures it only occupies the space of its children */
 }
 
 /* Main content wrapper: controls the overall layout and margin */
@@ -154,7 +153,7 @@ body {
     padding: var(--entry-padding-y) var(--entry-padding-x); 
     border-radius: var(--infinity-radius);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0; 
+    margin: var(--main-padding) 0; /* Ensures it stretches to full width of the constrained container */
     text-align: center;
     transition: padding 0.3s, border-radius 0.3s;
 }
@@ -247,7 +246,7 @@ body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[dat
 }
 .data-controls button:hover { filter: brightness(1.2); }
 
-/* Toggle Switch Styles (Correct) */
+/* Toggle Switch Styles (restored) */
 .toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; }
 .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
