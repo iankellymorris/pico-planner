@@ -2,11 +2,11 @@ body {
     font-family: 'Lato', sans-serif;
     margin: 0;
     padding: 0 20px 20px 20px;
-    background-color: #e0f2fe; /* Light sky blue */
+    background-color: #e0f2fe;
 }
 
 header {
-    background-color: #38bdf8; /* Mid-tone sky blue */
+    background-color: #38bdf8;
     padding: 20px 0;
     margin: 0 -20px 30px -20px;
 }
@@ -14,7 +14,7 @@ header {
 header h1 {
     font-family: 'Autour One', system-ui;
     text-align: center;
-    color: #ffffff; /* White text */
+    color: #ffffff;
     margin: 0;
 }
 
@@ -24,42 +24,51 @@ header h1 {
     border-radius: 50px;
     display: flex;
     gap: 10px;
-    justify-content: center; /* Centered elements */
+    justify-content: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: 30px;
     align-items: center;
 }
 
-.entry-container input, .entry-container select, .entry-container button {
+/* 100% rounding for input elements and add button */
+.entry-container input, .entry-container select, #addBtn {
     font-family: 'Lato', sans-serif;
-    padding: 8px;
+    padding: 8px 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 100px; 
+}
+
+/* Table styling with rounded corners */
+.table-wrapper {
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
     background: white;
 }
 
 th, td {
-    border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
+    border-bottom: 1px solid #eee;
 }
 
 th {
     background-color: #f8fafc;
+    border-bottom: 2px solid #ddd;
 }
 
-/* Class-specific colors */
-.bg-calculus { background-color: #ffff00; }
-.bg-programming { background-color: #ff0000; color: white; }
-.bg-circuits { background-color: #800080; color: white; }
+/* Updated Class-specific colors */
+.bg-calculus { background-color: #ffff00; color: #000; }
+.bg-programming { background-color: #ff6347; color: #fff; }
+.bg-circuits { background-color: #da70d6; color: #fff; }
 
-.bg-programming a, .bg-circuits a { color: white; }
+.bg-programming a, .bg-circuits a { color: #fff; }
 
 .delete-btn {
     width: 24px;
@@ -72,25 +81,25 @@ th {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    font-family: 'Lato', sans-serif;
     line-height: 1;
-    padding: 0;
-}
-
-.delete-btn:hover {
-    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .footer-controls {
-    text-align: right; /* Aligned to the right */
+    text-align: right;
     margin-top: 20px;
 }
 
+/* 100% rounding for footer buttons */
 button#exportBtn, button#importBtn, #addBtn {
     cursor: pointer;
     background-color: #333;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 25px;
+    border-radius: 100px;
+    font-weight: bold;
+}
+
+button#exportBtn:hover, button#importBtn:hover, #addBtn:hover {
+    background-color: #555;
 }
