@@ -12,19 +12,24 @@
 <body>
 
     <header>
-        <h1>Assignment Tracker</h1>
+        <div class="header-content">
+            <h1>Assignment Tracker</h1>
+            <button id="toggleControlsBtn">Toggle Controls</button>
+        </div>
     </header>
 
-    <div class="entry-container">
-        <select id="classSelect">
-            <option value="Calculus II">Calculus II</option>
-            <option value="Computer Programming">Computer Programming</option>
-            <option value="Digital Circuits">Digital Circuits</option>
-        </select>
-        <input type="text" id="assignmentName" placeholder="Assignment Name">
-        <input type="url" id="assignmentLink" placeholder="Link (Optional)">
-        <input type="date" id="dueDate">
-        <button id="addBtn">Add Assignment</button>
+    <div id="controlsContainer">
+        <div class="entry-container">
+            <select id="classSelect">
+                <option value="Calculus II">Calculus II</option>
+                <option value="Computer Programming">Computer Programming</option>
+                <option value="Digital Circuits">Digital Circuits</option>
+            </select>
+            <input type="text" id="assignmentName" placeholder="Assignment Name">
+            <input type="url" id="assignmentLink" placeholder="Link (Optional)">
+            <input type="date" id="dueDate">
+            <button id="addBtn">Add Assignment</button>
+        </div>
     </div>
 
     <div class="table-wrapper">
@@ -41,10 +46,12 @@
         </table>
     </div>
 
-    <div class="footer-controls">
-        <button id="exportBtn">Export Data</button>
-        <button id="importBtn">Import Data</button>
-        <input type="file" id="fileInput" style="display: none;" accept=".json">
+    <div id="footerContainer">
+        <div class="footer-controls">
+            <button id="exportBtn">Export Data</button>
+            <button id="importBtn">Import Data</button>
+            <input type="file" id="fileInput" style="display: none;" accept=".json">
+        </div>
     </div>
 
     <script src="script.js"></script>
