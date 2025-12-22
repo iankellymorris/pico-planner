@@ -1,3 +1,22 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e0f2fe;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #38bdf8;
+    border-radius: 10px;
+    border: 3px solid #e0f2fe;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0ea5e9;
+}
+
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
@@ -26,7 +45,6 @@ header h1 {
     margin: 0;
 }
 
-/* Toggle button without box/border */
 #toggleControlsBtn {
     cursor: pointer;
     background: none;
@@ -42,7 +60,6 @@ header h1 {
 
 #toggleControlsBtn svg {
     width: 32px;
-    height: auto;
 }
 
 .entry-container {
@@ -64,49 +81,56 @@ header h1 {
     border-radius: 100px; 
 }
 
-.table-wrapper {
-    margin-bottom: 20px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border: none;
-    /* 40% scale increase */
-    font-size: 1.4rem; 
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 th {
-    padding: 20px; 
+    padding: 20px;
     text-align: left;
     background-color: #f8fafc;
-    border: none;
+    color: #a0aec0;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 td {
     padding: 20px;
-    text-align: left;
-    border: none;
 }
 
-/* Table Colors */
-.bg-calculus td { background-color: #ffff00; color: #000; }
-.bg-programming td { background-color: #ff6347; color: #fff; }
-.bg-circuits td { background-color: #da70d6; color: #fff; }
+.col-name { text-align: left; padding-left: 20px; }
+.col-date { text-align: left; }
+.col-delete { text-align: right; padding-right: 20px; width: 40px; }
 
-.bg-programming a, .bg-circuits a { color: #fff; }
+.bg-calculus td { background-color: #ffff00; }
+.bg-programming td { background-color: #ff6347; }
+.bg-circuits td { background-color: #da70d6; }
 
-/* Delete Icon Sizing and Opacity */
+#assignmentTable tbody tr td,
+#assignmentTable tbody tr td a {
+    color: #000 !important;
+    text-decoration: none;
+}
+
 .delete-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-left: auto;
+    display: block;
     opacity: 0.32;
+    transition: opacity 0.2s ease;
+}
+
+.delete-btn:hover {
+    opacity: 1;
 }
 
 .delete-btn svg {
@@ -114,7 +138,6 @@ td {
     height: 24px;
 }
 
-/* Color specific to row background */
 .bg-calculus .del-icon { fill: #666633; }
 .bg-programming .del-icon { fill: #660000; }
 .bg-circuits .del-icon { fill: #663366; }
@@ -132,8 +155,7 @@ button#exportBtn, button#importBtn, #addBtn {
     padding: 12px 30px;
     border-radius: 100px;
     font-weight: bold;
+    text-transform: none;
 }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
