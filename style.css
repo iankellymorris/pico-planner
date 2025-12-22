@@ -1,329 +1,89 @@
-/* Color Variables */
-:root {
-    /* Title */
-    --title-color-dark-grey: #222222; 
-    --title-shadow-color: rgba(0, 0, 0, 0.4); /* Variable for shadow/engraving */
-    --title-shadow-offset: 1px;
-
-    /* Banner */
-    --banner-bg-color-light: #f0f0f0;
-    --banner-bg-color-dark: #3F5F5F; 
-
-    /* Background */
-    --main-bg-color-light: #ffffff;
-    --main-bg-color-dark: #000000; 
-
-    /* Assignment Entry */
-    --entry-bg-color-light: #f9f9f9;
-    --entry-bg-color-dark: #1a1a1a;
-
-    /* Button: Add Assignment */
-    --add-btn-bg-light: #FF8C00; 
-    --add-btn-bg-dark: #FF4500; 
-    --add-btn-text-color-light: white;
-    --add-btn-text-color-dark: white;
-
-    /* Table */
-    --table-bg-color-light: #ffffff;
-    --table-bg-color-dark: #303030;
-    --table-text-color-light: #333;
-    --table-text-color-dark: #eee;
-    
-    /* Delete Button */
-    --delete-btn-opacity: 0.5; 
-    --delete-btn-hover-opacity: 1.0; 
-
-    /* Export/Import Buttons */
-    --data-btn-bg-light: #cccccc;
-    --data-btn-bg-dark: #1b1b1b;
-    --data-btn-text-color-light: #333;
-    --data-btn-text-color-dark: #aaa;
-
-    /* Padding/Spacing Variables */
-    --main-padding: 20px;
-    --item-spacing: 15px;
-    --form-element-width: 160px; 
-    
-    /* Padding Variables for Assignment Entry */
-    --entry-padding-y: 20px; 
-    --entry-padding-x: 20px; 
-    
-    /* Page Widths */
-    --page-side-padding: 20px; 
-    --content-max-width: 1400px; 
-
-    /* Border Radius */
-    --infinity-radius: 9999px; 
-    --table-corner-radius: 20px; 
-
-    /* --- CLASS COLORS --- */
-
-    /* Class Colors - Light Mode (NEW: Autumnal/Earthy) */
-    --color-math-light: #F0A000; /* Deep Saffron/Orange-Yellow */
-    --color-phys-light: #C0C0C0; /* Silver/Muted Grey-Blue */
-    --color-ece-light: #AA3838; /* Brick Red/Rust */
-    
-    /* Class Colors - Dark Mode (Retained) */
-    --color-math-dark: #FFC300; 
-    --color-phys-dark: #4A90E2; 
-    --color-ece-dark: #D0021B; 
-    
-    /* Dynamic Text Colors for contrast */
-    --color-text-on-light: #000;
-    --color-text-on-dark: #fff;
-}
-
-/* Light Mode Variables (omitted for brevity) */
-body[data-theme="light"] {
-    --title-color: var(--title-color-dark-grey);
-    --banner-bg-color: var(--banner-bg-color-light);
-    --main-bg-color: var(--main-bg-color-light);
-    --entry-bg-color: var(--entry-bg-color-light);
-    --add-btn-bg: var(--add-btn-bg-light);
-    --add-btn-text-color: var(--add-btn-text-color-light);
-    --table-bg-color: var(--table-bg-color-light);
-    --table-text-color: var(--table-text-color-light);
-    --data-btn-bg: var(--data-btn-bg-light);
-    --data-btn-text-color: var(--data-btn-text-color-light);
-
-    --color-math: var(--color-math-light);
-    --color-phys: var(--color-phys-light);
-    --color-ece: var(--color-ece-light);
-}
-
-/* Dark Mode Variables (omitted for brevity) */
-body[data-theme="dark"] {
-    --title-color: var(--title-color-dark-grey);
-    --banner-bg-color: var(--banner-bg-color-dark);
-    --main-bg-color: var(--main-bg-color-dark);
-    --entry-bg-color: var(--entry-bg-color-dark);
-    --add-btn-bg: var(--add-btn-bg-dark);
-    --add-btn-text-color: var(--add-btn-text-color-dark);
-    --table-bg-color: var(--table-bg-color-dark);
-    --table-text-color: var(--table-text-color-dark);
-    --data-btn-bg: var(--data-btn-bg-dark);
-    --data-btn-text-color: var(--data-btn-text-color-dark);
-    
-    --color-math: var(--color-math-dark);
-    --color-phys: var(--color-phys-dark);
-    --color-ece: var(--color-ece-dark);
-}
-
-/* Base Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: var(--main-bg-color);
-    color: var(--table-text-color);
-    transition: background-color 0.3s, color 0.3s;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 
-.header-banner {
-    background-color: var(--banner-bg-color);
-    padding: var(--main-padding);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: auto; 
-}
-
-#page-title {
-    font-family: 'Jolly Lodger', cursive;
-    color: var(--title-color);
-    margin: 0;
-    font-size: 4em;
-    text-align: left;
-    flex-grow: 1;
-    /* NEW FIX: Subtle drop shadow/engraving for the title */
-    text-shadow: var(--title-shadow-offset) var(--title-shadow-offset) 1px var(--title-shadow-color);
-    /* To comment out later, just comment out the entire 'text-shadow' line */
-}
-
-/* Vertically stacked controls container */
-.controls {
-    display: flex;
-    flex-direction: column;
-    gap: var(--item-spacing);
-    flex-shrink: 0; 
-    width: fit-content; 
-    align-self: center; 
-}
-
-/* Main content wrapper: controls the overall layout and margin */
-.container {
-    padding: var(--main-padding) var(--page-side-padding); 
-    max-width: var(--content-max-width); 
-    margin: 0 auto; 
-    transition: max-width 0.3s;
-}
-
-/* Assignment Entry: Uses its own fixed padding */
-.assignment-entry {
-    background-color: var(--entry-bg-color);
-    padding: var(--entry-padding-y) var(--entry-padding-x); 
-    border-radius: var(--infinity-radius);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: var(--main-padding) 0; 
+header h1 {
+    font-family: 'Autour One', system-ui;
     text-align: center;
-    transition: padding 0.3s, border-radius 0.3s;
+    color: #333;
 }
 
-.form-row {
+.entry-container {
+    background: white;
+    padding: 10px 30px;
+    border-radius: 50px;
     display: flex;
-    gap: var(--item-spacing);
-    justify-content: center;
-    flex-wrap: wrap; 
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    align-items: center;
 }
 
-/* Consistent height and fixed width for all form elements */
-.form-row input, .form-row select, .form-row button, .dropdown-wrapper {
-    width: var(--form-element-width); 
-    min-width: var(--form-element-width); 
-    max-width: var(--form-element-width); 
-    flex-grow: 0; 
-    flex-shrink: 0; 
-    box-sizing: border-box; 
-}
-
-/* Form element base styling */
-.form-row input, .form-row select, .form-row button {
-    padding: 10px; 
-    line-height: 20px; 
-    border-radius: var(--infinity-radius); 
+.entry-container input, .entry-container select, .entry-container button {
+    font-family: 'Lato', sans-serif;
+    padding: 8px;
     border: 1px solid #ccc;
-    background-color: var(--main-bg-color);
-    color: var(--table-text-color);
+    border-radius: 4px;
 }
 
-/* Dropdown Custom Arrow Wrapper */
-.dropdown-wrapper { 
-    position: relative; 
-    /* NEW FIX: Use inline-flex to stabilize the wrapper sizing inside the form-row */
-    display: inline-flex; 
-}
-#classDropdown { 
-    -webkit-appearance: none; 
-    -moz-appearance: none; 
-    appearance: none; 
-    padding-right: 35px;
-    /* Line height helps control vertical alignment */
-    line-height: 20px; 
-}
-.dropdown-wrapper::after {
-    content: ""; position: absolute; top: 50%; right: 15px; transform: translateY(-50%);
-    width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent;
-    border-top: 6px solid var(--table-text-color); pointer-events: none;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: white;
 }
 
-#addAssignmentBtn {
-    background-color: var(--add-btn-bg);
-    color: var(--add-btn-text-color);
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #eee;
+}
+
+/* Class-specific colors */
+.bg-calculus { background-color: #ffff00; }
+.bg-programming { background-color: #ff0000; color: white; }
+.bg-circuits { background-color: #800080; color: white; }
+
+.bg-programming a, .bg-circuits a { color: white; }
+
+/* Square Delete Button */
+.delete-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.1);
     border: none;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    white-space: nowrap; 
+    font-family: 'Lato', sans-serif;
+    line-height: 1;
+    padding: 0;
 }
 
-#addAssignmentBtn:hover {
-    opacity: 0.9;
+.delete-btn:hover {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* Table Styles (omitted for brevity) */
-.assignments-table-container { text-align: center; margin-top: 30px; }
-#assignmentsTable {
-    width: 100%; border-collapse: collapse; margin: 15px auto 0;
-    background-color: var(--table-bg-color); color: var(--table-text-color);
-    border-radius: var(--table-corner-radius); overflow: hidden; 
+.footer-controls {
+    text-align: center;
+    margin-top: 20px;
 }
-#assignmentsTable th, #assignmentsTable td { padding: 12px 15px; border: 1px solid var(--banner-bg-color); text-align: left; }
-#assignmentsTable th { background-color: var(--banner-bg-color); color: white; }
-.delete-column { width: 10px; text-align: center !important; }
-.delete-btn {
-    background: none; border: none; color: var(--table-text-color); opacity: var(--delete-btn-opacity);
-    font-weight: bold; font-size: 1.2em; cursor: pointer; padding: 0; line-height: 1; transition: opacity 0.2s;
-}
-.delete-btn:hover { opacity: var(--delete-btn-hover-opacity); }
 
-/* Class Color Coding (omitted for brevity) */
-.row-MATH { background-color: var(--color-math); }
-.row-PHYS { background-color: var(--color-phys); }
-.row-ECE { background-color: var(--color-ece); }
-body[data-theme="dark"] .row-MATH, body[data-theme="dark"] .row-PHYS, body[data-theme="dark"] .row-ECE { color: var(--color-text-on-dark); }
-body[data-theme="light"] .row-MATH, body[data-theme="light"] .row-PHYS, body[data-theme="light"] .row-ECE { color: var(--color-text-on-light); }
-#assignmentsTable a { color: inherit; text-decoration: underline; font-weight: bold; }
-
-/* Data Controls (omitted for brevity) */
-.data-controls { display: flex; justify-content: flex-end; gap: var(--item-spacing); margin-top: var(--main-padding); }
-.data-controls button {
-    padding: 10px 20px; border: none; border-radius: var(--infinity-radius);
-    cursor: pointer; background-color: var(--data-btn-bg); color: var(--data-btn-text-color);
-}
-.data-controls button:hover { filter: brightness(1.2); }
-
-/* Toggle Switch Styles (omitted for brevity) */
-.toggle-container {
-    position: relative;
-    display: inline-block;
-    width: 60px; 
-    height: 34px; 
-    flex-shrink: 0; 
-    line-height: 34px; 
-}
-.toggle-container input[type="checkbox"] { opacity: 0; width: 0; height: 0; }
-.slider { 
-    position: absolute; 
-    cursor: pointer; 
-    top: 0; 
-    left: 0; 
-    right: 0; 
-    bottom: 0; 
-    background-color: #ccc; 
-    transition: 0.4s; 
-    height: 34px; 
-}
-.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; }
-input:checked + .slider { background-color: #2196F3; }
-input:checked + .slider:before { transform: translateX(26px); }
-.slider.round { border-radius: 34px; }
-.slider.round:before { border-radius: 50%; }
-
-/* --- RESPONSIVE FULL-WIDTH TRANSITION --- */
-
-@media (max-width: 850px) { 
-    /* 1. Remove padding from the container so it spans edge-to-edge */
-    .container {
-        max-width: 100%; 
-        padding-left: 0; 
-        padding-right: 0;
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-    /* 2. Make the assignment entry go full-width and use minimal internal padding */
-    .assignment-entry {
-        border-radius: 0; 
-        padding: var(--entry-padding-y) 15px; 
-        max-width: 100%;
-        margin: var(--main-padding) 0;
-    }
-
-    /* 3. Force vertical stack for mobile view, elements fill the entire width */
-    .form-row {
-        flex-direction: column; 
-        align-items: stretch;
-        gap: 10px;
-    }
-    
-    /* Elements fill the full width of the form row when stacked */
-    .form-row input, .form-row select, .form-row button, .dropdown-wrapper {
-        min-width: 100%;
-        width: 100%; 
-        max-width: 100%; 
-    }
-
-    /* 4. Remove table corners when full width */
-    #assignmentsTable {
-        border-radius: 0; 
-    }
+button#exportBtn, button#importBtn, #addBtn {
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
 }
