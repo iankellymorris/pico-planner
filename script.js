@@ -3,12 +3,21 @@ const tableBody = document.querySelector('#assignmentTable tbody');
 const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const fileInput = document.getElementById('fileInput');
+const toggleBtn = document.getElementById('toggleControlsBtn');
+const controls = document.getElementById('controlsContainer');
+const footer = document.getElementById('footerContainer');
 
 let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
 let undoStack = [];
 const MAX_UNDO = 15;
 
 renderTable();
+
+// Toggle visibility of inputs and import/export
+toggleBtn.addEventListener('click', () => {
+    controls.classList.toggle('hidden');
+    footer.classList.toggle('hidden');
+});
 
 window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
