@@ -11,13 +11,27 @@ let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
 let undoStack = [];
 const MAX_UNDO = 15;
 
+// Load and apply persistent toggle state
+let isVisible = localStorage.getItem('controlsVisible') !== 'false';
+applyToggleState();
+
 renderTable();
 
-// Toggle visibility of inputs and import/export
 toggleBtn.addEventListener('click', () => {
-    controls.classList.toggle('hidden');
-    footer.classList.toggle('hidden');
+    isVisible = !isVisible;
+    localStorage.setItem('controlsVisible', isVisible);
+    applyToggleState();
 });
+
+function applyToggleState() {
+    if (isVisible) {
+        controls.classList.remove('hidden');
+        footer.classList.remove('hidden');
+    } else {
+        controls.classList.add('hidden');
+        footer.classList.add('hidden');
+    }
+}
 
 window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
