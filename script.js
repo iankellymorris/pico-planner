@@ -31,6 +31,13 @@ function applyToggleState() {
     }
 }
 
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const [year, month, day] = dateStr.split('-');
+    return `${day} ${months[parseInt(month) - 1]} ${year}`;
+}
+
 window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
         undoDelete();
@@ -89,6 +96,7 @@ function renderTable() {
         else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
 
         const nameCell = document.createElement('td');
+        nameCell.className = "col-name";
         if (task.link) {
             const a = document.createElement('a');
             a.href = task.link; a.target = "_blank"; a.textContent = task.name;
@@ -98,9 +106,11 @@ function renderTable() {
         }
 
         const dateCell = document.createElement('td');
-        dateCell.textContent = task.date;
+        dateCell.className = "col-date";
+        dateCell.textContent = formatDate(task.date);
 
         const actionCell = document.createElement('td');
+        actionCell.className = "col-delete";
         const delBtn = document.createElement('button');
         delBtn.className = 'delete-btn';
         delBtn.innerHTML = `
