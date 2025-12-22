@@ -26,26 +26,22 @@ header h1 {
     margin: 0;
 }
 
+/* Toggle button without box/border */
 #toggleControlsBtn {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.2);
+    background: none;
+    border: none;
     color: white;
-    border: 1px solid white;
-    width: 50px;
+    width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    transition: background 0.2s;
-}
-
-#toggleControlsBtn:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0;
 }
 
 #toggleControlsBtn svg {
-    width: 24px;
+    width: 32px;
     height: auto;
 }
 
@@ -77,42 +73,51 @@ table {
     border-collapse: collapse;
     background: white;
     border: none;
-    /* Scale increase by roughly 60% through padding and font-size */
-    font-size: 1.6rem; 
+    /* 40% scale increase */
+    font-size: 1.4rem; 
 }
 
 th {
-    padding: 24px; 
+    padding: 20px; 
     text-align: left;
     background-color: #f8fafc;
     border: none;
 }
 
 td {
-    padding: 24px;
+    padding: 20px;
     text-align: left;
     border: none;
 }
 
+/* Table Colors */
 .bg-calculus td { background-color: #ffff00; color: #000; }
 .bg-programming td { background-color: #ff6347; color: #fff; }
 .bg-circuits td { background-color: #da70d6; color: #fff; }
 
 .bg-programming a, .bg-circuits a { color: #fff; }
 
+/* Delete Icon Sizing and Opacity */
 .delete-btn {
-    width: 38px;
-    height: 38px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
+    opacity: 0.32;
 }
+
+.delete-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Color specific to row background */
+.bg-calculus .del-icon { fill: #666633; }
+.bg-programming .del-icon { fill: #660000; }
+.bg-circuits .del-icon { fill: #663366; }
 
 .footer-controls {
     text-align: right;
