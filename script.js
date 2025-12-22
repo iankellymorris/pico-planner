@@ -47,7 +47,6 @@ function deleteAssignment(id) {
     const index = assignments.findIndex(a => a.id === id);
     if (index !== -1) {
         undoStack.push(assignments[index]);
-        // Limit undo stack to 15 items
         if (undoStack.length > MAX_UNDO) {
             undoStack.shift();
         }
