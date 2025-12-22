@@ -1,138 +1,89 @@
-const addBtn = document.getElementById('addBtn');
-const tableBody = document.querySelector('#assignmentTable tbody');
-const exportBtn = document.getElementById('exportBtn');
-const importBtn = document.getElementById('importBtn');
-const fileInput = document.getElementById('fileInput');
-
-let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
-let undoStack = [];
-const MAX_UNDO = 15;
-
-renderTable();
-
-window.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-        undoDelete();
-    }
-});
-
-addBtn.addEventListener('click', () => {
-    const className = document.getElementById('classSelect').value;
-    const name = document.getElementById('assignmentName').value;
-    const link = document.getElementById('assignmentLink').value;
-    const date = document.getElementById('dueDate').value;
-
-    if (!name || !date) {
-        alert("Please fill in the assignment name and due date.");
-        return;
-    }
-
-    const newAssignment = { 
-        id: Date.now(), 
-        className, 
-        name, 
-        link, 
-        date 
-    };
-    
-    assignments.push(newAssignment);
-    saveAndRender();
-    
-    document.getElementById('assignmentName').value = '';
-    document.getElementById('assignmentLink').value = '';
-    document.getElementById('dueDate').value = '';
-});
-
-function deleteAssignment(id) {
-    const index = assignments.findIndex(a => a.id === id);
-    if (index !== -1) {
-        undoStack.push(assignments[index]);
-        // Limit undo stack to 15 items
-        if (undoStack.length > MAX_UNDO) {
-            undoStack.shift();
-        }
-        assignments.splice(index, 1);
-        saveAndRender();
-    }
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 
-function undoDelete() {
-    if (undoStack.length > 0) {
-        const restoredAssignment = undoStack.pop();
-        assignments.push(restoredAssignment);
-        saveAndRender();
-    }
+header h1 {
+    font-family: 'Autour One', system-ui;
+    text-align: center;
+    color: #333;
 }
 
-function saveAndRender() {
-    assignments.sort((a, b) => new Date(a.date) - new Date(b.date));
-    localStorage.setItem('assignments', JSON.stringify(assignments));
-    renderTable();
+.entry-container {
+    background: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    align-items: center;
 }
 
-function renderTable() {
-    tableBody.innerHTML = '';
-    
-    assignments.forEach((task) => {
-        const row = document.createElement('tr');
-        
-        if (task.className === 'Calculus II') row.classList.add('bg-calculus');
-        else if (task.className === 'Computer Programming') row.classList.add('bg-programming');
-        else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
-
-        const nameCell = document.createElement('td');
-        if (task.link) {
-            const a = document.createElement('a');
-            a.href = task.link;
-            a.target = "_blank";
-            a.textContent = task.name;
-            nameCell.appendChild(a);
-        } else {
-            nameCell.textContent = task.name;
-        }
-
-        const dateCell = document.createElement('td');
-        dateCell.textContent = task.date;
-
-        const actionCell = document.createElement('td');
-        const delBtn = document.createElement('button');
-        delBtn.innerHTML = '&#10005;';
-        delBtn.className = 'delete-btn';
-        delBtn.onclick = () => deleteAssignment(task.id);
-        actionCell.appendChild(delBtn);
-
-        row.appendChild(nameCell);
-        row.appendChild(dateCell);
-        row.appendChild(actionCell);
-        tableBody.appendChild(row);
-    });
+.entry-container input, .entry-container select, .entry-container button {
+    font-family: 'Lato', sans-serif;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-exportBtn.addEventListener('click', () => {
-    const dataStr = JSON.stringify(assignments);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', 'assignments.json');
-    linkElement.click();
-});
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: white;
+}
 
-importBtn.addEventListener('click', () => fileInput.click());
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
 
-fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        try {
-            const importedData = JSON.parse(event.target.result);
-            if (Array.isArray(importedData)) {
-                assignments = importedData;
-                saveAndRender();
-            }
-        } catch (err) {
-            alert("Error parsing JSON file.");
-        }
-    };
-    reader.readAsText(file);
-});
+th {
+    background-color: #eee;
+}
+
+/* Class-specific colors */
+.bg-calculus { background-color: #ffff00; }
+.bg-programming { background-color: #ff0000; color: white; }
+.bg-circuits { background-color: #800080; color: white; }
+
+.bg-programming a, .bg-circuits a { color: white; }
+
+/* Square Delete Button */
+.delete-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+    line-height: 1;
+    padding: 0;
+}
+
+.delete-btn:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.footer-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button#exportBtn, button#importBtn, #addBtn {
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
