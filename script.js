@@ -1,222 +1,138 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const tableBody = document.querySelector('#assignmentsTable tbody');
-    const classDropdown = document.getElementById('classDropdown');
-    const assignmentNameInput = document.getElementById('assignmentName');
-    const assignmentLinkInput = document.getElementById('assignmentLink');
-    const dueDateInput = document.getElementById('dueDate');
-    const addAssignmentBtn = document.getElementById('addAssignmentBtn');
-    const darkModeToggle = document.getElementById('darkModeToggle');
+const addBtn = document.getElementById('addBtn');
+const tableBody = document.querySelector('#assignmentTable tbody');
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const fileInput = document.getElementById('fileInput');
 
-    const exportDataBtn = document.getElementById('exportDataBtn');
-    const importDataBtn = document.getElementById('importDataBtn');
-    const importFileInput = document.getElementById('importFileInput');
-    const body = document.body;
+let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
+let undoStack = [];
+const MAX_UNDO = 15;
 
-    // Undo Constants
-    const UNDO_HISTORY_LIMIT = 10;
-    let undoHistory = []; 
+renderTable();
 
-    let assignments = loadAssignments();
+window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        undoDelete();
+    }
+});
+
+addBtn.addEventListener('click', () => {
+    const className = document.getElementById('classSelect').value;
+    const name = document.getElementById('assignmentName').value;
+    const link = document.getElementById('assignmentLink').value;
+    const date = document.getElementById('dueDate').value;
+
+    if (!name || !date) {
+        alert("Please fill in the assignment name and due date.");
+        return;
+    }
+
+    const newAssignment = { 
+        id: Date.now(), 
+        className, 
+        name, 
+        link, 
+        date 
+    };
     
-    // --- Utility Functions ---
-
-    /**
-     * Formats a date string (YYYY-MM-DD) into DD MON YYYY format.
-     * FIX: Directly parses the YYYY-MM-DD string to reliably extract day/month/year.
-     * @param {string} dateString - The date in YYYY-MM-DD format.
-     * @returns {string} The date in DD MON YYYY format (e.g., 05 OCT 2025).
-     */
-    function formatDueDate(dateString) {
-        if (!dateString) return '';
-        
-        const [year, month, day] = dateString.split('-');
-        
-        // Month is 1-indexed (1=Jan, 12=Dec)
-        const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        const shortMonth = monthNames[parseInt(month, 10) - 1];
-
-        // Ensure leading zero on the day
-        const paddedDay = day.padStart(2, '0');
-
-        return `${paddedDay} ${shortMonth} ${year}`;
-    }
-
-    // --- State Management Functions ---
+    assignments.push(newAssignment);
+    saveAndRender();
     
-    function loadAssignments() {
-        const storedAssignments = localStorage.getItem('assignments');
-        const isDarkMode = localStorage.getItem('darkMode') !== 'false';
+    document.getElementById('assignmentName').value = '';
+    document.getElementById('assignmentLink').value = '';
+    document.getElementById('dueDate').value = '';
+});
+
+function deleteAssignment(id) {
+    const index = assignments.findIndex(a => a.id === id);
+    if (index !== -1) {
+        undoStack.push(assignments[index]);
+        // Limit undo stack to 15 items
+        if (undoStack.length > MAX_UNDO) {
+            undoStack.shift();
+        }
+        assignments.splice(index, 1);
+        saveAndRender();
+    }
+}
+
+function undoDelete() {
+    if (undoStack.length > 0) {
+        const restoredAssignment = undoStack.pop();
+        assignments.push(restoredAssignment);
+        saveAndRender();
+    }
+}
+
+function saveAndRender() {
+    assignments.sort((a, b) => new Date(a.date) - new Date(b.date));
+    localStorage.setItem('assignments', JSON.stringify(assignments));
+    renderTable();
+}
+
+function renderTable() {
+    tableBody.innerHTML = '';
+    
+    assignments.forEach((task) => {
+        const row = document.createElement('tr');
         
-        darkModeToggle.checked = isDarkMode;
-        body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        if (task.className === 'Calculus II') row.classList.add('bg-calculus');
+        else if (task.className === 'Computer Programming') row.classList.add('bg-programming');
+        else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
 
-        // Ensure we return an array
-        return storedAssignments ? JSON.parse(storedAssignments) : [];
-    }
-
-    function saveAssignments() {
-        localStorage.setItem('assignments', JSON.stringify(assignments));
-    }
-
-    function recordState() {
-        if (undoHistory.length > 0 && JSON.stringify(undoHistory[undoHistory.length - 1]) === JSON.stringify(assignments)) {
-            return;
+        const nameCell = document.createElement('td');
+        if (task.link) {
+            const a = document.createElement('a');
+            a.href = task.link;
+            a.target = "_blank";
+            a.textContent = task.name;
+            nameCell.appendChild(a);
+        } else {
+            nameCell.textContent = task.name;
         }
 
-        undoHistory.push(JSON.stringify(assignments)); 
-        if (undoHistory.length > UNDO_HISTORY_LIMIT) {
-            undoHistory.shift(); 
-        }
-    }
-    
-    function undoState() {
-        if (undoHistory.length > 1) {
-            undoHistory.pop(); 
-            const previousState = undoHistory[undoHistory.length - 1];
-            assignments = JSON.parse(previousState);
-            saveAssignments();
-            renderAssignments();
-        }
-    }
+        const dateCell = document.createElement('td');
+        dateCell.textContent = task.date;
 
-    // --- Core Rendering Functions ---
-    
-    function renderAssignments() {
-        tableBody.innerHTML = '';
-        let displayList = [...assignments];
-        
-        // 1. Sorting by Date 
-        displayList.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        const actionCell = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.innerHTML = '&#10005;';
+        delBtn.className = 'delete-btn';
+        delBtn.onclick = () => deleteAssignment(task.id);
+        actionCell.appendChild(delBtn);
 
-        displayList.forEach((assignment) => {
-            const row = tableBody.insertRow();
-            const classKey = assignment.class.split(' ')[0];
-            row.classList.add(`row-${classKey}`);
+        row.appendChild(nameCell);
+        row.appendChild(dateCell);
+        row.appendChild(actionCell);
+        tableBody.appendChild(row);
+    });
+}
 
-            // Assignment Cell 
-            const assignmentCell = row.insertCell(0);
-            if (assignment.link) {
-                const linkElement = document.createElement('a');
-                linkElement.href = assignment.link;
-                linkElement.target = '_blank';
-                linkElement.textContent = assignment.name; 
-                assignmentCell.appendChild(linkElement);
-            } else {
-                assignmentCell.textContent = assignment.name; 
+exportBtn.addEventListener('click', () => {
+    const dataStr = JSON.stringify(assignments);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', 'assignments.json');
+    linkElement.click();
+});
+
+importBtn.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const importedData = JSON.parse(event.target.result);
+            if (Array.isArray(importedData)) {
+                assignments = importedData;
+                saveAndRender();
             }
-            
-            // Due Date Cell - Applying DD MON YYYY format
-            const dateCell = row.insertCell(1);
-            dateCell.textContent = formatDueDate(assignment.dueDate);
-            
-            // Delete Button Cell
-            const deleteCell = row.insertCell(2);
-            deleteCell.classList.add('delete-column');
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '×';
-            deleteBtn.classList.add('delete-btn');
-            deleteBtn.addEventListener('click', () => deleteAssignment(assignment));
-            deleteCell.appendChild(deleteBtn);
-        });
-        
-        recordState();
-    }
-
-    function deleteAssignment(assignmentToDelete) {
-        recordState(); 
-        
-        const index = assignments.findIndex(a => 
-            a.class === assignmentToDelete.class && 
-            a.name === assignmentToDelete.name && 
-            a.dueDate === assignmentToDelete.dueDate
-        );
-        if (index > -1) {
-            assignments.splice(index, 1);
-            saveAssignments();
-            renderAssignments();
+        } catch (err) {
+            alert("Error parsing JSON file.");
         }
-    }
-
-    // --- Event Listeners ---
-
-    addAssignmentBtn.addEventListener('click', () => {
-        const className = classDropdown.value;
-        const name = assignmentNameInput.value.trim();
-        const link = assignmentLinkInput.value.trim();
-        const dueDate = dueDateInput.value; // Stored as YYYY-MM-DD
-
-        if (!name || !dueDate) {
-            // New assignments were failing here because the subsequent renderAssignments failed
-            alert('Please enter an assignment name and a due date.'); 
-            return;
-        }
-
-        const newAssignment = {
-            class: className,
-            name: name,
-            link: link,
-            dueDate: dueDate,
-        };
-
-        assignments.push(newAssignment);
-        saveAssignments();
-        renderAssignments(); // This now correctly renders the table
-
-        // Clear form
-        assignmentNameInput.value = '';
-        assignmentLinkInput.value = '';
-        dueDateInput.value = '';
-        classDropdown.value = 'MATH 1210';
-    });
-
-    darkModeToggle.addEventListener('change', () => {
-        const isDark = darkModeToggle.checked;
-        body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-        localStorage.setItem('darkMode', isDark);
-    });
-
-    exportDataBtn.addEventListener('click', () => {
-        const dataStr = JSON.stringify(assignments, null, 2);
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', 'assignment_tracker_data.json');
-        linkElement.click();
-    });
-
-    importDataBtn.addEventListener('click', () => { importFileInput.click(); });
-    
-    importFileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const importedData = JSON.parse(e.target.result);
-                if (Array.isArray(importedData)) {
-                    assignments = importedData;
-                    saveAssignments();
-                    undoHistory = []; 
-                    renderAssignments();
-                    alert('Data imported successfully!');
-                } else {
-                    alert('Import failed: File content is not a valid assignment list.');
-                }
-            } catch (error) {
-                alert('Import failed: Could not parse JSON file.');
-                console.error('Import error:', error);
-            }
-        };
-        reader.readAsText(file);
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-            e.preventDefault();
-            undoState();
-        }
-    });
-
-    // Initial render
-    renderAssignments();
+    };
+    reader.readAsText(file);
 });
