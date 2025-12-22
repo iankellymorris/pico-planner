@@ -15,7 +15,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -31,9 +31,22 @@ header h1 {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
     border: 1px solid white;
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-weight: bold;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+#toggleControlsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+#toggleControlsBtn svg {
+    width: 24px;
+    height: auto;
 }
 
 .entry-container {
@@ -56,32 +69,31 @@ header h1 {
 }
 
 .table-wrapper {
-    overflow: hidden;
-    border-radius: 12px;
     margin-bottom: 20px;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse; /* Essential for touching edges */
+    border-collapse: collapse;
     background: white;
     border: none;
+    /* Scale increase by roughly 60% through padding and font-size */
+    font-size: 1.6rem; 
 }
 
 th {
-    padding: 15px;
+    padding: 24px; 
     text-align: left;
     background-color: #f8fafc;
     border: none;
 }
 
 td {
-    padding: 15px;
+    padding: 24px;
     text-align: left;
-    border: none; /* Removed all internal borders */
+    border: none;
 }
 
-/* Perfect solid colored rectangles */
 .bg-calculus td { background-color: #ffff00; color: #000; }
 .bg-programming td { background-color: #ff6347; color: #fff; }
 .bg-circuits td { background-color: #da70d6; color: #fff; }
@@ -89,8 +101,8 @@ td {
 .bg-programming a, .bg-circuits a { color: #fff; }
 
 .delete-btn {
-    width: 24px;
-    height: 24px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,6 +111,7 @@ td {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 1.2rem;
 }
 
 .footer-controls {
@@ -111,7 +124,7 @@ button#exportBtn, button#importBtn, #addBtn {
     background-color: #333;
     color: white;
     border: none;
-    padding: 10px 25px;
+    padding: 12px 30px;
     border-radius: 100px;
     font-weight: bold;
 }
