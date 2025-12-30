@@ -11,6 +11,16 @@ let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
 let undoStack = [];
 const MAX_UNDO = 15;
 
+// Scrollbar Timer Logic
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    document.body.classList.remove('hide-scrollbar');
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        document.body.classList.add('hide-scrollbar');
+    }, 1500); // Hides after 1.5 seconds of no scrolling
+});
+
 let isVisible = localStorage.getItem('controlsVisible') !== 'false';
 applyToggleState();
 renderTable();
