@@ -11,14 +11,16 @@
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0 20px 40px 20px; /* Added bottom padding for shadows */
+    /* Added right padding to prevent scrollbar from cutting off banner/content */
+    padding: 0 32px 20px 20px; 
     background-color: #e0f2fe;
 }
 
 header {
     background-color: #38bdf8;
     padding: 20px;
-    margin: 0 -20px 30px -20px;
+    /* Adjusted margin to account for body padding fix */
+    margin: 0 -32px 30px -20px;
     position: relative;
     z-index: 1000;
 }
@@ -105,7 +107,7 @@ header h1 {
 
 table {
     width: 100%;
-    table-layout: fixed; /* Fixed layout for precise column spacing */
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 1.4rem;
     font-weight: 900;
@@ -115,11 +117,10 @@ table {
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
 td { padding: 20px 0; position: relative; }
 
-/* Column Widths and Internal Spacing */
-.col-check { width: 6%; padding-left: 20px; }
-.col-name { width: 54%; padding-left: 10px; } /* Closer to checkmark */
+.col-check { width: 60px; padding-left: 20px; }
+.col-name { width: 50%; padding-left: 10px; } 
 .col-date { width: 34%; }
-.col-delete { width: 6%; padding-right: 20px; text-align: right; }
+.col-delete { width: 60px; padding-right: 20px; text-align: right; }
 
 .bg-calculus td { background-color: #fee440; }
 .bg-programming td { background-color: #f24333; }
@@ -127,13 +128,13 @@ td { padding: 20px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* Cross-out animation - Halfway edge distance (95%) and 6px thickness */
+/* Cross-out animation - Exactly 8px from each edge */
 tr.crossing-out::after {
     content: '';
     position: absolute;
     top: 50%;
-    left: 2.5%; 
-    width: 95%; 
+    left: 8px; 
+    width: calc(100% - 16px); 
     height: 6px; 
     background: #000;
     transform: translateY(-50%) scaleX(0);
@@ -157,6 +158,7 @@ tr.crossing-out.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 }
 
 .check-btn svg { width: 24px; height: 24px; fill: #000; }
+
 .delete-btn { opacity: 0.32; margin-left: auto; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
@@ -168,7 +170,8 @@ tr.crossing-out.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 .footer-controls {
     text-align: right;
     margin-top: 40px;
-    padding-bottom: 20px; /* Space for shadows to avoid clipping */
+    padding-right: 15px; /* Fixed: Prevents right shadow cutoff */
+    padding-bottom: 20px;
     display: flex;
     justify-content: flex-end;
     gap: 20px;
