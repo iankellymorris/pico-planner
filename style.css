@@ -1,6 +1,6 @@
-/* Custom Scrollbar Integration */
+/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track { background: #e0f2fe; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { 
     background: #38bdf8; 
     border-radius: 10px; 
@@ -11,16 +11,25 @@
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0 0 4px 0; /* 4px Breathing room at bottom */
+    padding: 0 20px 24px 20px; /* 4px extra bottom breathing room */
     background-color: #e0f2fe;
+    overflow-y: scroll; /* Forces scrollbar to overlay rather than create lane */
     overflow-x: hidden;
 }
 
 header {
     background-color: #38bdf8;
-    padding: 20px 0;
-    margin-bottom: 30px;
-    width: 100%;
+    padding: 20px;
+    margin: 0 -20px 30px -20px;
+    position: relative;
+    z-index: 1000;
+    animation: headerPulse 2s ease-out; /* Header pulse on load */
+}
+
+@keyframes headerPulse {
+    0% { background-color: #38bdf8; }
+    50% { background-color: #0ea5e9; }
+    100% { background-color: #38bdf8; }
 }
 
 .header-content {
@@ -29,7 +38,6 @@ header {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
 }
 
 header h1 {
@@ -38,16 +46,12 @@ header h1 {
     font-size: 2.5rem;
     color: #ffffff;
     text-shadow: 3px 3px 0px #0ea5e9;
-    opacity: 0;
+    transform: translateX(-100vw); /* Start off-screen */
+    animation: slideInTitle 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-.slide-in {
-    animation: titleSlide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes titleSlide {
-    from { transform: translateX(-50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+@keyframes slideInTitle {
+    to { transform: translateX(0); }
 }
 
 #toggleControlsBtn {
@@ -114,8 +118,6 @@ header h1 {
     box-shadow: 7px 7px 0px #000;
 }
 
-.table-wrapper { padding: 0 20px; }
-
 table {
     width: 100%;
     table-layout: fixed;
@@ -126,7 +128,7 @@ table {
 }
 
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
-td { padding: 20px 0; position: relative; }
+td { padding: 20px 0; position: relative; box-sizing: border-box; }
 
 .col-check { width: 50px; padding-left: 20px; }
 .col-name { width: 55%; padding-left: 10px; } 
@@ -139,7 +141,7 @@ td { padding: 20px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* CHECKMARK: Cross-out animation */
+/* CHECKMARK ANIMATION (Simple Cross-out) */
 tr.crossing-out::after {
     content: '';
     position: absolute;
@@ -154,22 +156,30 @@ tr.crossing-out::after {
     z-index: 10;
 }
 
-/* DELETE: Grayscale + Grainy animation */
+/* DELETE ANIMATION (Grayscale + Grain) */
 tr.deleting td {
     filter: grayscale(1) url(#grain);
     transition: filter 0.6s ease;
 }
 
-tr.fading-out {
+tr.fading {
     animation: fadeOutRow 0.4s 0.6s forwards ease-out;
 }
 
 @keyframes crossLine { to { transform: translateY(-50%) scaleX(1); } }
-@keyframes fadeOutRow { to { opacity: 0; transform: scale(0.95); } }
+@keyframes fadeOutRow { to { opacity: 0; transform: scale(0.98); } }
 
-.action-icon-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; }
+.action-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
 .check-btn svg { width: 24px; height: 24px; fill: #000; }
-.delete-btn { opacity: 0.32; margin-left: auto; transition: opacity 0.2s ease; }
+.delete-btn { opacity: 0.32; margin-left: auto; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
 
@@ -179,8 +189,8 @@ tr.fading-out {
 
 .footer-controls {
     text-align: right;
-    margin: 20px 0;
-    padding: 0 35px 4px 0; /* Padding bottom here ensures shadow visible */
+    margin-top: 40px;
+    padding-right: 20px; 
     display: flex;
     justify-content: flex-end;
     gap: 20px;
