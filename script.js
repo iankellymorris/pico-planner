@@ -4,21 +4,20 @@ const exportBtn = document.getElementById('exportBtn');
 const importBtn = document.getElementById('importBtn');
 const fileInput = document.getElementById('fileInput');
 const toggleBtn = document.getElementById('toggleControlsBtn');
-const controls = document.getElementById('controlsContainer');
-const footer = document.getElementById('footerContainer');
+const controlWrapper = document.getElementById('collapsibleWrapper');
+const footerWrapper = document.getElementById('footerWrapper');
 
 let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
 let undoStack = [];
 const MAX_UNDO = 15;
 
-// Scrollbar Timer Logic
 let scrollTimeout;
 window.addEventListener('scroll', () => {
     document.body.classList.remove('hide-scrollbar');
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
         document.body.classList.add('hide-scrollbar');
-    }, 1500); // Hides after 1.5 seconds of no scrolling
+    }, 1500);
 });
 
 let isVisible = localStorage.getItem('controlsVisible') !== 'false';
@@ -33,11 +32,11 @@ toggleBtn.addEventListener('click', () => {
 
 function applyToggleState() {
     if (isVisible) {
-        controls.classList.remove('hidden');
-        footer.classList.remove('hidden');
+        controlWrapper.classList.remove('collapsed');
+        footerWrapper.classList.remove('collapsed');
     } else {
-        controls.classList.add('hidden');
-        footer.classList.add('hidden');
+        controlWrapper.classList.add('collapsed');
+        footerWrapper.classList.add('collapsed');
     }
 }
 
@@ -50,7 +49,10 @@ function formatDate(dateStr) {
 
 window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-        undoDelete();
+        if (undoStack.length > 0) {
+            assignments.push(undoStack.pop());
+            saveAndRender();
+        }
     }
 });
 
@@ -65,8 +67,7 @@ addBtn.addEventListener('click', () => {
         return;
     }
 
-    const newAssignment = { id: Date.now(), className, name, link, date };
-    assignments.push(newAssignment);
+    assignments.push({ id: Date.now(), className, name, link, date });
     saveAndRender();
     
     document.getElementById('assignmentName').value = '';
@@ -74,19 +75,21 @@ addBtn.addEventListener('click', () => {
     document.getElementById('dueDate').value = '';
 });
 
+function completeAssignment(id, rowElement) {
+    rowElement.classList.add('crossing-out', 'fading');
+    
+    // Duration matches CSS animations: 0.6s line + 0.4s fade
+    setTimeout(() => {
+        deleteAssignment(id);
+    }, 1000);
+}
+
 function deleteAssignment(id) {
     const index = assignments.findIndex(a => a.id === id);
     if (index !== -1) {
         undoStack.push(assignments[index]);
         if (undoStack.length > MAX_UNDO) undoStack.shift();
         assignments.splice(index, 1);
-        saveAndRender();
-    }
-}
-
-function undoDelete() {
-    if (undoStack.length > 0) {
-        assignments.push(undoStack.pop());
         saveAndRender();
     }
 }
@@ -105,6 +108,19 @@ function renderTable() {
         else if (task.className === 'Computer Programming') row.classList.add('bg-programming');
         else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
 
+        // Checkmark Column
+        const checkCell = document.createElement('td');
+        checkCell.className = "col-check";
+        const checkBtn = document.createElement('button');
+        checkBtn.className = "action-icon-btn check-btn";
+        checkBtn.innerHTML = `
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.65 13.26">
+                <polygon points="16.65 2.94 13.71 0 6.32 7.39 2.94 4 0 6.94 6.32 13.26 16.65 2.94"/>
+            </svg>
+        `;
+        checkBtn.onclick = () => completeAssignment(task.id, row);
+        checkCell.appendChild(checkBtn);
+
         const nameCell = document.createElement('td');
         nameCell.className = "col-name";
         if (task.link) {
@@ -122,7 +138,7 @@ function renderTable() {
         const actionCell = document.createElement('td');
         actionCell.className = "col-delete";
         const delBtn = document.createElement('button');
-        delBtn.className = 'delete-btn';
+        delBtn.className = 'action-icon-btn delete-btn';
         delBtn.innerHTML = `
             <svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg">
                 <polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/>
@@ -131,6 +147,7 @@ function renderTable() {
         delBtn.onclick = () => deleteAssignment(task.id);
         actionCell.appendChild(delBtn);
 
+        row.appendChild(checkCell);
         row.appendChild(nameCell);
         row.appendChild(dateCell);
         row.appendChild(actionCell);
