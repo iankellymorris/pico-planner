@@ -1,4 +1,4 @@
-/* Custom Scrollbar */
+/* Custom Scrollbar - Fixed to not overlap banner */
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background: #e0f2fe; }
 ::-webkit-scrollbar-thumb { 
@@ -20,6 +20,8 @@ header {
     background-color: #38bdf8;
     padding: 20px;
     margin: 0 -20px 30px -20px;
+    position: relative;
+    z-index: 1000; /* Ensure banner stays above everything */
 }
 
 .header-content {
@@ -43,11 +45,11 @@ header h1 {
     background: none;
     border: none;
     color: white;
+    filter: drop-shadow(3px 3px 0px #0ea5e9); /* Added drop shadow to icon */
 }
 
 #toggleControlsBtn svg { width: 32px; }
 
-/* Transitions */
 #collapsibleWrapper, #footerWrapper {
     max-height: 500px;
     overflow: hidden;
@@ -84,7 +86,6 @@ header h1 {
     font-weight: 700;
 }
 
-/* Insane Bounce Buttons */
 .insane-btn {
     cursor: pointer;
     background: linear-gradient(45deg, #000, #333);
@@ -101,13 +102,11 @@ header h1 {
 .insane-btn:hover {
     background: linear-gradient(45deg, #38bdf8, #0ea5e9);
     color: #000;
-    transform: scale(1.1);
+    transform: scale(1.04); /* Reduced scale from 1.1 */
     box-shadow: 7px 7px 0px #000;
 }
 
-.insane-btn:active {
-    transform: scale(0.95);
-}
+.insane-btn:active { transform: scale(0.98); }
 
 table {
     width: 100%;
@@ -130,19 +129,14 @@ td { padding: 20px; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* Cross-out animation */
-tr.crossing-out {
-    position: relative;
-    pointer-events: none;
-}
-
+/* Cross-out animation - Updated with 8px thickness and margin */
 tr.crossing-out::after {
     content: '';
     position: absolute;
     top: 50%;
-    left: 0;
-    width: 100%;
-    height: 4px;
+    left: 5%; /* Does not go edge-to-edge */
+    width: 90%; /* Center alignment */
+    height: 8px; /* Double thickness (baseline was 4px) */
     background: #000;
     transform: translateY(-50%) scaleX(0);
     transform-origin: left;
@@ -150,19 +144,11 @@ tr.crossing-out::after {
     z-index: 10;
 }
 
-tr.crossing-out.fading {
-    animation: fadeOutRow 0.4s 0.6s forwards ease-out;
-}
+tr.crossing-out.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 
-@keyframes crossLine {
-    to { transform: translateY(-50%) scaleX(1); }
-}
+@keyframes crossLine { to { transform: translateY(-50%) scaleX(1); } }
+@keyframes fadeOutRow { to { opacity: 0; transform: translateY(10px); } }
 
-@keyframes fadeOutRow {
-    to { opacity: 0; transform: translateY(10px); }
-}
-
-/* Control Buttons (Check/Delete) */
 .action-icon-btn {
     background: none;
     border: none;
@@ -171,13 +157,9 @@ tr.crossing-out.fading {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.1s ease;
 }
 
-.action-icon-btn:active { transform: scale(0.8); }
-
 .check-btn svg { width: 24px; height: 24px; fill: #000; }
-
 .delete-btn { opacity: 0.32; transition: opacity 0.2s ease; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
