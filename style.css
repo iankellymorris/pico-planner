@@ -7,12 +7,7 @@
     border: 3px solid #e0f2fe; 
     transition: background 0.3s ease;
 }
-
-/* Scrollbar Visibility Toggle via Class */
-.hide-scrollbar::-webkit-scrollbar-thumb {
-    background: transparent;
-    border-color: transparent;
-}
+.hide-scrollbar::-webkit-scrollbar-thumb { background: transparent; border-color: transparent; }
 
 body {
     font-family: 'Lato', sans-serif;
@@ -37,10 +32,9 @@ header {
 
 header h1 {
     font-family: 'Kavoon', serif;
-    text-align: left;
-    color: #ffffff;
-    margin: 0 0 0 5px; /* Pushed 5px to the right */
+    margin: 0 0 0 5px;
     font-size: 2.5rem;
+    color: #ffffff;
     text-shadow: 3px 3px 0px #0ea5e9;
 }
 
@@ -49,15 +43,24 @@ header h1 {
     background: none;
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
 }
 
 #toggleControlsBtn svg { width: 32px; }
+
+/* Transitions */
+#collapsibleWrapper, #footerWrapper {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out, margin 0.5s ease;
+    opacity: 1;
+}
+
+#collapsibleWrapper.collapsed, #footerWrapper.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    pointer-events: none;
+}
 
 .insane-container {
     background: linear-gradient(145deg, #ffffff, #f0f9ff);
@@ -66,7 +69,7 @@ header h1 {
     display: flex;
     gap: 15px;
     justify-content: center;
-    box-shadow: 10px 10px 0px #38bdf8, -2px -2px 10px rgba(255,255,255,0.5);
+    box-shadow: 10px 10px 0px #38bdf8;
     margin: 0 auto 40px auto;
     max-width: fit-content;
     align-items: center;
@@ -77,11 +80,11 @@ header h1 {
     font-family: 'Lato', sans-serif;
     padding: 10px 20px;
     border: 2px solid #000;
-    border-radius: 100px; 
-    background: white;
+    border-radius: 100px;
     font-weight: 700;
 }
 
+/* Insane Bounce Buttons */
 .insane-btn {
     cursor: pointer;
     background: linear-gradient(45deg, #000, #333);
@@ -90,70 +93,92 @@ header h1 {
     padding: 12px 30px;
     border-radius: 100px;
     font-weight: 900;
-    font-family: 'Lato', sans-serif;
     box-shadow: 4px 4px 0px #38bdf8;
-    transition: all 0.1s ease;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-transform: uppercase;
 }
 
 .insane-btn:hover {
     background: linear-gradient(45deg, #38bdf8, #0ea5e9);
     color: #000;
-    transform: translate(-2px, -2px);
+    transform: scale(1.1);
     box-shadow: 7px 7px 0px #000;
 }
 
 .insane-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px #000;
+    transform: scale(0.95);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    border: none;
     font-size: 1.4rem;
     font-weight: 900;
     text-transform: uppercase;
 }
 
-th {
-    padding: 20px;
-    text-align: left;
-    background-color: #f8fafc;
-    color: #a0aec0;
-    font-weight: 900;
-    text-transform: uppercase;
-}
+th { padding: 20px; text-align: left; background-color: #f8fafc; color: #a0aec0; }
+td { padding: 20px; position: relative; }
 
-td { padding: 20px; }
-
-.col-name { text-align: left; padding-left: 20px; }
-.col-date { text-align: left; }
+.col-check { width: 40px; padding-left: 20px; }
+.col-name { text-align: left; }
 .col-delete { text-align: right; padding-right: 20px; width: 40px; }
 
 .bg-calculus td { background-color: #fee440; }
 .bg-programming td { background-color: #f24333; }
 .bg-circuits td { background-color: #da70d6; }
 
-#assignmentTable tbody tr td,
-#assignmentTable tbody tr td a {
-    color: #000 !important;
-    text-decoration: none;
+#assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
+
+/* Cross-out animation */
+tr.crossing-out {
+    position: relative;
+    pointer-events: none;
 }
 
-.delete-btn {
+tr.crossing-out::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #000;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    animation: crossLine 0.6s forwards ease-in-out;
+    z-index: 10;
+}
+
+tr.crossing-out.fading {
+    animation: fadeOutRow 0.4s 0.6s forwards ease-out;
+}
+
+@keyframes crossLine {
+    to { transform: translateY(-50%) scaleX(1); }
+}
+
+@keyframes fadeOutRow {
+    to { opacity: 0; transform: translateY(10px); }
+}
+
+/* Control Buttons (Check/Delete) */
+.action-icon-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    margin-left: auto;
-    display: block;
-    opacity: 0.32;
-    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
 }
 
+.action-icon-btn:active { transform: scale(0.8); }
+
+.check-btn svg { width: 24px; height: 24px; fill: #000; }
+
+.delete-btn { opacity: 0.32; transition: opacity 0.2s ease; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
 
@@ -168,5 +193,3 @@ td { padding: 20px; }
     justify-content: flex-end;
     gap: 20px;
 }
-
-.hidden { display: none !important; }
