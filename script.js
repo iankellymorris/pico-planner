@@ -110,11 +110,7 @@ function renderTable() {
         checkCell.className = "col-check";
         const checkBtn = document.createElement('button');
         checkBtn.className = "action-icon-btn check-btn";
-        checkBtn.innerHTML = `
-            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.65 13.26">
-                <polygon points="16.65 2.94 13.71 0 6.32 7.39 2.94 4 0 6.94 6.32 13.26 16.65 2.94"/>
-            </svg>
-        `;
+        checkBtn.innerHTML = `<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.65 13.26"><polygon points="16.65 2.94 13.71 0 6.32 7.39 2.94 4 0 6.94 6.32 13.26 16.65 2.94"/></svg>`;
         checkBtn.onclick = () => completeAssignment(task.id, row);
         checkCell.appendChild(checkBtn);
 
@@ -136,12 +132,8 @@ function renderTable() {
         actionCell.className = "col-delete";
         const delBtn = document.createElement('button');
         delBtn.className = 'action-icon-btn delete-btn';
-        delBtn.innerHTML = `
-            <svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg">
-                <polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/>
-            </svg>
-        `;
-        delBtn.onclick = () => deleteAssignment(task.id);
+        delBtn.innerHTML = `<svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg"><polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/></svg>`;
+        delBtn.onclick = () => deleteAssignment(id);
         actionCell.appendChild(delBtn);
 
         row.appendChild(checkCell);
