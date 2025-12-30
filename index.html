@@ -6,7 +6,7 @@
     <title>Assignment Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Autour+One&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kavoon&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
     </header>
 
     <div id="controlsContainer">
-        <div class="entry-container">
+        <div class="entry-container insane-container">
             <select id="classSelect">
                 <option value="Calculus II">Calculus II</option>
                 <option value="Computer Programming">Computer Programming</option>
@@ -35,7 +35,7 @@
             <input type="text" id="assignmentName" placeholder="Assignment Name">
             <input type="url" id="assignmentLink" placeholder="Link (Optional)">
             <input type="date" id="dueDate">
-            <button id="addBtn">Add Assignment</button>
+            <button id="addBtn" class="insane-btn">Add Assignment</button>
         </div>
     </div>
 
@@ -55,8 +55,8 @@
 
     <div id="footerContainer">
         <div class="footer-controls">
-            <button id="exportBtn">Export Data</button>
-            <button id="importBtn">Import Data</button>
+            <button id="exportBtn" class="insane-btn">Export Data</button>
+            <button id="importBtn" class="insane-btn">Import Data</button>
             <input type="file" id="fileInput" style="display: none;" accept=".json">
         </div>
     </div>
