@@ -1,4 +1,4 @@
-/* Custom Scrollbar */
+/* Custom Scrollbar Integration */
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background: #e0f2fe; }
 ::-webkit-scrollbar-thumb { 
@@ -11,17 +11,16 @@
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0; /* Integrated scrollbar into page edge */
+    padding: 0 0 4px 0; /* 4px Breathing room at bottom */
     background-color: #e0f2fe;
     overflow-x: hidden;
 }
 
 header {
     background-color: #38bdf8;
-    padding: 20px;
-    margin: 0 0 30px 0;
-    position: relative;
-    z-index: 1000;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .header-content {
@@ -39,6 +38,16 @@ header h1 {
     font-size: 2.5rem;
     color: #ffffff;
     text-shadow: 3px 3px 0px #0ea5e9;
+    opacity: 0;
+}
+
+.slide-in {
+    animation: titleSlide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes titleSlide {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 #toggleControlsBtn {
@@ -105,9 +114,7 @@ header h1 {
     box-shadow: 7px 7px 0px #000;
 }
 
-.table-wrapper {
-    padding: 0 20px;
-}
+.table-wrapper { padding: 0 20px; }
 
 table {
     width: 100%;
@@ -121,7 +128,6 @@ table {
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
 td { padding: 20px 0; position: relative; }
 
-/* Column Logic: Tighter Date/Delete Spacing */
 .col-check { width: 50px; padding-left: 20px; }
 .col-name { width: 55%; padding-left: 10px; } 
 .col-date { width: 25%; }
@@ -133,23 +139,13 @@ td { padding: 20px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* Grayscale + Grainy Animation */
-tr.crossing-out {
-    position: relative;
-    pointer-events: none;
-    transition: filter 0.6s ease;
-}
-
-tr.crossing-out td {
-    filter: grayscale(1) url(#grain); /* Grain + Grayscale */
-}
-
+/* CHECKMARK: Cross-out animation */
 tr.crossing-out::after {
     content: '';
     position: absolute;
     top: 50%;
-    left: 15px; /* Uniform 15px from left edge */
-    width: calc(100% - 30px); /* 15px from each edge (30px total) */
+    left: 15px; 
+    width: calc(100% - 30px); 
     height: 6px; 
     background: #000;
     transform: translateY(-50%) scaleX(0);
@@ -158,22 +154,22 @@ tr.crossing-out::after {
     z-index: 10;
 }
 
-tr.crossing-out.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
+/* DELETE: Grayscale + Grainy animation */
+tr.deleting td {
+    filter: grayscale(1) url(#grain);
+    transition: filter 0.6s ease;
+}
+
+tr.fading-out {
+    animation: fadeOutRow 0.4s 0.6s forwards ease-out;
+}
 
 @keyframes crossLine { to { transform: translateY(-50%) scaleX(1); } }
 @keyframes fadeOutRow { to { opacity: 0; transform: scale(0.95); } }
 
-.action-icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-}
-
+.action-icon-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; }
 .check-btn svg { width: 24px; height: 24px; fill: #000; }
-.delete-btn { opacity: 0.32; margin-left: auto; }
+.delete-btn { opacity: 0.32; margin-left: auto; transition: opacity 0.2s ease; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
 
@@ -183,8 +179,8 @@ tr.crossing-out.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 
 .footer-controls {
     text-align: right;
-    margin: 20px 0 20px 0; /* Tightened vertical space */
-    padding-right: 35px; 
+    margin: 20px 0;
+    padding: 0 35px 4px 0; /* Padding bottom here ensures shadow visible */
     display: flex;
     justify-content: flex-end;
     gap: 20px;
