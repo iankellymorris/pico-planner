@@ -133,7 +133,10 @@ function renderTable() {
         const delBtn = document.createElement('button');
         delBtn.className = 'action-icon-btn delete-btn';
         delBtn.innerHTML = `<svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg"><polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/></svg>`;
-        delBtn.onclick = () => deleteAssignment(id);
+        
+        // FIXED: Explicitly pass task.id to avoid scope issues
+        delBtn.onclick = () => deleteAssignment(task.id);
+        
         actionCell.appendChild(delBtn);
 
         row.appendChild(checkCell);
