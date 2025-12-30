@@ -77,8 +77,6 @@ addBtn.addEventListener('click', () => {
 
 function completeAssignment(id, rowElement) {
     rowElement.classList.add('crossing-out', 'fading');
-    
-    // Duration matches CSS animations: 0.6s line + 0.4s fade
     setTimeout(() => {
         deleteAssignment(id);
     }, 1000);
@@ -108,7 +106,6 @@ function renderTable() {
         else if (task.className === 'Computer Programming') row.classList.add('bg-programming');
         else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
 
-        // Checkmark Column
         const checkCell = document.createElement('td');
         checkCell.className = "col-check";
         const checkBtn = document.createElement('button');
