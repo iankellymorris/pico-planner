@@ -1,66 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kavoon&family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const addBtn = document.getElementById('addBtn');
+const tableBody = document.querySelector('#assignmentTable tbody');
+const exportBtn = document.getElementById('exportBtn');
+const importBtn = document.getElementById('importBtn');
+const fileInput = document.getElementById('fileInput');
+const toggleBtn = document.getElementById('toggleControlsBtn');
+const controls = document.getElementById('controlsContainer');
+const footer = document.getElementById('footerContainer');
 
-    <header>
-        <div class="header-content">
-            <h1>Assignment Tracker</h1>
-            <button id="toggleControlsBtn" title="Toggle Controls">
-                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.92 20.84">
-                    <path d="M27.92,8.88c.02-2.64-.69-5.28-2.14-7.59l-9.83,7.59h11.97Z" fill="currentColor"/>
-                    <path d="M6.5,16.18c5.4,3.41,12.63,7.15,17.34,2.45,1.62-1.62,2.74-3.53,3.4-5.56H10.53s-4.03,3.12-4.03,3.12Z" fill="currentColor"/>
-                    <path d="M21.39,4.66C15.98,1.26,8.76-2.49,4.05,2.22,2.15,4.12.92,6.44.35,8.88h15.58l5.46-4.22Z" fill="currentColor"/>
-                    <path d="M0,13.06c.16,2.27.86,4.5,2.11,6.49l8.4-6.49H0Z" fill="currentColor"/>
-                </svg>
-            </button>
-        </div>
-    </header>
+let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
+let undoStack = [];
+const MAX_UNDO = 15;
 
-    <div id="controlsContainer">
-        <div class="entry-container insane-container">
-            <select id="classSelect">
-                <option value="Calculus II">Calculus II</option>
-                <option value="Computer Programming">Computer Programming</option>
-                <option value="Digital Circuits">Digital Circuits</option>
-            </select>
-            <input type="text" id="assignmentName" placeholder="Assignment Name">
-            <input type="url" id="assignmentLink" placeholder="Link (Optional)">
-            <input type="date" id="dueDate">
-            <button id="addBtn" class="insane-btn">Add Assignment</button>
-        </div>
-    </div>
+let isVisible = localStorage.getItem('controlsVisible') !== 'false';
+applyToggleState();
+renderTable();
 
-    <div class="table-wrapper">
-        <table id="assignmentTable">
-            <thead>
-                <tr>
-                    <th class="col-name">Assignment Name</th>
-                    <th class="col-date">Due Date</th>
-                    <th class="col-delete"></th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
-    </div>
+toggleBtn.addEventListener('click', () => {
+    isVisible = !isVisible;
+    localStorage.setItem('controlsVisible', isVisible);
+    applyToggleState();
+});
 
-    <div id="footerContainer">
-        <div class="footer-controls">
-            <button id="exportBtn" class="insane-btn">Export Data</button>
-            <button id="importBtn" class="insane-btn">Import Data</button>
-            <input type="file" id="fileInput" style="display: none;" accept=".json">
-        </div>
-    </div>
+function applyToggleState() {
+    if (isVisible) {
+        controls.classList.remove('hidden');
+        footer.classList.remove('hidden');
+    } else {
+        controls.classList.add('hidden');
+        footer.classList.add('hidden');
+    }
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const [year, month, day] = dateStr.split('-');
+    return `${day} ${months[parseInt(month) - 1]} ${year}`;
+}
+
+window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        undoDelete();
+    }
+});
+
+addBtn.addEventListener('click', () => {
+    const className = document.getElementById('classSelect').value;
+    const name = document.getElementById('assignmentName').value;
+    const link = document.getElementById('assignmentLink').value;
+    const date = document.getElementById('dueDate').value;
+
+    if (!name || !date) {
+        alert("Please fill in the assignment name and due date.");
+        return;
+    }
+
+    const newAssignment = { id: Date.now(), className, name, link, date };
+    assignments.push(newAssignment);
+    saveAndRender();
+    
+    document.getElementById('assignmentName').value = '';
+    document.getElementById('assignmentLink').value = '';
+    document.getElementById('dueDate').value = '';
+});
+
+function deleteAssignment(id) {
+    const index = assignments.findIndex(a => a.id === id);
+    if (index !== -1) {
+        undoStack.push(assignments[index]);
+        if (undoStack.length > MAX_UNDO) undoStack.shift();
+        assignments.splice(index, 1);
+        saveAndRender();
+    }
+}
+
+function undoDelete() {
+    if (undoStack.length > 0) {
+        assignments.push(undoStack.pop());
+        saveAndRender();
+    }
+}
+
+function saveAndRender() {
+    assignments.sort((a, b) => new Date(a.date) - new Date(b.date));
+    localStorage.setItem('assignments', JSON.stringify(assignments));
+    renderTable();
+}
+
+function renderTable() {
+    tableBody.innerHTML = '';
+    assignments.forEach((task) => {
+        const row = document.createElement('tr');
+        if (task.className === 'Calculus II') row.classList.add('bg-calculus');
+        else if (task.className === 'Computer Programming') row.classList.add('bg-programming');
+        else if (task.className === 'Digital Circuits') row.classList.add('bg-circuits');
+
+        const nameCell = document.createElement('td');
+        nameCell.className = "col-name";
+        if (task.link) {
+            const a = document.createElement('a');
+            a.href = task.link; a.target = "_blank"; a.textContent = task.name;
+            nameCell.appendChild(a);
+        } else {
+            nameCell.textContent = task.name;
+        }
+
+        const dateCell = document.createElement('td');
+        dateCell.className = "col-date";
+        dateCell.textContent = formatDate(task.date);
+
+        const actionCell = document.createElement('td');
+        actionCell.className = "col-delete";
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = `
+            <svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg">
+                <polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/>
+            </svg>
+        `;
+        delBtn.onclick = () => deleteAssignment(task.id);
+        actionCell.appendChild(delBtn);
+
+        row.appendChild(nameCell);
+        row.appendChild(dateCell);
+        row.appendChild(actionCell);
+        tableBody.appendChild(row);
+    });
+}
+
+exportBtn.addEventListener('click', () => {
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(JSON.stringify(assignments));
+    const link = document.createElement('a');
+    link.setAttribute('href', dataUri);
+    link.setAttribute('download', 'assignments.json');
+    link.click();
+});
+
+importBtn.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const data = JSON.parse(event.target.result);
+            if (Array.isArray(data)) { assignments = data; saveAndRender(); }
+        } catch (err) { alert("Error parsing JSON."); }
+    };
+    reader.readAsText(file);
+});
