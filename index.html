@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignment Tracker</title>
     
-    <link rel="icon" type="image/png" href="/my-favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/my-favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/my-favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/my-favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="my-favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="my-favicon/favicon.svg" />
+    <link rel="shortcut icon" href="my-favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="my-favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="MyWebSite" />
-    <link rel="manifest" href="/my-favicon/site.webmanifest" />
+    <link rel="manifest" href="my-favicon/site.webmanifest" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,17 +33,19 @@
         </div>
     </header>
 
-    <div id="controlsContainer">
-        <div class="entry-container insane-container">
-            <select id="classSelect">
-                <option value="Calculus II">Calculus II</option>
-                <option value="Computer Programming">Computer Programming</option>
-                <option value="Digital Circuits">Digital Circuits</option>
-            </select>
-            <input type="text" id="assignmentName" placeholder="Assignment Name">
-            <input type="url" id="assignmentLink" placeholder="Link (Optional)">
-            <input type="date" id="dueDate">
-            <button id="addBtn" class="insane-btn">Add Assignment</button>
+    <div id="collapsibleWrapper" class="expanded">
+        <div id="controlsContainer">
+            <div class="entry-container insane-container">
+                <select id="classSelect">
+                    <option value="Calculus II">Calculus II</option>
+                    <option value="Computer Programming">Computer Programming</option>
+                    <option value="Digital Circuits">Digital Circuits</option>
+                </select>
+                <input type="text" id="assignmentName" placeholder="Assignment Name">
+                <input type="url" id="assignmentLink" placeholder="Link (Optional)">
+                <input type="date" id="dueDate">
+                <button id="addBtn" class="insane-btn">Add Assignment</button>
+            </div>
         </div>
     </div>
 
@@ -51,17 +53,17 @@
         <table id="assignmentTable">
             <thead>
                 <tr>
+                    <th class="col-check"></th>
                     <th class="col-name">Assignment Name</th>
                     <th class="col-date">Due Date</th>
                     <th class="col-delete"></th>
                 </tr>
             </thead>
-            <tbody>
-                </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
-    <div id="footerContainer">
+    <div id="footerWrapper" class="expanded">
         <div class="footer-controls">
             <button id="exportBtn" class="insane-btn">Export Data</button>
             <button id="importBtn" class="insane-btn">Import Data</button>
