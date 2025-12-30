@@ -75,19 +75,23 @@ addBtn.addEventListener('click', () => {
     document.getElementById('dueDate').value = '';
 });
 
-// Animation for Checkmark (Cross-out)
+// Checkmark function (Simple cross-out)
 function completeAssignment(id, rowElement) {
-    rowElement.classList.add('crossing-out', 'fading-out');
-    setTimeout(() => { finalizeDeletion(id); }, 1000);
+    rowElement.classList.add('crossing-out', 'fading');
+    setTimeout(() => {
+        finalizeDelete(id);
+    }, 1000);
 }
 
-// Animation for "X" (Delete - Grayscale/Grain)
-function animateDelete(id, rowElement) {
-    rowElement.classList.add('deleting', 'fading-out');
-    setTimeout(() => { finalizeDeletion(id); }, 1000);
+// Delete button function (Grayscale Grain Disintegration)
+function animatedDelete(id, rowElement) {
+    rowElement.classList.add('deleting', 'fading');
+    setTimeout(() => {
+        finalizeDelete(id);
+    }, 1000);
 }
 
-function finalizeDeletion(id) {
+function finalizeDelete(id) {
     const index = assignments.findIndex(a => a.id === id);
     if (index !== -1) {
         undoStack.push(assignments[index]);
@@ -138,7 +142,7 @@ function renderTable() {
         const delBtn = document.createElement('button');
         delBtn.className = 'action-icon-btn delete-btn';
         delBtn.innerHTML = `<svg viewBox="0 0 16.65 16.65" xmlns="http://www.w3.org/2000/svg"><polygon class="del-icon" points="16.65 2.94 13.71 0 8.32 5.39 2.94 0 0 2.94 5.39 8.32 0 13.71 2.94 16.65 8.32 11.26 13.71 16.65 16.65 13.71 11.26 8.32 16.65 2.94"/></svg>`;
-        delBtn.onclick = () => animateDelete(task.id, row);
+        delBtn.onclick = () => animatedDelete(task.id, row);
         actionCell.appendChild(delBtn);
 
         row.appendChild(checkCell);
