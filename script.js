@@ -11,6 +11,7 @@ let assignments = JSON.parse(localStorage.getItem('assignments')) || [];
 let undoStack = [];
 const MAX_UNDO = 15;
 
+// Unified Scrollbar Logic
 let scrollTimeout;
 window.addEventListener('scroll', () => {
     document.body.classList.remove('hide-scrollbar');
