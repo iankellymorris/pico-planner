@@ -42,22 +42,24 @@
     </header>
 
     <div id="collapsibleWrapper" class="expanded">
-        <div id="controlsContainer">
-            <div class="entry-container insane-container">
-                <select id="classSelect">
-                    <option value="Calculus II">Calculus II</option>
-                    <option value="Computer Programming">Computer Programming</option>
-                    <option value="Digital Circuits">Digital Circuits</option>
-                </select>
-                <input type="text" id="assignmentName" placeholder="Assignment Name">
-                <input type="url" id="assignmentLink" placeholder="Link (Optional)">
-                <input type="date" id="dueDate">
-                <button id="addBtn" class="insane-btn">Add Assignment</button>
+        <div class="vertical-buffer">
+            <div id="controlsContainer">
+                <div class="entry-container insane-container">
+                    <select id="classSelect">
+                        <option value="Calculus II">Calculus II</option>
+                        <option value="Computer Programming">Computer Programming</option>
+                        <option value="Digital Circuits">Digital Circuits</option>
+                    </select>
+                    <input type="text" id="assignmentName" placeholder="Assignment Name">
+                    <input type="url" id="assignmentLink" placeholder="Link (Optional)">
+                    <input type="date" id="dueDate">
+                    <button id="addBtn" class="insane-btn">Add Assignment</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="table-wrapper">
+    <div class="table-main-container">
         <table id="assignmentTable">
             <thead>
                 <tr>
@@ -72,10 +74,12 @@
     </div>
 
     <div id="footerWrapper" class="expanded">
-        <div class="footer-controls">
-            <button id="exportBtn" class="insane-btn">Export Data</button>
-            <button id="importBtn" class="insane-btn">Import Data</button>
-            <input type="file" id="fileInput" style="display: none;" accept=".json">
+        <div class="vertical-buffer">
+            <div id="footerContainer" class="footer-controls">
+                <button id="exportBtn" class="insane-btn">Export Data</button>
+                <button id="importBtn" class="insane-btn">Import Data</button>
+                <input type="file" id="fileInput" style="display: none;" accept=".json">
+            </div>
         </div>
     </div>
 
