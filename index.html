@@ -21,15 +21,15 @@
 
     <svg style="display: none;">
         <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0" />
             <feComposite operator="in" in2="SourceGraphic" />
         </filter>
     </svg>
 
     <header id="mainHeader">
         <div class="header-content">
-            <h1 id="titleText">Assignment Tracker</h1>
+            <h1 class="slide-in">Assignment Tracker</h1>
             <button id="toggleControlsBtn" title="Toggle Controls">
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.92 20.84">
                     <path d="M27.92,8.88c.02-2.64-.69-5.28-2.14-7.59l-9.83,7.59h11.97Z" fill="currentColor"/>
