@@ -1,3 +1,5 @@
+* { box-sizing: border-box; }
+
 ::-webkit-scrollbar { width: 12px; }
 ::-webkit-scrollbar-track { background: #e0f2fe; }
 ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; border: 3px solid #e0f2fe; }
@@ -6,7 +8,7 @@
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0 0 24px 0; /* Final 4px breathing room + base */
+    padding: 0;
     background-color: #e0f2fe;
     overflow-x: hidden;
 }
@@ -15,8 +17,7 @@ header {
     background-color: #38bdf8;
     padding: 20px 0;
     margin: 0;
-    width: 100vw;
-    animation: pulseHeader 2s ease-out;
+    width: 100%;
 }
 
 .header-content {
@@ -34,22 +35,6 @@ header h1 {
     font-size: 2.5rem;
     color: #ffffff;
     text-shadow: 3px 3px 0px #0ea5e9;
-    position: relative;
-}
-
-.slide-in {
-    animation: slideInLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-@keyframes slideInLeft {
-    from { transform: translateX(-150%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes pulseHeader {
-    0% { background-color: #38bdf8; }
-    50% { background-color: #7dd3fc; }
-    100% { background-color: #38bdf8; }
 }
 
 #toggleControlsBtn {
@@ -58,12 +43,18 @@ header h1 {
     border: none;
     color: white;
     filter: drop-shadow(3px 3px 0px #0ea5e9);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Rotation for toggle button */
+#toggleControlsBtn.rotated {
+    transform: rotate(180deg);
 }
 
 #toggleControlsBtn svg { width: 32px; }
 
 #collapsibleWrapper, #footerWrapper {
-    max-height: 500px;
+    max-height: 800px;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -118,7 +109,7 @@ header h1 {
 
 .table-wrapper {
     padding: 0 20px;
-    width: calc(100% - 40px);
+    width: 100%;
 }
 
 table {
@@ -133,10 +124,11 @@ table {
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
 td { padding: 20px 0; position: relative; }
 
-.col-check { width: 50px; padding-left: 20px; }
-.col-name { width: 55%; padding-left: 10px; } 
-.col-date { width: 25%; }
-.col-delete { width: 50px; padding-right: 20px; text-align: right; }
+/* Tighter Column Defs */
+.col-check { width: 50px; padding-left: 10px; }
+.col-name { width: auto; padding-left: 10px; } 
+.col-date { width: 180px; }
+.col-delete { width: 50px; padding-right: 10px; text-align: right; }
 
 .bg-calculus td { background-color: #fee440; }
 .bg-programming td { background-color: #f24333; }
@@ -144,7 +136,7 @@ td { padding: 20px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* COMPLETE (Checkmark) Animation */
+/* Fixed cross-out: using calc and absolute positioning relative to row */
 tr.completing::after {
     content: '';
     position: absolute;
@@ -160,7 +152,6 @@ tr.completing::after {
 }
 tr.completing.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 
-/* DELETE (X) Animation */
 tr.deleting {
     pointer-events: none;
     animation: deleteNoise 1s forwards ease-out;
@@ -198,7 +189,7 @@ tr.deleting td {
 .footer-controls {
     text-align: right;
     margin: 20px 0 0 0;
-    padding-right: 35px; 
+    padding: 0 40px 32px 0; /* Padding bottom for breath + shadows */
     display: flex;
     justify-content: flex-end;
     gap: 20px;
