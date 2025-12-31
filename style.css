@@ -1,8 +1,17 @@
 * { box-sizing: border-box; }
 
+/* Scrollbar on HTML to prevent shifting, using overlay behavior */
+html {
+    overflow-y: scroll;
+}
+
 ::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track { background: #e0f2fe; }
-::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; border: 3px solid #e0f2fe; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { 
+    background: #38bdf8; 
+    border-radius: 10px; 
+    border: 3px solid #e0f2fe; 
+}
 .hide-scrollbar::-webkit-scrollbar-thumb { background: transparent; border-color: transparent; }
 
 body {
@@ -10,14 +19,12 @@ body {
     margin: 0;
     padding: 0;
     background-color: #e0f2fe;
-    overflow-x: hidden;
 }
 
 header {
     background-color: #38bdf8;
     padding: 20px 0;
-    margin: 0;
-    width: 100%;
+    margin-bottom: 0;
 }
 
 .header-content {
@@ -26,7 +33,7 @@ header {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
 }
 
 header h1 {
@@ -46,15 +53,12 @@ header h1 {
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Rotation for toggle button */
-#toggleControlsBtn.rotated {
-    transform: rotate(180deg);
-}
-
+#toggleControlsBtn.rotated { transform: rotate(180deg); }
 #toggleControlsBtn svg { width: 32px; }
 
+/* Transition Wrappers */
 #collapsibleWrapper, #footerWrapper {
-    max-height: 800px;
+    max-height: 500px;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -62,7 +66,11 @@ header h1 {
 #collapsibleWrapper.collapsed, #footerWrapper.collapsed {
     max-height: 0;
     opacity: 0;
-    pointer-events: none;
+}
+
+/* Vertical buffer adds space when expanded, disappears when collapsed */
+.vertical-buffer {
+    padding: 40px 0;
 }
 
 .insane-container {
@@ -73,7 +81,7 @@ header h1 {
     gap: 15px;
     justify-content: center;
     box-shadow: 10px 10px 0px #38bdf8;
-    margin: 40px auto;
+    margin: 0 auto;
     max-width: fit-content;
     align-items: center;
     border: 3px solid #000;
@@ -107,9 +115,10 @@ header h1 {
     box-shadow: 7px 7px 0px #000;
 }
 
-.table-wrapper {
-    padding: 0 20px;
-    width: 100%;
+.table-main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
 table {
@@ -124,11 +133,11 @@ table {
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
 td { padding: 20px 0; position: relative; }
 
-/* Tighter Column Defs */
-.col-check { width: 50px; padding-left: 10px; }
-.col-name { width: auto; padding-left: 10px; } 
-.col-date { width: 180px; }
-.col-delete { width: 50px; padding-right: 10px; text-align: right; }
+/* Balanced column padding */
+.col-check { width: 80px; padding-left: 25px; }
+.col-name { width: auto; padding-left: 20px; } 
+.col-date { width: 220px; }
+.col-delete { width: 80px; padding-right: 25px; text-align: right; }
 
 .bg-calculus td { background-color: #fee440; }
 .bg-programming td { background-color: #f24333; }
@@ -136,7 +145,7 @@ td { padding: 20px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* Fixed cross-out: using calc and absolute positioning relative to row */
+/* Cross-out Logic */
 tr.completing::after {
     content: '';
     position: absolute;
@@ -187,9 +196,9 @@ tr.deleting td {
 .bg-circuits .del-icon { fill: #663366; }
 
 .footer-controls {
-    text-align: right;
-    margin: 20px 0 0 0;
-    padding: 0 40px 32px 0; /* Padding bottom for breath + shadows */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
     display: flex;
     justify-content: flex-end;
     gap: 20px;
