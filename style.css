@@ -1,35 +1,22 @@
-/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { 
-    background: #38bdf8; 
-    border-radius: 10px; 
-    border: 3px solid #e0f2fe; 
-}
+::-webkit-scrollbar-track { background: #e0f2fe; }
+::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; border: 3px solid #e0f2fe; }
 .hide-scrollbar::-webkit-scrollbar-thumb { background: transparent; border-color: transparent; }
 
 body {
     font-family: 'Lato', sans-serif;
     margin: 0;
-    padding: 0 20px 24px 20px; /* 4px extra bottom breathing room */
+    padding: 0 0 24px 0; /* Final 4px breathing room + base */
     background-color: #e0f2fe;
-    overflow-y: scroll; /* Forces scrollbar to overlay rather than create lane */
     overflow-x: hidden;
 }
 
 header {
     background-color: #38bdf8;
-    padding: 20px;
-    margin: 0 -20px 30px -20px;
-    position: relative;
-    z-index: 1000;
-    animation: headerPulse 2s ease-out; /* Header pulse on load */
-}
-
-@keyframes headerPulse {
-    0% { background-color: #38bdf8; }
-    50% { background-color: #0ea5e9; }
-    100% { background-color: #38bdf8; }
+    padding: 20px 0;
+    margin: 0;
+    width: 100vw;
+    animation: pulseHeader 2s ease-out;
 }
 
 .header-content {
@@ -38,6 +25,7 @@ header {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 header h1 {
@@ -46,12 +34,22 @@ header h1 {
     font-size: 2.5rem;
     color: #ffffff;
     text-shadow: 3px 3px 0px #0ea5e9;
-    transform: translateX(-100vw); /* Start off-screen */
-    animation: slideInTitle 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    position: relative;
 }
 
-@keyframes slideInTitle {
-    to { transform: translateX(0); }
+.slide-in {
+    animation: slideInLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-150%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulseHeader {
+    0% { background-color: #38bdf8; }
+    50% { background-color: #7dd3fc; }
+    100% { background-color: #38bdf8; }
 }
 
 #toggleControlsBtn {
@@ -84,7 +82,7 @@ header h1 {
     gap: 15px;
     justify-content: center;
     box-shadow: 10px 10px 0px #38bdf8;
-    margin: 0 auto 40px auto;
+    margin: 40px auto;
     max-width: fit-content;
     align-items: center;
     border: 3px solid #000;
@@ -118,6 +116,11 @@ header h1 {
     box-shadow: 7px 7px 0px #000;
 }
 
+.table-wrapper {
+    padding: 0 20px;
+    width: calc(100% - 40px);
+}
+
 table {
     width: 100%;
     table-layout: fixed;
@@ -128,7 +131,7 @@ table {
 }
 
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
-td { padding: 20px 0; position: relative; box-sizing: border-box; }
+td { padding: 20px 0; position: relative; }
 
 .col-check { width: 50px; padding-left: 20px; }
 .col-name { width: 55%; padding-left: 10px; } 
@@ -141,8 +144,8 @@ td { padding: 20px 0; position: relative; box-sizing: border-box; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* CHECKMARK ANIMATION (Simple Cross-out) */
-tr.crossing-out::after {
+/* COMPLETE (Checkmark) Animation */
+tr.completing::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -155,19 +158,24 @@ tr.crossing-out::after {
     animation: crossLine 0.6s forwards ease-in-out;
     z-index: 10;
 }
+tr.completing.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 
-/* DELETE ANIMATION (Grayscale + Grain) */
+/* DELETE (X) Animation */
+tr.deleting {
+    pointer-events: none;
+    animation: deleteNoise 1s forwards ease-out;
+}
 tr.deleting td {
     filter: grayscale(1) url(#grain);
-    transition: filter 0.6s ease;
 }
 
-tr.fading {
-    animation: fadeOutRow 0.4s 0.6s forwards ease-out;
+@keyframes deleteNoise {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.92); }
 }
 
 @keyframes crossLine { to { transform: translateY(-50%) scaleX(1); } }
-@keyframes fadeOutRow { to { opacity: 0; transform: scale(0.98); } }
+@keyframes fadeOutRow { to { opacity: 0; transform: scale(0.95); } }
 
 .action-icon-btn {
     background: none;
@@ -189,8 +197,8 @@ tr.fading {
 
 .footer-controls {
     text-align: right;
-    margin-top: 40px;
-    padding-right: 20px; 
+    margin: 20px 0 0 0;
+    padding-right: 35px; 
     display: flex;
     justify-content: flex-end;
     gap: 20px;
