@@ -1,6 +1,5 @@
 * { box-sizing: border-box; }
 
-/* Persistent Scrollbar Approach */
 html {
     overflow-y: scroll;
     scrollbar-width: thin;
@@ -22,6 +21,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #e0f2fe;
+    overflow-x: hidden;
 }
 
 header {
@@ -60,7 +60,6 @@ header h1 {
 #toggleControlsBtn.rotated { transform: rotate(180deg); }
 #toggleControlsBtn svg { width: 32px; }
 
-/* Added padding for table when controls are collapsed */
 .table-wrapper {
     padding: 40px 20px;
     width: 100%;
@@ -68,7 +67,7 @@ header h1 {
 }
 
 #collapsibleWrapper, #footerWrapper {
-    max-height: 800px;
+    max-height: 1000px; /* Increased to allow room for children */
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -77,6 +76,18 @@ header h1 {
     max-height: 0;
     opacity: 0;
     pointer-events: none;
+}
+
+/* Padding added to wrappers so internal shadows/bounces aren't clipped */
+#controlsContainer {
+    padding: 40px 20px;
+}
+
+.footer-controls {
+    padding: 20px 40px 60px 20px; /* Large bottom/right padding for shadow/bounce */
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .insane-container {
@@ -132,7 +143,6 @@ table {
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
 td { padding: 25px 0; position: relative; }
 
-/* Table Icon Spacing */
 .col-check { width: 80px; padding-left: 30px; }
 .col-name { width: auto; padding-left: 20px; } 
 .col-date { width: 220px; }
@@ -144,7 +154,6 @@ td { padding: 25px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
-/* Cross-out Logic */
 tr.completing::after {
     content: '';
     position: absolute;
@@ -193,12 +202,3 @@ tr.deleting td {
 .bg-calculus .del-icon { fill: #666633; }
 .bg-programming .del-icon { fill: #660000; }
 .bg-circuits .del-icon { fill: #663366; }
-
-.footer-controls {
-    text-align: right;
-    margin: 0;
-    padding: 0 40px 40px 0; 
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-}
