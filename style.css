@@ -107,6 +107,19 @@ header h1 {
     border: 2px solid #000;
     border-radius: 100px;
     font-weight: 700;
+    background-color: #fff;
+}
+
+/* Custom Dropdown Arrow Logic */
+.insane-container select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 18px;
+    padding-right: 45px !important;
 }
 
 .insane-btn {
