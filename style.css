@@ -21,7 +21,6 @@ body {
     margin: 0;
     padding: 0;
     background-color: #e0f2fe;
-    overflow-x: hidden;
 }
 
 header {
@@ -60,14 +59,14 @@ header h1 {
 #toggleControlsBtn.rotated { transform: rotate(180deg); }
 #toggleControlsBtn svg { width: 32px; }
 
+/* Balanced table vertical spacing */
 .table-wrapper {
-    padding: 40px 20px;
+    padding: 20px;
     width: 100%;
-    min-height: 200px;
 }
 
 #collapsibleWrapper, #footerWrapper {
-    max-height: 1000px; /* Increased to allow room for children */
+    max-height: 1000px;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -78,13 +77,13 @@ header h1 {
     pointer-events: none;
 }
 
-/* Padding added to wrappers so internal shadows/bounces aren't clipped */
+/* Reduced internal padding for happy medium */
 #controlsContainer {
-    padding: 40px 20px;
+    padding: 20px;
 }
 
 .footer-controls {
-    padding: 20px 40px 60px 20px; /* Large bottom/right padding for shadow/bounce */
+    padding: 10px 40px 30px 20px;
     display: flex;
     justify-content: flex-end;
     gap: 20px;
