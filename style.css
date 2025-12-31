@@ -59,7 +59,6 @@ header h1 {
 #toggleControlsBtn.rotated { transform: rotate(180deg); }
 #toggleControlsBtn svg { width: 32px; }
 
-/* Balanced table vertical spacing */
 .table-wrapper {
     padding: 20px;
     width: 100%;
@@ -77,7 +76,6 @@ header h1 {
     pointer-events: none;
 }
 
-/* Reduced internal padding for happy medium */
 #controlsContainer {
     padding: 20px;
 }
@@ -153,6 +151,7 @@ td { padding: 25px 0; position: relative; }
 
 #assignmentTable tbody tr td, #assignmentTable tbody tr td a { color: #000 !important; text-decoration: none; }
 
+/* COMPLETE Animation */
 tr.completing::after {
     content: '';
     position: absolute;
@@ -168,17 +167,19 @@ tr.completing::after {
 }
 tr.completing.fading { animation: fadeOutRow 0.4s 0.6s forwards ease-out; }
 
+/* DELETE Animation: Vertical Compression + Grayscale Grain */
 tr.deleting {
     pointer-events: none;
-    animation: deleteNoise 1s forwards ease-out;
+    animation: compressVertical 0.8s forwards cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
 tr.deleting td {
     filter: grayscale(1) url(#grain);
 }
 
-@keyframes deleteNoise {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(0.92); }
+@keyframes compressVertical {
+    0% { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(0); }
 }
 
 @keyframes crossLine { to { transform: translateY(-50%) scaleX(1); } }
@@ -197,7 +198,3 @@ tr.deleting td {
 .delete-btn { opacity: 0.32; margin-left: auto; }
 .delete-btn:hover { opacity: 1; }
 .delete-btn svg { width: 24px; height: 24px; }
-
-.bg-calculus .del-icon { fill: #666633; }
-.bg-programming .del-icon { fill: #660000; }
-.bg-circuits .del-icon { fill: #663366; }
