@@ -34,9 +34,11 @@ function applyToggleState() {
     if (isVisible) {
         controlWrapper.classList.remove('collapsed');
         footerWrapper.classList.remove('collapsed');
+        toggleBtn.classList.remove('rotated');
     } else {
         controlWrapper.classList.add('collapsed');
         footerWrapper.classList.add('collapsed');
+        toggleBtn.classList.add('rotated');
     }
 }
 
