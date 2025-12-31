@@ -1,17 +1,20 @@
 * { box-sizing: border-box; }
 
-/* Scrollbar on HTML to prevent shifting, using overlay behavior */
+/* Persistent Scrollbar Approach */
 html {
     overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #38bdf8 transparent;
 }
 
-::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { 
     background: #38bdf8; 
-    border-radius: 10px; 
-    border: 3px solid #e0f2fe; 
+    border-radius: 10px;
+    border: 2px solid #e0f2fe;
 }
+
 .hide-scrollbar::-webkit-scrollbar-thumb { background: transparent; border-color: transparent; }
 
 body {
@@ -24,7 +27,8 @@ body {
 header {
     background-color: #38bdf8;
     padding: 20px 0;
-    margin-bottom: 0;
+    margin: 0;
+    width: 100%;
 }
 
 .header-content {
@@ -33,7 +37,7 @@ header {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 20px;
 }
 
 header h1 {
@@ -56,9 +60,15 @@ header h1 {
 #toggleControlsBtn.rotated { transform: rotate(180deg); }
 #toggleControlsBtn svg { width: 32px; }
 
-/* Transition Wrappers */
+/* Added padding for table when controls are collapsed */
+.table-wrapper {
+    padding: 40px 20px;
+    width: 100%;
+    min-height: 200px;
+}
+
 #collapsibleWrapper, #footerWrapper {
-    max-height: 500px;
+    max-height: 800px;
     overflow: hidden;
     transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -66,11 +76,7 @@ header h1 {
 #collapsibleWrapper.collapsed, #footerWrapper.collapsed {
     max-height: 0;
     opacity: 0;
-}
-
-/* Vertical buffer adds space when expanded, disappears when collapsed */
-.vertical-buffer {
-    padding: 40px 0;
+    pointer-events: none;
 }
 
 .insane-container {
@@ -115,15 +121,8 @@ header h1 {
     box-shadow: 7px 7px 0px #000;
 }
 
-.table-main-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 40px;
-}
-
 table {
     width: 100%;
-    table-layout: fixed;
     border-collapse: collapse;
     font-size: 1.4rem;
     font-weight: 900;
@@ -131,13 +130,13 @@ table {
 }
 
 th { padding: 20px 0; text-align: left; background-color: #f8fafc; color: #a0aec0; }
-td { padding: 20px 0; position: relative; }
+td { padding: 25px 0; position: relative; }
 
-/* Balanced column padding */
-.col-check { width: 80px; padding-left: 25px; }
+/* Table Icon Spacing */
+.col-check { width: 80px; padding-left: 30px; }
 .col-name { width: auto; padding-left: 20px; } 
 .col-date { width: 220px; }
-.col-delete { width: 80px; padding-right: 25px; text-align: right; }
+.col-delete { width: 80px; padding-right: 30px; text-align: right; }
 
 .bg-calculus td { background-color: #fee440; }
 .bg-programming td { background-color: #f24333; }
@@ -196,9 +195,9 @@ tr.deleting td {
 .bg-circuits .del-icon { fill: #663366; }
 
 .footer-controls {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 40px;
+    text-align: right;
+    margin: 0;
+    padding: 0 40px 40px 0; 
     display: flex;
     justify-content: flex-end;
     gap: 20px;
