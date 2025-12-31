@@ -84,7 +84,10 @@ function completeAssignment(id, rowElement) {
 
 function deleteWithAnimation(id, rowElement) {
     rowElement.classList.add('deleting');
-    setTimeout(() => removeData(id), 1000);
+    // Wait for the 600ms CSS transition to finish
+    setTimeout(() => {
+        removeData(id);
+    }, 600);
 }
 
 function removeData(id) {
